@@ -1,4 +1,6 @@
 import './globals.css';
+import Footer from './Footer';
+import Header from './Header';
 
 export const metadata = {
   title: {
@@ -19,9 +21,9 @@ export default function RootLayout(props: Props) {
     <html lang="en">
       <head />
       <body>
-        <header>TASKOLOGY</header>
+        <Header />
         {props.children}
-        <footer>Created by Katharina Simma with love</footer>
+        <Footer />
       </body>
     </html>
   );
