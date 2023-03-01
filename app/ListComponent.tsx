@@ -7,23 +7,20 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useState } from 'react';
-import Task from './Task';
+import { List } from '../database/lists';
+import TaskContainer from './TaskContainer';
 
 type Props = {
-  taskList: { id: number; title: string; description: string };
-  tasks: { id: number; name: string; description: string }[];
+  list: List;
 };
 
-export default function List(props: Props) {
+export default function ListComponent(props: Props) {
   const [listOpen, setListOpen] = useState(false);
 
   return (
-    <div
-      className="max-w-lg p-2 mx-auto my-4 border border-gray-400 border-solid rounded-md min-w-md"
-      key={`list_name_${props.taskList.title}`}
-    >
+    <div className="max-w-lg p-2 mx-auto my-4 border border-gray-400 border-solid rounded-md min-w-md">
       <div className="flex justify-between ">
-        {props.taskList.title}
+        {props.list.title}
         <div className="flex gap-2 ">
           <button
             onClick={() => {
@@ -36,7 +33,7 @@ export default function List(props: Props) {
               <ChevronDownIcon className="w-6 h-6" />
             )}
           </button>
-          <Link href={`/${props.taskList.id}`}>
+          <Link href={`/${props.list.id}`}>
             <EllipsisVerticalIcon className="w-6 h-6" />
           </Link>
         </div>
@@ -44,19 +41,12 @@ export default function List(props: Props) {
 
       <div
         className={`max-w-lg mx-auto my-4 rounded-md ${
-          listOpen && props.taskList.description ? '' : 'hidden'
+          listOpen ? '' : 'hidden'
         } `}
       >
-        {props.tasks.map((task) => {
-          return (
-            <div
-              className="px-1 my-1 border rounded-md"
-              key={`task-${task.id}`}
-            >
-              <Task task={task} />
-            </div>
-          );
-        })}
+        {' '}
+        {props.list.description}
+        <TaskContainer listId={props.list.id} />
       </div>
     </div>
   );

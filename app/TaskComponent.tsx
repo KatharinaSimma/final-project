@@ -2,35 +2,38 @@
 
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { Task } from '../database/lists';
 
 type Props = {
-  task: { id: number; name: string; description: string };
+  task: Task;
 };
 
-export default function SingleList(props: Props) {
+export default function TaskComponent(props: Props) {
   const [taskOpen, setTaskOpen] = useState(false);
+
+  const { task } = props;
 
   return (
     <div
       className="flex items-start justify-between gap-5 px-1 my-1 "
-      key={`task-${props.task.id}`}
+      key={`task-${task.id}`}
     >
       <div className="flex items-baseline gap-1">
         <input
           className="mx-1 accent-gray-400"
-          id={`task-${props.task.id}`}
+          id={`task-${task.id}`}
           type="checkbox"
         />
         <div>
-          <label className="" htmlFor={`task-${props.task.id}`}>
-            {props.task.name}
+          <label className="" htmlFor={`task-${task.id}`}>
+            {task.title}
           </label>
           <div
             className={`max-w-lg mx-auto m-2 rounded-md border ${
               taskOpen ? '' : 'hidden'
             } `}
           >
-            <p>This task is open!</p>
+            <p>{task.description}</p>
           </div>
         </div>
       </div>

@@ -7,16 +7,17 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import TaskBox from '../Task';
+import { List } from '../../database/lists';
+import TaskContainer from '../TaskContainer';
 
 export type Task = {
   id: number;
-  name: string;
+  title: string;
   description: string;
 };
 
 type Props = {
-  singleList: { id: number; title: string; description: string; tasks: Task[] };
+  singleList: List;
 };
 
 export default function SingleViewList(props: Props) {
@@ -71,15 +72,7 @@ export default function SingleViewList(props: Props) {
         <span>{description}</span>
       )}
 
-      <div className="">
-        {props.singleList.tasks.map((task) => {
-          return (
-            <div className="my-1 border rounded-md" key={`task-${task.id}`}>
-              <TaskBox task={task} />
-            </div>
-          );
-        })}
-      </div>
+      <TaskContainer listId={props.singleList.id} />
     </main>
   );
 }
