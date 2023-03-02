@@ -1,36 +1,17 @@
 'use client';
 
-import { gql, useQuery } from '@apollo/client';
 import { Task } from '../database/lists';
+import { ListWithTaskResponse } from './ListContainer';
 import TaskComponent from './TaskComponent';
 
 type Props = {
-  listId: number;
+  list: ListWithTaskResponse;
 };
 
 export default function TaskContainer(props: Props) {
-  const getTaskByListId = gql`
-    query tasksByListId($listId: ID! = ${props.listId}) {
-      tasksByListId(listId: $listId) {
-        id
-        title
-        description
-      }
-    }
-  `;
-
-  const { loading, error, data, refetch } = useQuery(getTaskByListId, {
-    onCompleted: async () => {
-      await refetch;
-    },
-  });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
   return (
     <div>
-      {data.tasksByListId.map((task: Task) => (
+      {props.list.tasks.map((task: Task) => (
         <TaskComponent key={`task-${task.id}`} task={task} />
       ))}
     </div>

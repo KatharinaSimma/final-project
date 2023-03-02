@@ -1,4 +1,4 @@
-import { HeartIcon } from '@heroicons/react/24/outline';
+import { HeartIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import Navigation from './Navigation';
 

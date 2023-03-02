@@ -5,7 +5,7 @@ import {
   CheckCircleIcon,
   PencilIcon,
   TrashIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { List } from '../../database/lists';
 import TaskContainer from '../TaskContainer';
@@ -20,9 +20,28 @@ type Props = {
   singleList: List;
 };
 
+// const deleteListMutation = gql`
+//   mutation DeleteList($id: ID!) {
+//     deleteListById(id: $id) {
+//       id
+//     }
+//   }
+// `;
+
 export default function SingleViewList(props: Props) {
   const [description, setDescription] = useState(props.singleList.description);
   const [editDescription, setEditDescription] = useState(false);
+
+  // const [handleDeleteAnimal] = useMutation(deleteAnimalMutation, {
+  //   onError: (error) => {
+  //     setOnError(error.message);
+  //   },
+
+  //   onCompleted: async () => {
+  //     await refetch();
+  //     setOnError('');
+  //   },
+  // });
 
   return (
     <main className="flex flex-col max-w-lg p-2 m-auto mb-12">

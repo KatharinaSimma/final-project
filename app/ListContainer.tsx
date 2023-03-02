@@ -1,17 +1,29 @@
 'use client';
 
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
-import { List } from '../database/lists';
+import { Task } from '../database/lists';
 import ListComponent from './ListComponent';
 
-const getLists = gql`
-  query lists {
-    lists {
+export type ListWithTaskResponse = {
+  id: number;
+  title: string;
+  description?: string;
+  tasks: [Task];
+};
+
+const getListWithTask = gql`
+  query ListWithTasks {
+    listWithTasks {
       id
       title
       description
+      tasks {
+        id
+        title
+        description
+      }
     }
   }
 `;
@@ -27,27 +39,33 @@ const createList = gql`
 
 export default function ListContainer() {
   const [newListName, setNewListName] = useState('');
+  const [onError, setOnError] = useState('');
 
-  const { loading, error, data, refetch } = useQuery(getLists, {
+  const [handleCreateList] = useMutation(createList, {
+    variables: {
+      title: newListName,
+    },
+    onError: (error) => {
+      setOnError(error.message);
+    },
     onCompleted: async () => {
       await refetch;
     },
   });
+
+  const { loading, error, data, refetch } = useQuery(getListWithTask, {
+    onCompleted: async () => {
+      await refetch;
+    },
+  });
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // const [handleCreateList] = useMutation(createList, {
-  //   variables: {
-  //     title,
-  //   },
-  //   onError: (error) => {
-  //     return;
-  //   },
-  // });
-
   return (
     <div className="max-w-lg mx-auto my-4 min-w-md">
-      {data.lists.map((list: List) => {
+      <p className="error">{onError}</p>
+      {data.listWithTasks.map((list: ListWithTaskResponse) => {
         return <ListComponent list={list} key={`list_name_${list.id}`} />;
       })}
       <div className="flex items-center gap-2 justify-items-stretch">
@@ -61,7 +79,10 @@ export default function ListContainer() {
           value={newListName}
           onChange={(event) => setNewListName(event.currentTarget.value)}
         />
-        <button className="flex justify-center gap-2 p-2 border border-black border-solid rounded-md">
+        <button
+          className="flex justify-center gap-2 p-2 border border-black border-solid rounded-md"
+          onClick={async () => await handleCreateList()}
+        >
           <PlusIcon className="w-6 h-6" />
           Add New List
         </button>

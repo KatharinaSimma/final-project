@@ -5,8 +5,10 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLError } from 'graphql';
 import {
   createList,
+  deleteListById,
   getListById,
   getLists,
+  getListWithTask,
   getTaskByListId,
 } from '../../database/lists';
 
@@ -40,15 +42,23 @@ const typeDefs = gql`
     description: String
   }
 
+  type ListWithTask {
+    id: ID!
+    title: String!
+    description: String
+    tasks: [Task]
+  }
+
   type Query {
     lists: [List]
     list(id: ID!): List
     tasksByListId(listId: ID!): [Task]
+    listWithTasks: [ListWithTask]
   }
 
   type Mutation {
-    createList(title: String!, description: String!): List
-    # deleteListById(id: ID): List
+    createList(title: String!): List
+    deleteListById(id: ID): List
     # updateListById(id: ID!, title: String!, description: String!): List
   }
 `;
@@ -72,6 +82,10 @@ const resolvers = {
       return await getTaskByListId(parseInt(args.listId));
     },
 
+    listWithTasks: async () => {
+      return await getLists();
+    },
+
     // getLoggedInAnimalByFirstName: async (
     //   parent: string,
     //   args: { firstName: string },
@@ -83,6 +97,12 @@ const resolvers = {
     // },
   },
 
+  ListWithTask: {
+    tasks: async (parent: any) => {
+      return await getListWithTask(parent.id);
+    },
+  },
+
   Mutation: {
     createList: async (parent: string, args: ListInput) => {
       if (
@@ -92,20 +112,20 @@ const resolvers = {
       ) {
         throw new GraphQLError('Required field is missing');
       }
-      return await createList(args.title, args.description);
+      return await createList(args.title);
     },
 
-    // deleteAnimalById: async (
-    //   parent: string,
-    //   args: Args,
-    //   context: FakeAdminAnimalContext,
-    // ) => {
-    //   if (!context.isAdmin) {
-    //     throw new GraphQLError('Unauthorized operation');
-    //   }
+    deleteListById: async (
+      parent: string,
+      args: Args,
+      // context: FakeAdminAnimalContext,
+    ) => {
+      // if (!context.isAdmin) {
+      // throw new GraphQLError('Unauthorized operation');
+      // }
 
-    //   return await deleteAnimalById(parseInt(args.id));
-    // },
+      return await deleteListById(parseInt(args.id));
+    },
 
     // updateAnimalById: async (parent: string, args: AnimalInput) => {
     //   if (

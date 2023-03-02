@@ -2,7 +2,7 @@ import {
   EnvelopeIcon,
   RectangleGroupIcon,
   UserCircleIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
 export default function Navigation() {

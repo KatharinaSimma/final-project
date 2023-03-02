@@ -5,13 +5,19 @@ import ListContainer from './ListContainer';
 
 export default async function Home() {
   const client = initializeApollo(null);
+
   await client.query({
     query: gql`
-      query getLists {
-        lists {
+      query ListWithTasks {
+        listWithTasks {
           id
           title
           description
+          tasks {
+            id
+            title
+            description
+          }
         }
       }
     `,

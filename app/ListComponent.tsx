@@ -4,14 +4,14 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   EllipsisVerticalIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import { useState } from 'react';
-import { List } from '../database/lists';
+import { ListWithTaskResponse } from './ListContainer';
 import TaskContainer from './TaskContainer';
 
 type Props = {
-  list: List;
+  list: ListWithTaskResponse;
 };
 
 export default function ListComponent(props: Props) {
@@ -46,7 +46,7 @@ export default function ListComponent(props: Props) {
       >
         {' '}
         {props.list.description}
-        <TaskContainer listId={props.list.id} />
+        <TaskContainer list={props.list} />
       </div>
     </div>
   );

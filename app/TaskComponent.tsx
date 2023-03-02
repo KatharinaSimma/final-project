@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { Task } from '../database/lists';
 
