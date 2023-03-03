@@ -49,31 +49,31 @@ export default function ListContainer() {
       setOnError(error.message);
     },
     onCompleted: async () => {
-      await refetch;
+      await refetch();
+      setNewListName('');
     },
   });
 
   const { loading, error, data, refetch } = useQuery(getListWithTask, {
     onCompleted: async () => {
-      await refetch;
+      await refetch();
     },
   });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  const reversedListWithTasks = [...data.listWithTasks].reverse();
+
   return (
     <div className="max-w-lg mx-auto my-4 min-w-md">
       <p className="error">{onError}</p>
-      {data.listWithTasks.map((list: ListWithTaskResponse) => {
-        return <ListComponent list={list} key={`list_name_${list.id}`} />;
-      })}
-      <div className="flex items-center gap-2 justify-items-stretch">
+      <div className="flex flex-wrap items-center gap-2 justify-items-stretch">
         <label className="p-2" htmlFor="createList">
           New List:
         </label>
         <input
-          className="flex-grow p-2 border border-black rounded-md"
+          className="flex-grow p-2 border border-black rounded-md "
           id="createList"
           placeholder="..."
           value={newListName}
@@ -84,9 +84,11 @@ export default function ListContainer() {
           onClick={async () => await handleCreateList()}
         >
           <PlusIcon className="w-6 h-6" />
-          Add New List
         </button>
       </div>
+      {reversedListWithTasks.map((list: ListWithTaskResponse) => {
+        return <ListComponent list={list} key={`list_name_${list.id}`} />;
+      })}
     </div>
   );
 }

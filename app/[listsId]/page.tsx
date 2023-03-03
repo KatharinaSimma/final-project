@@ -1,6 +1,4 @@
-import { gql } from '@apollo/client';
 import lists from '../../database/lists.json';
-import { initializeApollo } from '../../util/graphql';
 import ApolloClientProvider from '../ApolloClientProvider';
 import { listNotFoundMetadata } from './not-found';
 import SingleViewList from './SingleViewList';
@@ -26,25 +24,10 @@ export function generateMetadata(props: Props) {
   };
 }
 
-export default async function ListsPage(props: Props) {
-  const client = initializeApollo(null);
-  const listsId = props.params.listsId;
-
-  const { data } = await client.query({
-    query: gql`
-      query list($id: ID! = ${listsId}) {
-        list(id: $id) {
-          id
-          title
-          description
-        }
-      }
-    `,
-  });
-
+export default function ListsPage(props: Props) {
   return (
     <ApolloClientProvider initialApolloState={JSON.stringify([])}>
-      <SingleViewList singleList={data.list} />
+      <SingleViewList listsId={props.params.listsId} />
     </ApolloClientProvider>
   );
 }

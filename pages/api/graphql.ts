@@ -5,6 +5,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLError } from 'graphql';
 import {
   createList,
+  createTask,
   deleteListById,
   getListById,
   getLists,
@@ -24,6 +25,11 @@ type ListInput = {
   description: string;
 };
 
+type TaskInput = {
+  listId: string;
+  title: string;
+};
+
 // type FakeAdminAnimalContext = {
 //   isAdmin: boolean;
 //   req: { cookies: { fakeSessionToken: string } };
@@ -40,9 +46,10 @@ const typeDefs = gql`
     id: ID!
     title: String!
     description: String
+    listId: ID!
   }
 
-  type ListWithTask {
+  type ListWithTasks {
     id: ID!
     title: String!
     description: String
@@ -53,11 +60,13 @@ const typeDefs = gql`
     lists: [List]
     list(id: ID!): List
     tasksByListId(listId: ID!): [Task]
-    listWithTasks: [ListWithTask]
+    listWithTasks: [ListWithTasks]
+    singleListWithTasks(id: ID!): ListWithTasks
   }
 
   type Mutation {
     createList(title: String!): List
+    createTask(title: String!, listId: String!): Task
     deleteListById(id: ID): List
     # updateListById(id: ID!, title: String!, description: String!): List
   }
@@ -83,7 +92,12 @@ const resolvers = {
     },
 
     listWithTasks: async () => {
+      // return value: type [ListWithTask]
       return await getLists();
+    },
+
+    singleListWithTasks: async (parent: any, args: Args) => {
+      return await getListById(parseInt(args.id));
     },
 
     // getLoggedInAnimalByFirstName: async (
@@ -97,7 +111,7 @@ const resolvers = {
     // },
   },
 
-  ListWithTask: {
+  ListWithTasks: {
     tasks: async (parent: any) => {
       return await getListWithTask(parent.id);
     },
@@ -113,6 +127,18 @@ const resolvers = {
         throw new GraphQLError('Required field is missing');
       }
       return await createList(args.title);
+    },
+
+    createTask: async (parent: string, args: TaskInput) => {
+      if (
+        !args.title ||
+        !args.listId ||
+        typeof args.title !== 'string' ||
+        typeof args.listId !== 'string'
+      ) {
+        throw new GraphQLError('Required field is missing');
+      }
+      return await createTask(args.title, parseInt(args.listId));
     },
 
     deleteListById: async (

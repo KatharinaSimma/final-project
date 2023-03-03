@@ -32,15 +32,21 @@ export type ListWithTasks = {
   listId: number | null;
   title: string;
   description: string | null;
-  dueDate: Date | null;
-  inUse: boolean | null;
-  createdAt: Date | null;
+  tasks: any;
 };
 
 export const getListWithTask = cache(async (id: number) => {
-  const tasks = await sql<ListWithTasks[]>`
+  const tasks = await sql<
+    {
+      id: number;
+      listId: number | null;
+      title: string;
+      description: string | null;
+      tasks: any;
+    }[]
+  >`
     SELECT
-      *
+      id, list_id, title, description, tasks
     FROM
       tasks
     WHERE tasks.list_id = ${id}
@@ -72,15 +78,10 @@ export const getListById = cache(async (id: number) => {
   }
 
   const [list] = await sql<
-    {
-      id: number;
-      title: string;
-      description: string | null;
-      createdAt: Date | null;
-    }[]
+    { id: number; title: string; description: string | null }[]
   >`
     SELECT
-      *
+      id, title, description
     FROM
       lists
     WHERE
@@ -114,7 +115,7 @@ export const getTaskByListId = cache(async (listId: number) => {
   return task;
 });
 
-// Create list
+// Create List
 export const createList = cache(async (title: string) => {
   const [list] = await sql<
     { id: number; title: string; description: string | null }[]
@@ -127,6 +128,26 @@ export const createList = cache(async (title: string) => {
       id, title, description
   `;
   return list;
+});
+
+// Create Task
+export const createTask = cache(async (title: string, listId: number) => {
+  const [task] = await sql<
+    {
+      id: number;
+      title: string;
+      description: string | null;
+      listId: number | null;
+    }[]
+  >`
+    INSERT INTO tasks
+      (title, list_id)
+    VALUES
+      (${title}, ${listId})
+    RETURNING
+      id, title, description, list_id
+  `;
+  return task;
 });
 
 // Update list

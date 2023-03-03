@@ -4,6 +4,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   EllipsisVerticalIcon,
+  PlusIcon,
 } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -22,17 +23,23 @@ export default function ListComponent(props: Props) {
       <div className="flex justify-between ">
         {props.list.title}
         <div className="flex gap-2 ">
-          <button
-            onClick={() => {
-              setListOpen(!listOpen);
-            }}
-          >
-            {listOpen ? (
-              <ChevronUpIcon className="w-6 h-6" />
-            ) : (
-              <ChevronDownIcon className="w-6 h-6" />
-            )}
-          </button>
+          {props.list.tasks.length < 1 ? (
+            <Link href={`/${props.list.id}`}>
+              <PlusIcon className="w-6 h-6" />
+            </Link>
+          ) : (
+            <button
+              onClick={() => {
+                setListOpen(!listOpen);
+              }}
+            >
+              {listOpen ? (
+                <ChevronUpIcon className="w-6 h-6" />
+              ) : (
+                <ChevronDownIcon className="w-6 h-6" />
+              )}
+            </button>
+          )}
           <Link href={`/${props.list.id}`}>
             <EllipsisVerticalIcon className="w-6 h-6" />
           </Link>
