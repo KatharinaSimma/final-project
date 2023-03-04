@@ -12,8 +12,6 @@ import { useState } from 'react';
 import { Task } from '../../database/lists';
 import TaskContainer from '../TaskContainer';
 
-// import TaskContainer from '../TaskContainer';
-
 export type ListWithTaskResponse = {
   id: number;
   title: string;
@@ -104,7 +102,7 @@ export default function SingleViewList(props: Props) {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <main className="flex flex-col max-w-lg m-auto mb-12">
+    <main className="flex flex-col max-w-lg p-3 m-auto mb-12 sm:p-0">
       <h1 className="py-5 text-3xl text-center ">
         Edit List: {data.singleListWithTasks.title}
       </h1>
@@ -162,7 +160,7 @@ export default function SingleViewList(props: Props) {
       ) : (
         <span>{description}</span>
       )}
-      <div className="flex items-center gap-2 my-2 justify-items-center">
+      <div className="flex flex-wrap items-center gap-2 my-2 justify-items-center">
         <label className="p-2" htmlFor="createTask">
           New Task:
         </label>

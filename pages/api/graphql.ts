@@ -7,6 +7,7 @@ import {
   createList,
   createTask,
   deleteListById,
+  deleteTaskById,
   getListById,
   getLists,
   getListWithTask,
@@ -28,6 +29,7 @@ type ListInput = {
 type TaskInput = {
   listId: string;
   title: string;
+  id: string;
 };
 
 // type FakeAdminAnimalContext = {
@@ -68,6 +70,7 @@ const typeDefs = gql`
     createList(title: String!): List
     createTask(title: String!, listId: String!): Task
     deleteListById(id: ID): List
+    deleteTaskById(id: ID!): Task
     # updateListById(id: ID!, title: String!, description: String!): List
   }
 `;
@@ -151,6 +154,18 @@ const resolvers = {
       // }
 
       return await deleteListById(parseInt(args.id));
+    },
+
+    deleteTaskById: async (
+      parent: string,
+      args: Args,
+      // context: FakeAdminAnimalContext,
+    ) => {
+      // if (!context.isAdmin) {
+      // throw new GraphQLError('Unauthorized operation');
+      // }
+
+      return await deleteTaskById(parseInt(args.id));
     },
 
     // updateAnimalById: async (parent: string, args: AnimalInput) => {

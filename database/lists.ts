@@ -1,6 +1,10 @@
 import { cache } from 'react';
 import { sql } from './connect';
 
+// ////// //
+// TYPES  //
+// ////// //
+
 export type List = {
   id: number;
   title: string;
@@ -14,6 +18,18 @@ export type Task = {
   description?: string;
 };
 
+export type ListWithTasks = {
+  id: number;
+  listId: number | null;
+  title: string;
+  description: string | null;
+  tasks: any;
+};
+
+// //// //
+// READ //
+// //// //
+
 export const getLists = cache(async () => {
   const lists = await sql<
     { id: number; title: string; description: string | null }[]
@@ -26,14 +42,6 @@ export const getLists = cache(async () => {
 
   return lists;
 });
-
-export type ListWithTasks = {
-  id: number;
-  listId: number | null;
-  title: string;
-  description: string | null;
-  tasks: any;
-};
 
 export const getListWithTask = cache(async (id: number) => {
   const tasks = await sql<
@@ -115,7 +123,32 @@ export const getTaskByListId = cache(async (listId: number) => {
   return task;
 });
 
-// Create List
+export const getListByTitle = cache(async (title: string) => {
+  if (!title) {
+    return undefined;
+  }
+
+  const [list] = await sql<
+    {
+      id: number;
+      title: string;
+      description: string | null;
+      createdAt: Date | null;
+    }[]
+  >`
+      SELECT
+        *
+      FROM
+        lists
+      WHERE
+        title = ${title}
+  `;
+  return list;
+});
+
+// ////// //
+// CREATE //
+// ////// //
 export const createList = cache(async (title: string) => {
   const [list] = await sql<
     { id: number; title: string; description: string | null }[]
@@ -130,7 +163,6 @@ export const createList = cache(async (title: string) => {
   return list;
 });
 
-// Create Task
 export const createTask = cache(async (title: string, listId: number) => {
   const [task] = await sql<
     {
@@ -149,6 +181,27 @@ export const createTask = cache(async (title: string, listId: number) => {
   `;
   return task;
 });
+
+// /////// //
+// UPDATE  //
+// /////// //
+
+// export const updateTaskById = cache(async (id: number, title: string) => {
+//   if (Number.isNaN(id)) {
+//     return undefined;
+//   }
+
+//   const [task] = await sql<Task[]>`
+//     UPDATE
+//       tasks
+//     SET
+//       title = ${title}
+//     WHERE
+//       id = ${id}
+//     RETURNING *
+//   `;
+//   return task;
+// });
 
 // Update list
 // export const updateListById = cache(
@@ -171,7 +224,10 @@ export const createTask = cache(async (title: string, listId: number) => {
 //   },
 // );
 
-// Detele list
+// /////// //
+// DELETE  //
+// /////// //
+
 export const deleteListById = cache(async (id: number) => {
   if (Number.isNaN(id)) {
     return undefined;
@@ -194,19 +250,27 @@ export const deleteListById = cache(async (id: number) => {
   return list;
 });
 
-// Get list by first name
-// export const getListByTitle = cache(async (title: string) => {
-//   if (!title) {
-//     return undefined;
-//   }
+export const deleteTaskById = cache(async (id: number) => {
+  if (Number.isNaN(id)) {
+    return undefined;
+  }
 
-//   const [list] = await sql<List[]>`
-//       SELECT
-//         *
-//       FROM
-//         lists
-//       WHERE
-//         title = ${title}
-//   `;
-//   return list;
-// });
+  const [task] = await sql<
+    {
+      id: number;
+      listId: number | null;
+      title: string;
+      description: string | null;
+      dueDate: Date | null;
+      inUse: boolean | null;
+      createdAt: Date | null;
+    }[]
+  >`
+    DELETE FROM
+      tasks
+    WHERE
+      id = ${id}
+    RETURNING *
+  `;
+  return task;
+});
