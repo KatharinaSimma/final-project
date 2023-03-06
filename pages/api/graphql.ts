@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import bcrypt from 'bcrypt';
 import { GraphQLError } from 'graphql';
 import {
   createList,
@@ -14,11 +15,36 @@ import {
   getTaskByListId,
   updateTaskById,
 } from '../../database/lists';
-
-// import { isUserAdminBySessionToken } from '../../database/users';
+import {
+  createUser,
+  getUserByUsername,
+  getUserByUsernameWithPasswordHash,
+  isUserAdminBySessionToken,
+} from '../../database/users';
 
 type Args = {
   id: string;
+};
+
+type RegisterUserInput = {
+  username: string;
+  password: string;
+};
+
+type LoginArgument = {
+  username: string;
+  password: string;
+};
+
+type UserAuthenticationContext = {
+  res: {
+    setHeader: (setCookie: string, cookieValue: string) => void;
+  };
+};
+
+type UserContext = {
+  isAdmin: boolean;
+  req: { cookies: { fakeSessionToken: string } };
 };
 
 type ListInput = {
@@ -33,11 +59,6 @@ type TaskInput = {
   id: string;
   done: boolean;
 };
-
-// type FakeAdminAnimalContext = {
-//   isAdmin: boolean;
-//   req: { cookies: { fakeSessionToken: string } };
-// };
 
 const typeDefs = gql`
   type List {
@@ -61,6 +82,12 @@ const typeDefs = gql`
     tasks: [Task]
   }
 
+  type User {
+    id: ID!
+    username: String!
+    password: String
+  }
+
   type Query {
     lists: [List]
     list(id: ID!): List
@@ -72,17 +99,21 @@ const typeDefs = gql`
   type Mutation {
     createList(title: String!): List
     createTask(title: String!, listId: String!): Task
+    createUser(username: String!, password: String!): User
+
     deleteListById(id: ID): List
     deleteTaskById(id: ID!): Task
+
     updateTaskById(id: ID!, title: String, done: Boolean): Task
-    # updateListById(id: ID!, title: String!, description: String!): List
+    login(username: String!, password: String!): User
   }
 `;
 
 // Create fake serializedCookie for authentication
-// function createFakeSerializedCookie(firstName: string) {
-//   return `fakeSessionToken=${firstName}; HttpOnly; SameSite=lax; Path=/; Max-Age=3600`;
-// }
+// FIX WITH JOSÈ
+function createFakeSerializedCookie(firstName: string) {
+  return `fakeSessionToken=${firstName}; HttpOnly; SameSite=lax; Path=/; Max-Age=3600`;
+}
 
 const resolvers = {
   Query: {
@@ -114,7 +145,7 @@ const resolvers = {
     //   if (!args.firstName) {
     //     throw new GraphQLError('User must be logged in');
     //   }
-    //   return await getAnimalByFirstName(args.firstName);
+    //   return await getUserByUserName(args.firstName);
     // },
   },
 
@@ -146,6 +177,76 @@ const resolvers = {
         throw new GraphQLError('Required field is missing');
       }
       return await createTask(args.title, parseInt(args.listId));
+    },
+
+    createUser: async (parent: string, args: RegisterUserInput) => {
+      // validate input
+      // FIXME: Add zod types???
+      if (
+        !args.username ||
+        !args.password ||
+        typeof args.username !== 'string' ||
+        typeof args.password !== 'string'
+      ) {
+        throw new GraphQLError('Required field is missing');
+      }
+
+      const user = await getUserByUsername(args.username);
+      if (user) {
+        throw new GraphQLError('User already exists');
+      }
+
+      // FIXME: bcrypt breaks application
+      const passwordHash = await bcrypt.hash(args.password, 12);
+
+      const newUser = await createUser(args.username, passwordHash);
+
+      if (!newUser) {
+        throw new GraphQLError(
+          'Internal server error (500): User creation failed',
+        );
+      }
+      return newUser;
+    },
+
+    login: async (
+      parent: string,
+      args: LoginArgument,
+      context: UserContext,
+    ) => {
+      if (
+        !args.username ||
+        !args.password ||
+        typeof args.username !== 'string' ||
+        typeof args.password !== 'string'
+      ) {
+        throw new GraphQLError('Required field missing');
+      }
+      // FIXME: Implement secure authentication
+
+      const userWithPasswordHash = await getUserByUsernameWithPasswordHash(
+        args.username,
+      );
+
+      if (!userWithPasswordHash) {
+        throw new GraphQLError("Credentials don't match");
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        args.password,
+        userWithPasswordHash.passwordHash,
+      );
+
+      if (!isPasswordValid) {
+        throw new GraphQLError("Credentials don't match");
+      }
+
+      // const fakeSerializedCookie = createFakeSerializedCookie(args.username);
+      // context.res.setHeader('Set-Cookie', fakeSerializedCookie);
+
+      // return userWithPasswordHash.username;
+
+      return await getUserByUsername(args.username);
     },
 
     deleteListById: async (
@@ -184,31 +285,6 @@ const resolvers = {
 
       return await updateTaskById(parseInt(args.id), args.title, args.done);
     },
-
-    // login: async (
-    //   parent: string,
-    //   args: LoginArgument,
-    //   context: AnimalAuthenticationContext,
-    // ) => {
-    //   // FIXME: Implement secure authentication
-    //   if (
-    //     typeof args.username !== 'string' ||
-    //     typeof args.password !== 'string' ||
-    //     !args.username ||
-    //     !args.password
-    //   ) {
-    //     throw new GraphQLError('Required field missing');
-    //   }
-
-    //   if (args.username !== 'Mayo' || args.password !== 'asdf') {
-    //     throw new GraphQLError('Invalid username or password');
-    //   }
-
-    //   const fakeSerializedCookie = createFakeSerializedCookie(args.username);
-    //   context.res.setHeader('Set-Cookie', fakeSerializedCookie);
-
-    //   return await getAnimalByFirstName(args.username);
-    // },
   },
 };
 
@@ -221,4 +297,12 @@ const server = new ApolloServer({
   schema,
 });
 
-export default startServerAndCreateNextHandler(server);
+export default startServerAndCreateNextHandler(server, {
+  context: async (req, res) => {
+    // FIXME: Implement secure authentication
+    const isAdmin = await isUserAdminBySessionToken(
+      req.cookies.fakeSessionToken!,
+    );
+    return { req, res, isAdmin };
+  },
+});
