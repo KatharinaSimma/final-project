@@ -5,6 +5,7 @@ export async function up(sql) {
       list_id integer REFERENCES lists (id) ON DELETE CASCADE,
       title varchar(50) NOT NULL,
       description varchar(255),
+      done boolean default false,
       due_date date,
       in_use boolean default false,
       created_at timestamp default current_timestamp

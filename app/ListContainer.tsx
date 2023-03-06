@@ -23,6 +23,7 @@ const getListWithTask = gql`
         id
         title
         description
+        done
       }
     }
   }

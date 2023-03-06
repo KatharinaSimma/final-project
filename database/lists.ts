@@ -16,6 +16,7 @@ export type Task = {
   listId?: number;
   title: string;
   description?: string;
+  done: boolean;
 };
 
 export type ListWithTasks = {
@@ -50,11 +51,11 @@ export const getListWithTask = cache(async (id: number) => {
       listId: number | null;
       title: string;
       description: string | null;
-      tasks: any;
+      done: boolean | null;
     }[]
   >`
     SELECT
-      id, list_id, title, description, tasks
+      id, list_id, title, description, done
     FROM
       tasks
     WHERE tasks.list_id = ${id}
@@ -69,10 +70,11 @@ export const getTasks = cache(async () => {
       listId: number | null;
       title: string;
       description: string | null;
+      done: boolean | null;
     }[]
   >`
     SELECT
-      id, list_id, title, description
+      id, list_id, title, description, done
     FROM
       tasks
   `;
@@ -110,10 +112,11 @@ export const getTaskByListId = cache(async (listId: number) => {
       listId: number | null;
       title: string;
       description: string | null;
+      done: boolean | null;
     }[]
   >`
     SELECT
-      id, list_id, title, description
+      id, list_id, title, description, done
     FROM
       tasks
     WHERE
@@ -186,22 +189,35 @@ export const createTask = cache(async (title: string, listId: number) => {
 // UPDATE  //
 // /////// //
 
-// export const updateTaskById = cache(async (id: number, title: string) => {
-//   if (Number.isNaN(id)) {
-//     return undefined;
-//   }
+export const updateTaskById = cache(
+  async (id: number, title: string, done: boolean) => {
+    if (Number.isNaN(id)) {
+      return undefined;
+    }
 
-//   const [task] = await sql<Task[]>`
-//     UPDATE
-//       tasks
-//     SET
-//       title = ${title}
-//     WHERE
-//       id = ${id}
-//     RETURNING *
-//   `;
-//   return task;
-// });
+    const [task] = await sql<
+      {
+        id: number;
+        listId: number | null;
+        title: string;
+        description: string | null;
+        done: boolean | null;
+        dueDate: Date | null;
+        inUse: boolean | null;
+        createdAt: Date | null;
+      }[]
+    >`
+    UPDATE
+      tasks
+    SET
+      title = ${title}, done = ${done}
+    WHERE
+      id = ${id}
+    RETURNING *
+  `;
+    return task;
+  },
+);
 
 // Update list
 // export const updateListById = cache(
@@ -261,6 +277,7 @@ export const deleteTaskById = cache(async (id: number) => {
       listId: number | null;
       title: string;
       description: string | null;
+      done: boolean | null;
       dueDate: Date | null;
       inUse: boolean | null;
       createdAt: Date | null;

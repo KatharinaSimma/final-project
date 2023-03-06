@@ -12,6 +12,7 @@ import {
   getLists,
   getListWithTask,
   getTaskByListId,
+  updateTaskById,
 } from '../../database/lists';
 
 // import { isUserAdminBySessionToken } from '../../database/users';
@@ -30,6 +31,7 @@ type TaskInput = {
   listId: string;
   title: string;
   id: string;
+  done: boolean;
 };
 
 // type FakeAdminAnimalContext = {
@@ -49,6 +51,7 @@ const typeDefs = gql`
     title: String!
     description: String
     listId: ID!
+    done: Boolean
   }
 
   type ListWithTasks {
@@ -71,6 +74,7 @@ const typeDefs = gql`
     createTask(title: String!, listId: String!): Task
     deleteListById(id: ID): List
     deleteTaskById(id: ID!): Task
+    updateTaskById(id: ID!, title: String, done: Boolean): Task
     # updateListById(id: ID!, title: String!, description: String!): List
   }
 `;
@@ -168,24 +172,18 @@ const resolvers = {
       return await deleteTaskById(parseInt(args.id));
     },
 
-    // updateAnimalById: async (parent: string, args: AnimalInput) => {
-    //   if (
-    //     typeof args.firstName !== 'string' ||
-    //     typeof args.type !== 'string' ||
-    //     (args.accessory && typeof args.type !== 'string') ||
-    //     !args.firstName ||
-    //     !args.type
-    //   ) {
-    //     throw new GraphQLError('Required field missing');
-    //   }
+    updateTaskById: async (parent: string, args: TaskInput) => {
+      if (
+        !args.id ||
+        (args.id && typeof args.id !== 'string') ||
+        typeof args.title !== 'string' ||
+        typeof args.done !== 'boolean'
+      ) {
+        throw new GraphQLError('Required field missing');
+      }
 
-    //   return await updateAnimalById(
-    //     parseInt(args.id),
-    //     args.firstName,
-    //     args.type,
-    //     args.accessory,
-    //   );
-    // },
+      return await updateTaskById(parseInt(args.id), args.title, args.done);
+    },
 
     // login: async (
     //   parent: string,

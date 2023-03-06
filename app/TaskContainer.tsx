@@ -9,10 +9,13 @@ type Props = {
 };
 
 export default function TaskContainer(props: Props) {
+  const { list } = props;
   return (
     <div>
-      {props.list.tasks.map((task: Task) => (
-        <TaskComponent key={`task-${task.id}`} task={task} />
+      {list.tasks.map((task: Task) => (
+        <div key={`task-${task.id}`}>
+          {!task.done && <TaskComponent task={task} />}
+        </div>
       ))}
     </div>
   );

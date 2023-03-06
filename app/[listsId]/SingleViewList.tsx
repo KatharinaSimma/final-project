@@ -1,13 +1,7 @@
 'use client';
 
 import { gql, useMutation, useQuery } from '@apollo/client';
-import {
-  ArchiveBoxArrowDownIcon,
-  CheckCircleIcon,
-  PencilIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/react/20/solid';
+import { PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
 import TaskContainer from '../TaskContainer';
@@ -15,7 +9,6 @@ import TaskContainer from '../TaskContainer';
 export type ListWithTaskResponse = {
   id: number;
   title: string;
-  description?: string;
   tasks: [Task];
 };
 
@@ -29,6 +22,7 @@ const getSingleListWithTask = gql`
         id
         title
         description
+        done
       }
     }
   }
@@ -55,8 +49,6 @@ const createTask = gql`
 type Props = { listsId: string };
 
 export default function SingleViewList(props: Props) {
-  const [description, setDescription] = useState('');
-  const [editDescription, setEditDescription] = useState(false);
   const [onError, setOnError] = useState('');
   const [newTaskName, setNewTaskName] = useState('');
 
@@ -94,7 +86,7 @@ export default function SingleViewList(props: Props) {
       singleListWithTasksId: props.listsId,
     },
     onCompleted: async () => {
-      await refetch;
+      await refetch();
     },
   });
 
@@ -108,60 +100,8 @@ export default function SingleViewList(props: Props) {
       </h1>
       <p className="error">{onError}</p>
 
-      <div className="flex justify-end gap-2 my-3">
-        <button className="flex items-center gap-1 px-3 py-1 border rounded-md">
-          <ArchiveBoxArrowDownIcon className="w-4 h-4" />
-          Archive
-        </button>
-
-        <button
-          className="flex items-center gap-1 px-3 py-1 border rounded-md"
-          onClick={async () => {
-            await handleDeleteList({
-              variables: {
-                id: data.singleListWithTasks.id,
-              },
-            });
-          }}
-        >
-          <TrashIcon className="w-4 h-4" />
-          Delete
-        </button>
-      </div>
-      <div className="flex items-end justify-between">
-        <label htmlFor="description">Description:</label>
-        <button
-          className="gap-1 px-3 py-1 border rounded-md "
-          onClick={() => setEditDescription(!editDescription)}
-        >
-          {editDescription ? (
-            <span className="flex items-center gap-1">
-              <CheckCircleIcon className="w-4 h-4" /> Save Description
-            </span>
-          ) : (
-            <span className="flex items-center gap-1">
-              <PencilIcon className="w-4 h-4" /> Edit Description
-            </span>
-          )}
-        </button>
-      </div>
-
-      {editDescription || !description ? (
-        <textarea
-          rows={3}
-          id="description"
-          className="block w-full p-2 border rounded-md"
-          value={description}
-          onChange={(event) => {
-            setDescription(event.currentTarget.value);
-          }}
-          placeholder="Add a description ..."
-        />
-      ) : (
-        <span>{description}</span>
-      )}
       <div className="flex flex-wrap items-center gap-2 my-2 justify-items-center">
-        <label className="p-2" htmlFor="createTask">
+        <label className="p-2 " htmlFor="createTask">
           New Task:
         </label>
         <input
@@ -180,6 +120,21 @@ export default function SingleViewList(props: Props) {
       </div>
 
       <TaskContainer list={data.singleListWithTasks} />
+      <div className="flex justify-end gap-2 my-3">
+        <button
+          className="flex items-center gap-1 px-4 py-2 border border-black rounded-md"
+          onClick={async () => {
+            await handleDeleteList({
+              variables: {
+                id: data.singleListWithTasks.id,
+              },
+            });
+          }}
+        >
+          <TrashIcon className="w-4 h-4" />
+          Delete List
+        </button>
+      </div>
     </main>
   );
 }

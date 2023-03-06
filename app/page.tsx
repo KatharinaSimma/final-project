@@ -17,6 +17,7 @@ export default async function Home() {
             id
             title
             description
+            done
           }
         }
       }
