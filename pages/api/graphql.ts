@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { gql } from '@apollo/client';
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
@@ -15,12 +16,14 @@ import {
   getTaskByListId,
   updateTaskById,
 } from '../../database/lists';
+import { createSession } from '../../database/sessions';
 import {
   createUser,
   getUserByUsername,
   getUserByUsernameWithPasswordHash,
   isUserAdminBySessionToken,
 } from '../../database/users';
+import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 
 type Args = {
   id: string;
@@ -42,10 +45,10 @@ type UserAuthenticationContext = {
   };
 };
 
-type UserContext = {
-  isAdmin: boolean;
-  req: { cookies: { fakeSessionToken: string } };
-};
+// type UserContext = {
+//   isAdmin: boolean;
+//   req: { cookies: { fakeSessionToken: string } };
+// };
 
 type ListInput = {
   id: string;
@@ -108,12 +111,6 @@ const typeDefs = gql`
     login(username: String!, password: String!): User
   }
 `;
-
-// Create fake serializedCookie for authentication
-// FIX WITH JOSÈ
-function createFakeSerializedCookie(firstName: string) {
-  return `fakeSessionToken=${firstName}; HttpOnly; SameSite=lax; Path=/; Max-Age=3600`;
-}
 
 const resolvers = {
   Query: {
@@ -179,7 +176,11 @@ const resolvers = {
       return await createTask(args.title, parseInt(args.listId));
     },
 
-    createUser: async (parent: string, args: RegisterUserInput) => {
+    createUser: async (
+      parent: string,
+      args: RegisterUserInput,
+      context: UserAuthenticationContext,
+    ) => {
       // validate input
       // FIXME: Add zod types???
       if (
@@ -196,7 +197,6 @@ const resolvers = {
         throw new GraphQLError('User already exists');
       }
 
-      // FIXME: bcrypt breaks application
       const passwordHash = await bcrypt.hash(args.password, 12);
 
       const newUser = await createUser(args.username, passwordHash);
@@ -206,14 +206,36 @@ const resolvers = {
           'Internal server error (500): User creation failed',
         );
       }
+
+      // create a session for the new user
+      const token = crypto.randomBytes(80).toString('base64');
+      // const csrfSecret = createCsrfSecret();
+
+      // create the session
+      const session = await createSession(
+        token,
+        newUser.id,
+        // csrfSecret,
+      );
+
+      if (!session) {
+        throw new GraphQLError('Creating session failed');
+      }
+
+      const serializedCookie = createSerializedRegisterSessionTokenCookie(
+        session.token,
+      );
+      context.res.setHeader('Set-Cookie', serializedCookie);
+
       return newUser;
     },
 
     login: async (
       parent: string,
       args: LoginArgument,
-      context: UserContext,
+      context: UserAuthenticationContext,
     ) => {
+      // check input type
       if (
         !args.username ||
         !args.password ||
@@ -222,31 +244,45 @@ const resolvers = {
       ) {
         throw new GraphQLError('Required field missing');
       }
-      // FIXME: Implement secure authentication
 
+      // check if username exists
       const userWithPasswordHash = await getUserByUsernameWithPasswordHash(
         args.username,
       );
-
       if (!userWithPasswordHash) {
         throw new GraphQLError("Credentials don't match");
       }
 
+      // check if password is valid
       const isPasswordValid = await bcrypt.compare(
         args.password,
         userWithPasswordHash.passwordHash,
       );
-
       if (!isPasswordValid) {
         throw new GraphQLError("Credentials don't match");
       }
 
-      // const fakeSerializedCookie = createFakeSerializedCookie(args.username);
-      // context.res.setHeader('Set-Cookie', fakeSerializedCookie);
+      // create the token
+      const token = crypto.randomBytes(80).toString('base64');
+      // const csrfSecret = createCsrfSecret();
 
-      // return userWithPasswordHash.username;
+      // create the session
+      const session = await createSession(
+        token,
+        userWithPasswordHash.id,
+        // csrfSecret,
+      );
 
-      return await getUserByUsername(args.username);
+      if (!session) {
+        throw new GraphQLError('Creating session failed');
+      }
+
+      const serializedCookie = createSerializedRegisterSessionTokenCookie(
+        session.token,
+      );
+      context.res.setHeader('Set-Cookie', serializedCookie);
+
+      return userWithPasswordHash.username;
     },
 
     deleteListById: async (
