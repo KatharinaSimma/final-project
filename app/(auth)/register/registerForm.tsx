@@ -30,13 +30,13 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
       setOnError(error.message);
     },
 
-    onCompleted: (data) => {
+    onCompleted: () => {
       const returnTo = getSafeReturnToPath(props.returnTo);
       if (returnTo) {
         router.push(returnTo);
         return;
       }
-      router.replace(`/profile/${data.createUser.username}`);
+      router.replace(`/profile`);
       router.refresh();
     },
   });

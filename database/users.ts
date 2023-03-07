@@ -48,46 +48,19 @@ export const getUserByUsernameWithPasswordHash = cache(
   },
 );
 
-// Update animal
-// export const updateUserById = cache(
-//   async (id: number, username: string, password: string, accessory: string) => {
-//     if (Number.isNaN(id)) {
-//       return undefined;
-//     }
-
-//     const [animal] = await sql<User[]>`
-//     UPDATE
-//       users
-//     SET
-//       username = ${username},
-//       password = ${password},
-//       accessory = ${accessory}
-//     WHERE
-//       id = ${id}
-//     RETURNING *
-//   `;
-//     return animal;
-//   },
-// );
-
-// Detele animal
-// export const deleteUserById = cache(async (id: number) => {
-//   if (Number.isNaN(id)) {
-//     return undefined;
-//   }
-
-//   const [animal] = await sql<User[]>`
-//     DELETE FROM
-//       users
-//     WHERE
-//       id = ${id}
-//     RETURNING *
-//   `;
-//   return animal;
-// });
-
-export async function isUserAdminBySessionToken(sessionToken: string) {
-  // FIXME: Implement proper authorization
-  // console.log(sessionToken);
-  return await true;
-}
+export const getUserBySessionToken = cache(async (token: string) => {
+  const [user] = await sql<{ id: number; username: string }[]>`
+    SELECT
+      users.id,
+      users.username
+    FROM
+      users
+    INNER JOIN
+      sessions ON (
+        sessions.token = ${token} AND
+        sessions.user_id = users.id AND
+        sessions.expiry_timestamp > now()
+      )
+  `;
+  return user;
+});

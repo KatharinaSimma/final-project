@@ -19,9 +19,9 @@ import {
 import { createSession } from '../../database/sessions';
 import {
   createUser,
+  getUserBySessionToken,
   getUserByUsername,
   getUserByUsernameWithPasswordHash,
-  isUserAdminBySessionToken,
 } from '../../database/users';
 import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 
@@ -45,10 +45,10 @@ type UserAuthenticationContext = {
   };
 };
 
-// type UserContext = {
-//   isAdmin: boolean;
-//   req: { cookies: { fakeSessionToken: string } };
-// };
+type UserContext = {
+  isUserLoggedIn: boolean;
+  req: { cookies: { sessionToken: string } };
+};
 
 type ListInput = {
   id: string;
@@ -64,6 +64,12 @@ type TaskInput = {
 };
 
 const typeDefs = gql`
+  type UserContext {
+    isUserLoggedIn: Boolean
+    username: String
+    userId: String
+  }
+
   type List {
     id: ID!
     title: String!
@@ -97,6 +103,8 @@ const typeDefs = gql`
     tasksByListId(listId: ID!): [Task]
     listWithTasks: [ListWithTasks]
     singleListWithTasks(id: ID!): ListWithTasks
+    userBySessionToken(token: String!): User
+    isUserLoggedIn: UserContext
   }
 
   type Mutation {
@@ -134,16 +142,6 @@ const resolvers = {
     singleListWithTasks: async (parent: any, args: Args) => {
       return await getListById(parseInt(args.id));
     },
-
-    // getLoggedInAnimalByFirstName: async (
-    //   parent: string,
-    //   args: { firstName: string },
-    // ) => {
-    //   if (!args.firstName) {
-    //     throw new GraphQLError('User must be logged in');
-    //   }
-    //   return await getUserByUserName(args.firstName);
-    // },
   },
 
   ListWithTasks: {
@@ -282,17 +280,17 @@ const resolvers = {
       );
       context.res.setHeader('Set-Cookie', serializedCookie);
 
-      return userWithPasswordHash.username;
+      return getUserByUsername(args.username);
     },
 
     deleteListById: async (
       parent: string,
       args: Args,
-      // context: FakeAdminAnimalContext,
+      context: UserContext,
     ) => {
-      // if (!context.isAdmin) {
-      // throw new GraphQLError('Unauthorized operation');
-      // }
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
 
       return await deleteListById(parseInt(args.id));
     },
@@ -335,10 +333,8 @@ const server = new ApolloServer({
 
 export default startServerAndCreateNextHandler(server, {
   context: async (req, res) => {
-    // FIXME: Implement secure authentication
-    const isAdmin = await isUserAdminBySessionToken(
-      req.cookies.fakeSessionToken!,
-    );
-    return { req, res, isAdmin };
+    const user = await getUserBySessionToken(req.cookies.sessionToken!);
+    const isUserLoggedIn = user ? true : false;
+    return { req, res, isUserLoggedIn };
   },
 });

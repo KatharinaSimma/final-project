@@ -6,11 +6,10 @@ export const config = {
 
 export function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
-  // FIXME
-  const fakeSessionToken = request.cookies.get('fakeSessionToken')?.value;
+  const sessionToken = request.cookies.get('sessionToken')?.value;
 
-  if (fakeSessionToken) {
-    requestHeaders.set('x-fakeSessionToken-to-delete', fakeSessionToken);
+  if (sessionToken) {
+    requestHeaders.set('x-sessionToken-to-delete', sessionToken);
   }
 
   const response = NextResponse.next({
@@ -20,7 +19,7 @@ export function middleware(request: NextRequest) {
   });
 
   response.cookies.set({
-    name: 'fakeSessionToken',
+    name: 'sessionToken',
     value: '',
     maxAge: -1,
   });

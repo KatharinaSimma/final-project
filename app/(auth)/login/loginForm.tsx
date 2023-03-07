@@ -29,14 +29,14 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
       setOnError(error.message);
     },
 
-    onCompleted: (data) => {
+    onCompleted: () => {
       const returnTo = getSafeReturnToPath(props.returnTo);
       if (returnTo) {
         router.push(returnTo);
         return;
       }
 
-      router.replace(`/profile/${data.login.username}`);
+      router.replace(`/profile`);
       router.refresh();
     },
   });

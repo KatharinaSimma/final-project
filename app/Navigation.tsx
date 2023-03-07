@@ -1,30 +1,26 @@
-// import { gql } from '@apollo/client';
+import { gql } from '@apollo/client';
 import {
   EnvelopeIcon,
   RectangleGroupIcon,
   UserCircleIcon,
 } from '@heroicons/react/20/solid';
-// import { cookies } from 'next/headers';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { initializeApollo } from '../util/graphql';
 
-// import { initializeApollo } from '../util/graphql';
+export default async function Navigation() {
+  const client = initializeApollo(null);
+  const sessionToken = cookies().get('sessionToken');
 
-export default function Navigation() {
-  // const client = initializeApollo(null);
-  // const nextCookies = cookies();
-
-  // const fakeSessionToken = nextCookies.get('fakeSessionToken');
-
-  // const { data } = await client.query({
-  //   query: gql`
-  //   query GetLoggedInAnimalByFirstName($firstName: String! = ${fakeSessionToken?.value}) {
-  //     getLoggedInAnimalByFirstName(firstName: $firstName) {
-  //       accessory
-  //       firstName
-  //     }
-  //   }
-  // `,
-  // });
+  const { data } = await client.query({
+    query: gql`
+    query userBySessionToken($token: String! = "${sessionToken?.value}") {
+      userBySessionToken(token: $token) {
+        username
+      }
+    }
+  `,
+  });
 
   return (
     <nav className="flex justify-around gap-5 align-middle sm:justify-center ">
@@ -44,6 +40,16 @@ export default function Navigation() {
         <UserCircleIcon className="w-6 h-6" />
         <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
           Register
+        </div>
+      </Link>
+      <Link href="/login" className="flex">
+        <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
+          Login
+        </div>
+      </Link>
+      <Link href="/logout" prefetch={false} className="flex">
+        <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
+          Logout {data.userBySessionToken?.username}
         </div>
       </Link>
     </nav>
