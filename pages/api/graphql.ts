@@ -142,6 +142,10 @@ const resolvers = {
     singleListWithTasks: async (parent: any, args: Args) => {
       return await getListById(parseInt(args.id));
     },
+
+    userBySessionToken: async (parent: any, args: { token: string }) => {
+      return await getUserBySessionToken(args.token);
+    },
   },
 
   ListWithTasks: {

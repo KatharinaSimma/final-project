@@ -3,9 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { initializeApollo } from '../../util/graphql';
 
-type Props = { params: { username: string } };
-
-export default async function UserProfile({ params }: Props) {
+export default async function UserProfilePage() {
   const client = initializeApollo(null);
   const sessionToken = cookies().get('sessionToken');
 
@@ -19,6 +17,8 @@ export default async function UserProfile({ params }: Props) {
     }
   `,
   });
+
+  console.log(data.userBySessionToken.username);
 
   if (!data.userBySessionToken) {
     redirect('/login');

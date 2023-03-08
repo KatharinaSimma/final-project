@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+// import { cookies } from 'next/headers';
+// import { redirect } from 'next/navigation';
 import { initializeApollo } from '../util/graphql';
 import ApolloClientProvider from './ApolloClientProvider';
 import ListContainer from './ListContainer';
@@ -8,7 +8,7 @@ import ListContainer from './ListContainer';
 export default async function Home() {
   const client = initializeApollo(null);
 
-  const nextCookies = cookies();
+  // const nextCookies = cookies();
 
   // const fakeSessionToken = nextCookies.get('fakeSessionToken');
   // const { data } = await client.query({
