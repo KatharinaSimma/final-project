@@ -19,9 +19,12 @@ import {
 import { createSession } from '../../database/sessions';
 import {
   createUser,
+  getUserById,
   getUserBySessionToken,
   getUserByUsername,
   getUserByUsernameWithPasswordHash,
+  getUsers,
+  getUserWithList,
 } from '../../database/users';
 import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 
@@ -42,6 +45,10 @@ type LoginArgument = {
 type UserAuthenticationContext = {
   res: {
     setHeader: (setCookie: string, cookieValue: string) => void;
+  };
+  user: {
+    id: string;
+    username: string;
   };
 };
 
@@ -91,10 +98,15 @@ const typeDefs = gql`
     tasks: [Task]
   }
 
+  # type UserListWithTasks {
+  #   id: ID!
+  #   username: String!
+  # }
+
   type User {
     id: ID!
     username: String!
-    password: String
+    listWithTasks: [ListWithTasks]
   }
 
   type Query {
@@ -105,6 +117,8 @@ const typeDefs = gql`
     singleListWithTasks(id: ID!): ListWithTasks
     userBySessionToken(token: String!): User
     isUserLoggedIn: UserContext
+    user: User
+    users: [User]
   }
 
   type Mutation {
@@ -130,12 +144,22 @@ const resolvers = {
       return getListById(parseInt(args.id));
     },
 
+    users: async () => {
+      return await getUsers();
+    },
+
+    user: (parent: string, args: Args) => {
+      return getUserById(parseInt(args.id));
+    },
+
     tasksByListId: async (parent: string, args: { listId: string }) => {
       return await getTaskByListId(parseInt(args.listId));
     },
 
     listWithTasks: async () => {
-      // return value: type [ListWithTask]
+      // check if there is a token
+      // check for user id
+      // filter lists by user id
       return await getLists();
     },
 
@@ -150,12 +174,38 @@ const resolvers = {
 
   ListWithTasks: {
     tasks: async (parent: any) => {
-      return await getListWithTask(parent.id);
+      return await getListWithTask(parseInt(parent.id));
+    },
+  },
+
+  User: {
+    listWithTasks: async (
+      parent: any,
+      args: any,
+      context: UserAuthenticationContext,
+    ) => {
+      // give me all lists
+      // where parent.userId === context.user.id
+      // && parent.listId ===
+      console.log('aaaaaaaaaaaaaaaaa', parent);
+
+      const user = await getUserWithList(parseInt(context.user.id));
+
+      console.log('bbbbbbbbbbbbbbbb', user);
+
+      return user;
     },
   },
 
   Mutation: {
-    createList: async (parent: string, args: ListInput) => {
+    createList: async (
+      parent: string,
+      args: ListInput,
+      context: UserContext,
+    ) => {
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       if (
         typeof args.title !== 'string' ||
         (args.description && typeof args.description !== 'string') ||
@@ -166,7 +216,14 @@ const resolvers = {
       return await createList(args.title);
     },
 
-    createTask: async (parent: string, args: TaskInput) => {
+    createTask: async (
+      parent: string,
+      args: TaskInput,
+      context: UserContext,
+    ) => {
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       if (
         !args.title ||
         !args.listId ||
@@ -302,16 +359,23 @@ const resolvers = {
     deleteTaskById: async (
       parent: string,
       args: Args,
-      // context: FakeAdminAnimalContext,
+      context: UserContext,
     ) => {
-      // if (!context.isAdmin) {
-      // throw new GraphQLError('Unauthorized operation');
-      // }
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
 
       return await deleteTaskById(parseInt(args.id));
     },
 
-    updateTaskById: async (parent: string, args: TaskInput) => {
+    updateTaskById: async (
+      parent: string,
+      args: TaskInput,
+      context: UserContext,
+    ) => {
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       if (
         !args.id ||
         (args.id && typeof args.id !== 'string') ||
@@ -338,7 +402,8 @@ const server = new ApolloServer({
 export default startServerAndCreateNextHandler(server, {
   context: async (req, res) => {
     const user = await getUserBySessionToken(req.cookies.sessionToken!);
+
     const isUserLoggedIn = user ? true : false;
-    return { req, res, isUserLoggedIn };
+    return { req, res, isUserLoggedIn, user };
   },
 });

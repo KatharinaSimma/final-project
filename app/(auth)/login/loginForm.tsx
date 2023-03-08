@@ -44,7 +44,6 @@ export default function LoginForm(props: { returnTo?: string | string[] }) {
 
   return (
     <div>
-      <h1>Login</h1>
       <div>
         <label>
           username

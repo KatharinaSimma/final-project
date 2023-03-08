@@ -21,6 +21,17 @@ export const createUser = cache(
   },
 );
 
+export const getUsers = cache(async () => {
+  const user = await sql<{ id: number; username: string }[]>`
+    SELECT
+      id,
+      username
+    FROM
+      users
+  `;
+  return user;
+});
+
 export const getUserByUsername = cache(async (username: string) => {
   const [user] = await sql<{ id: number; username: string }[]>`
     SELECT
@@ -30,6 +41,19 @@ export const getUserByUsername = cache(async (username: string) => {
       users
     WHERE
       username = ${username}
+  `;
+  return user;
+});
+
+export const getUserById = cache(async (id: number) => {
+  const [user] = await sql<{ id: number; username: string }[]>`
+    SELECT
+      id,
+      username
+    FROM
+      users
+    WHERE
+      id = ${id}
   `;
   return user;
 });
@@ -63,4 +87,28 @@ export const getUserBySessionToken = cache(async (token: string) => {
       )
   `;
   return user;
+});
+
+export const getUserWithList = cache(async (id: number) => {
+  const userWithList = await sql<
+    {
+      listId: number;
+      listTitle: string;
+      listDescription: string;
+    }[]
+  >`
+    SELECT
+      lists.id AS list_id,
+      lists.title AS list_title,
+      lists.description AS list_description
+    FROM
+      users
+    INNER JOIN
+      users_lists ON users.id = users_lists.user_id
+    INNER JOIN
+      lists ON users_lists.list_id = lists.id
+    WHERE
+      users.id = ${id}
+  `;
+  return userWithList;
 });

@@ -14,13 +14,15 @@ export default async function Navigation() {
 
   const { data } = await client.query({
     query: gql`
-    query userBySessionToken($token: String! = "${sessionToken?.value}") {
-      userBySessionToken(token: $token) {
-        username
+      query userBySessionToken($token: String! = "${sessionToken?.value}") {
+        userBySessionToken(token: $token) {
+          username
+        }
       }
-    }
   `,
   });
+
+  console.log(data.userBySessionToken);
 
   return (
     <nav className="flex justify-around gap-5 align-middle sm:justify-center ">
@@ -36,22 +38,22 @@ export default async function Navigation() {
           Contact
         </div>
       </Link>
-      <Link href="/register" className="flex">
-        <UserCircleIcon className="w-6 h-6" />
-        <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
-          Register
-        </div>
-      </Link>
-      <Link href="/login" className="flex">
-        <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
-          Login
-        </div>
-      </Link>
-      <Link href="/logout" prefetch={false} className="flex">
-        <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
-          Logout {data.userBySessionToken?.username}
-        </div>
-      </Link>
+
+      {!data.userBySessionToken ? (
+        <Link href="/login" className="flex">
+          <UserCircleIcon className="w-6 h-6" />
+          <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
+            Login
+          </div>
+        </Link>
+      ) : (
+        <Link href="/profile" prefetch={false} className="flex">
+          <UserCircleIcon className="w-6 h-6" />
+          <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
+            {data.userBySessionToken?.username}
+          </div>
+        </Link>
+      )}
     </nav>
   );
 }

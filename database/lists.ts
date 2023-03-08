@@ -15,7 +15,6 @@ export type Task = {
   id: number;
   listId?: number;
   title: string;
-  description?: string;
   done: boolean;
 };
 
@@ -32,15 +31,12 @@ export type ListWithTasks = {
 // //// //
 
 export const getLists = cache(async () => {
-  const lists = await sql<
-    { id: number; title: string; description: string | null }[]
-  >`
+  const lists = await sql<{ id: number; title: string; description: string }[]>`
     SELECT
       id, title, description
     FROM
       lists
   `;
-
   return lists;
 });
 
@@ -48,14 +44,13 @@ export const getListWithTask = cache(async (id: number) => {
   const tasks = await sql<
     {
       id: number;
-      listId: number | null;
+      listId: number;
       title: string;
-      description: string | null;
-      done: boolean | null;
+      done: boolean;
     }[]
   >`
     SELECT
-      id, list_id, title, description, done
+      id, list_id, title, done
     FROM
       tasks
     WHERE tasks.list_id = ${id}
@@ -67,14 +62,13 @@ export const getTasks = cache(async () => {
   const tasks = await sql<
     {
       id: number;
-      listId: number | null;
+      listId: number;
       title: string;
-      description: string | null;
-      done: boolean | null;
+      done: boolean;
     }[]
   >`
     SELECT
-      id, list_id, title, description, done
+      id, list_id, title,  done
     FROM
       tasks
   `;
@@ -88,7 +82,7 @@ export const getListById = cache(async (id: number) => {
   }
 
   const [list] = await sql<
-    { id: number; title: string; description: string | null }[]
+    { id: number; title: string; description: string }[]
   >`
     SELECT
       id, title, description
@@ -107,16 +101,10 @@ export const getTaskByListId = cache(async (listId: number) => {
   }
 
   const task = await sql<
-    {
-      id: number;
-      listId: number | null;
-      title: string;
-      description: string | null;
-      done: boolean | null;
-    }[]
+    { id: number; listId: number; title: string; done: boolean }[]
   >`
     SELECT
-      id, list_id, title, description, done
+      id, list_id, title, done
     FROM
       tasks
     WHERE
@@ -132,12 +120,7 @@ export const getListByTitle = cache(async (title: string) => {
   }
 
   const [list] = await sql<
-    {
-      id: number;
-      title: string;
-      description: string | null;
-      createdAt: Date | null;
-    }[]
+    { id: number; title: string; description: string; createdAt: Date }[]
   >`
       SELECT
         *
@@ -154,7 +137,7 @@ export const getListByTitle = cache(async (title: string) => {
 // ////// //
 export const createList = cache(async (title: string) => {
   const [list] = await sql<
-    { id: number; title: string; description: string | null }[]
+    { id: number; title: string; description: string }[]
   >`
     INSERT INTO lists
       (title)
@@ -167,20 +150,13 @@ export const createList = cache(async (title: string) => {
 });
 
 export const createTask = cache(async (title: string, listId: number) => {
-  const [task] = await sql<
-    {
-      id: number;
-      title: string;
-      description: string | null;
-      listId: number | null;
-    }[]
-  >`
+  const [task] = await sql<{ id: number; title: string; listId: number }[]>`
     INSERT INTO tasks
       (title, list_id)
     VALUES
       (${title}, ${listId})
     RETURNING
-      id, title, description, list_id
+      id, title, list_id
   `;
   return task;
 });
@@ -198,13 +174,12 @@ export const updateTaskById = cache(
     const [task] = await sql<
       {
         id: number;
-        listId: number | null;
+        listId: number;
         title: string;
-        description: string | null;
-        done: boolean | null;
-        dueDate: Date | null;
-        inUse: boolean | null;
-        createdAt: Date | null;
+        done: boolean;
+        dueDate: Date;
+        inUse: boolean;
+        createdAt: Date;
       }[]
     >`
     UPDATE
@@ -250,12 +225,7 @@ export const deleteListById = cache(async (id: number) => {
   }
 
   const [list] = await sql<
-    {
-      id: number;
-      title: string;
-      description: string | null;
-      createdAt: Date | null;
-    }[]
+    { id: number; title: string; description: string; createdAt: Date }[]
   >`
     DELETE FROM
       lists
@@ -274,13 +244,12 @@ export const deleteTaskById = cache(async (id: number) => {
   const [task] = await sql<
     {
       id: number;
-      listId: number | null;
+      listId: number;
       title: string;
-      description: string | null;
-      done: boolean | null;
-      dueDate: Date | null;
-      inUse: boolean | null;
-      createdAt: Date | null;
+      done: boolean;
+      dueDate: Date;
+      inUse: boolean;
+      createdAt: Date;
     }[]
   >`
     DELETE FROM

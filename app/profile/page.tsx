@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { initializeApollo } from '../../util/graphql';
 
@@ -18,8 +19,6 @@ export default async function UserProfilePage() {
   `,
   });
 
-  console.log(data.userBySessionToken.username);
-
   if (!data.userBySessionToken) {
     redirect('/login');
   }
@@ -29,6 +28,9 @@ export default async function UserProfilePage() {
       <h1>Profile</h1>
       <h2>name: {data.userBySessionToken.username}</h2>
       <p>id:{data.userBySessionToken.id}</p>
+      <Link className="border rounded-md" href="/logout">
+        Logout
+      </Link>
     </>
   );
 }

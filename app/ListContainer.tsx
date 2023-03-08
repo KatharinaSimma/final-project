@@ -38,6 +38,22 @@ const createList = gql`
   }
 `;
 
+const user = gql`
+  query User {
+    listWithTasks {
+      id
+      title
+      description
+      tasks {
+        id
+        title
+        description
+        done
+      }
+    }
+  }
+`;
+
 export default function ListContainer() {
   const [newListName, setNewListName] = useState('');
   const [onError, setOnError] = useState('');
@@ -55,7 +71,13 @@ export default function ListContainer() {
     },
   });
 
-  const { loading, error, data, refetch } = useQuery(getListWithTask, {
+  // const { loading, error, data, refetch } = useQuery(getListWithTask, {
+  //   onCompleted: async () => {
+  //     await refetch();
+  //   },
+  // });
+
+  const { loading, error, data, refetch } = useQuery(user, {
     onCompleted: async () => {
       await refetch();
     },
