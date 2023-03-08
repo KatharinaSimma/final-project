@@ -13,8 +13,8 @@ export default function Footer() {
   );
 
   return (
-    <footer className="fixed bottom-0 w-full h-12 p-3 align-middle bg-white border-t">
-      <div className="hidden sm:block">{contactMessage}</div>
+    <footer className="fixed bottom-0 w-full h-12 p-3 align-middle border-t bg-base-100">
+      <div className="hidden sm:block ">{contactMessage}</div>
 
       <div className="block sm:hidden">
         <Navigation />

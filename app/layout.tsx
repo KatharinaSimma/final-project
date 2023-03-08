@@ -18,7 +18,7 @@ type Props = {
 
 export default function RootLayout(props: Props) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="aqua">
       <head />
       <body>
         <Header />

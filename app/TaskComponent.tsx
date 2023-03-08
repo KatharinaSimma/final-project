@@ -72,21 +72,18 @@ export default function TaskComponent(props: Props) {
       key={`task-${task.id}`}
     >
       <div className="flex items-baseline gap-1">
-        <input
-          className="mx-1 accent-gray-400"
-          id={`task-${task.id}`}
-          type="checkbox"
-          onChange={async () => {
-            setDone(!done);
-            await handleUpdateTask();
-          }}
-          checked={done}
-        />
-        <div>
-          <label className="" htmlFor={`task-${task.id}`}>
-            {task.title}
-          </label>
-        </div>
+        <label className="flex gap-2 cursor-pointer label">
+          <input
+            type="checkbox"
+            className="checkbox checkbox-primary"
+            onChange={async () => {
+              setDone(!done);
+              await handleUpdateTask();
+            }}
+            checked={done}
+          />
+          <span className="label-text">{task.title}</span>
+        </label>
       </div>
       <div className="flex gap-2">
         <button
@@ -98,7 +95,7 @@ export default function TaskComponent(props: Props) {
             });
           }}
         >
-          <TrashIcon className="w-5 h-5" />
+          <TrashIcon className="w-5 h-5 fill-neutral" />
         </button>
         <p className="error">{onError}</p>
       </div>

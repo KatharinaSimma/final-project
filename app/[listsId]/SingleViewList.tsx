@@ -100,19 +100,20 @@ export default function SingleViewList(props: Props) {
       </h1>
       <p className="error">{onError}</p>
 
-      <div className="flex flex-wrap items-center gap-2 my-2 justify-items-center">
-        <label className="p-2 " htmlFor="createTask">
+      <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
+        <label className="p-2 text-lg text-primary " htmlFor="createTask">
           New Task:
         </label>
         <input
-          className="flex-grow p-2 border border-black rounded-md"
-          id="createTask"
           placeholder="..."
+          id="createTask"
+          className="w-full max-w-xs input input-bordered input-primary"
           value={newTaskName}
           onChange={(event) => setNewTaskName(event.currentTarget.value)}
         />
         <button
-          className="flex justify-center gap-1 p-2 border border-black border-solid rounded-md"
+          // className="flex justify-center gap-1 p-2 border border-black border-solid rounded-md"
+          className="flex btn btn-outline btn-primary"
           onClick={async () => await handleCreateTask()}
         >
           <PlusIcon className="w-6 h-6" />

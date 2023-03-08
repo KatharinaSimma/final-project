@@ -47,8 +47,14 @@ export default async function Navigation() {
           </div>
         </Link>
       ) : (
-        <Link href="/profile" prefetch={false} className="flex">
-          <UserCircleIcon className="w-6 h-6" />
+        <Link href="/profile" prefetch={false} className="flex gap-1">
+          <div className="avatar placeholder">
+            <div className="w-6 rounded-full bg-neutral-focus text-neutral-content">
+              <span className="text-xs">
+                {data.userBySessionToken?.username.charAt(0)}
+              </span>
+            </div>
+          </div>
           <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
             {data.userBySessionToken?.username}
           </div>
