@@ -47,7 +47,7 @@ export default async function Navigation() {
       ) : (
         <Link href="/profile" prefetch={false} className="flex gap-1">
           <div className="avatar placeholder">
-            <div className="w-6 rounded-full bg-neutral-focus text-neutral-content">
+            <div className="w-6 rounded-full bg-primary text-neutral-content">
               <span className="text-xs">
                 {data.userBySessionToken?.username.charAt(0)}
               </span>

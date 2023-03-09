@@ -5,7 +5,6 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   EllipsisVerticalIcon,
-  PlusIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid';
 import Link from 'next/link';
@@ -47,27 +46,22 @@ export default function ListComponent(props: Props) {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="max-w-lg p-2 mx-auto my-4 border border-gray-400 border-solid rounded-md min-w-md">
+    <div className="max-w-lg p-2 mx-auto my-4 border border-solid rounded-md border-primary min-w-md">
       <div className="flex justify-between ">
         {list.title}
         <div className="flex gap-2 ">
-          {list.tasks.length < 1 ? (
-            <Link href={`/${list.id}`}>
-              <PlusIcon className="w-6 h-6" />
-            </Link>
-          ) : (
-            <button
-              onClick={() => {
-                setListOpen(!listOpen);
-              }}
-            >
-              {listOpen ? (
-                <ChevronUpIcon className="w-6 h-6" />
-              ) : (
-                <ChevronDownIcon className="w-6 h-6" />
-              )}
-            </button>
-          )}
+          <button
+            onClick={() => {
+              setListOpen(!listOpen);
+            }}
+          >
+            {listOpen ? (
+              <ChevronUpIcon className="w-6 h-6" />
+            ) : (
+              <ChevronDownIcon className="w-6 h-6" />
+            )}
+          </button>
+
           <Link href={`/${list.id}`}>
             <EllipsisVerticalIcon className="w-6 h-6" />
           </Link>

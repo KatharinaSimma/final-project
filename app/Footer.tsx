@@ -8,12 +8,12 @@ export default function Footer() {
       <span className="align-middle flexjustify-center">
         Created by Katharina Simma with
       </span>
-      <HeartIcon className="w-6 h-6" />
+      <HeartIcon className="w-6 h-6 fill-primary" />
     </Link>
   );
 
   return (
-    <footer className="fixed bottom-0 w-full h-12 p-3 align-middle border-t bg-base-100">
+    <footer className="fixed bottom-0 w-full h-12 p-3 align-middle bg-base-100">
       <div className="hidden sm:block ">{contactMessage}</div>
 
       <div className="block sm:hidden">

@@ -64,11 +64,11 @@ export default function TaskComponent(props: Props) {
     refetchQueries: ['ListWithTask', 'SingleListWithTasks'],
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <button className="btn loading">loading</button>;
 
   return (
     <div
-      className="flex items-start justify-between gap-5 px-1 my-2 "
+      className="flex items-center justify-between gap-5 px-1 my-2 hover:border hover:border-primary hover:rounded-md"
       key={`task-${task.id}`}
     >
       <div className="flex items-baseline gap-1">
@@ -95,7 +95,7 @@ export default function TaskComponent(props: Props) {
             });
           }}
         >
-          <TrashIcon className="w-5 h-5 fill-neutral" />
+          <TrashIcon className="w-5 h-5 fill-secondary" />
         </button>
         <p className="error">{onError}</p>
       </div>

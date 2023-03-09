@@ -1,4 +1,5 @@
 import './globals.css';
+import { getLocalStorage } from '../util/localStorage';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -17,8 +18,10 @@ type Props = {
 };
 
 export default function RootLayout(props: Props) {
+  const theme = getLocalStorage('theme');
+  console.log(theme);
   return (
-    <html lang="en" data-theme="aqua">
+    <html lang="en" data-theme={theme}>
       <head />
       <body>
         <Header />

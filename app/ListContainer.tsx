@@ -61,7 +61,7 @@ export default function ListContainer() {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <button className="btn loading">loading</button>;
   if (error) return <p>Error: {error.message}</p>;
 
   const reversedListWithTasks = [...data.listWithTasks].reverse();

@@ -90,7 +90,7 @@ export default function SingleViewList(props: Props) {
     },
   });
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <button className="btn loading">loading</button>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
