@@ -91,16 +91,12 @@ export const getUserBySessionToken = cache(async (token: string) => {
 
 export const getUserWithList = cache(async (id: number) => {
   const userWithList = await sql<
-    {
-      listId: number;
-      listTitle: string;
-      listDescription: string;
-    }[]
+    { id: number; title: string; description: string }[]
   >`
     SELECT
-      lists.id AS list_id,
-      lists.title AS list_title,
-      lists.description AS list_description
+      lists.id AS id,
+      lists.title AS title,
+      lists.description AS description
     FROM
       users
     INNER JOIN
@@ -109,6 +105,7 @@ export const getUserWithList = cache(async (id: number) => {
       lists ON users_lists.list_id = lists.id
     WHERE
       users.id = ${id}
+
   `;
   return userWithList;
 });

@@ -42,19 +42,16 @@ type LoginArgument = {
   password: string;
 };
 
-type UserAuthenticationContext = {
-  res: {
-    setHeader: (setCookie: string, cookieValue: string) => void;
-  };
-  user: {
-    id: string;
-    username: string;
-  };
-};
-
 type UserContext = {
   isUserLoggedIn: boolean;
   req: { cookies: { sessionToken: string } };
+  user: {
+    id: number;
+    username: string;
+  };
+  res: {
+    setHeader: (setCookie: string, cookieValue: string) => void;
+  };
 };
 
 type ListInput = {
@@ -98,10 +95,9 @@ const typeDefs = gql`
     tasks: [Task]
   }
 
-  # type UserListWithTasks {
-  #   id: ID!
-  #   username: String!
-  # }
+  type UserListWithTasks {
+    lists: [ListWithTasks]
+  }
 
   type User {
     id: ID!
@@ -119,6 +115,7 @@ const typeDefs = gql`
     isUserLoggedIn: UserContext
     user: User
     users: [User]
+    userListWithTasks: [ListWithTasks]
   }
 
   type Mutation {
@@ -156,11 +153,9 @@ const resolvers = {
       return await getTaskByListId(parseInt(args.listId));
     },
 
-    listWithTasks: async () => {
-      // check if there is a token
-      // check for user id
-      // filter lists by user id
-      return await getLists();
+    listWithTasks: async (parent: any, args: any, context: UserContext) => {
+      const allLists = await getUserWithList(context?.user.id);
+      return allLists;
     },
 
     singleListWithTasks: async (parent: any, args: Args) => {
@@ -179,20 +174,8 @@ const resolvers = {
   },
 
   User: {
-    listWithTasks: async (
-      parent: any,
-      args: any,
-      context: UserAuthenticationContext,
-    ) => {
-      // give me all lists
-      // where parent.userId === context.user.id
-      // && parent.listId ===
-      console.log('aaaaaaaaaaaaaaaaa', parent);
-
-      const user = await getUserWithList(parseInt(context.user.id));
-
-      console.log('bbbbbbbbbbbbbbbb', user);
-
+    listWithTasks: async (parent: any, args: any, context: UserContext) => {
+      const user = await getUserWithList(context.user.id);
       return user;
     },
   },
@@ -238,7 +221,7 @@ const resolvers = {
     createUser: async (
       parent: string,
       args: RegisterUserInput,
-      context: UserAuthenticationContext,
+      context: UserContext,
     ) => {
       // validate input
       // FIXME: Add zod types???
@@ -292,7 +275,7 @@ const resolvers = {
     login: async (
       parent: string,
       args: LoginArgument,
-      context: UserAuthenticationContext,
+      context: UserContext,
     ) => {
       // check input type
       if (
@@ -402,7 +385,6 @@ const server = new ApolloServer({
 export default startServerAndCreateNextHandler(server, {
   context: async (req, res) => {
     const user = await getUserBySessionToken(req.cookies.sessionToken!);
-
     const isUserLoggedIn = user ? true : false;
     return { req, res, isUserLoggedIn, user };
   },

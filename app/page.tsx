@@ -26,9 +26,27 @@ export default async function Home() {
   //   redirect('/login');
   // }
 
+  // await client.query({
+  //   query: gql`
+  //     query ListWithTasks {
+  //       listWithTasks {
+  //         id
+  //         title
+  //         description
+  //         tasks {
+  //           id
+  //           title
+  //           description
+  //           done
+  //         }
+  //       }
+  //     }
+  //   `,
+  // });
+
   await client.query({
     query: gql`
-      query ListWithTasks {
+      query User {
         listWithTasks {
           id
           title

@@ -22,8 +22,6 @@ export default async function Navigation() {
   `,
   });
 
-  console.log(data.userBySessionToken);
-
   return (
     <nav className="flex justify-around gap-5 align-middle sm:justify-center ">
       <Link href="/" className="flex justify-center gap-1 align-middle">

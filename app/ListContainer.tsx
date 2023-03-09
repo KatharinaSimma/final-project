@@ -38,22 +38,6 @@ const createList = gql`
   }
 `;
 
-const user = gql`
-  query User {
-    listWithTasks {
-      id
-      title
-      description
-      tasks {
-        id
-        title
-        description
-        done
-      }
-    }
-  }
-`;
-
 export default function ListContainer() {
   const [newListName, setNewListName] = useState('');
   const [onError, setOnError] = useState('');
@@ -71,13 +55,7 @@ export default function ListContainer() {
     },
   });
 
-  // const { loading, error, data, refetch } = useQuery(getListWithTask, {
-  //   onCompleted: async () => {
-  //     await refetch();
-  //   },
-  // });
-
-  const { loading, error, data, refetch } = useQuery(user, {
+  const { loading, error, data, refetch } = useQuery(getListWithTask, {
     onCompleted: async () => {
       await refetch();
     },
@@ -96,7 +74,7 @@ export default function ListContainer() {
           New List:
         </label>
         <input
-          className="flex-grow p-2 border border-black rounded-md "
+          className="flex-grow p-2 border rounded-md "
           id="createList"
           placeholder="..."
           value={newListName}
