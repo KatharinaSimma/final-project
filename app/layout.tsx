@@ -1,5 +1,6 @@
 import './globals.css';
-import { getLocalStorage } from '../util/localStorage';
+import { cookies } from 'next/headers';
+import { themes } from '../util/themes';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -18,8 +19,16 @@ type Props = {
 };
 
 export default function RootLayout(props: Props) {
-  const theme = getLocalStorage('theme');
-  console.log(theme);
+  const themeCookie = cookies().get('theme');
+
+  const theme =
+    themeCookie &&
+    themes.find((themeName) => JSON.parse(themeCookie.value) === themeName)
+      ? JSON.parse(themeCookie.value)
+      : 'light';
+
+  console.log('theme', theme);
+
   return (
     <html lang="en" data-theme={theme}>
       <head />

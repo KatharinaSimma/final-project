@@ -35,7 +35,11 @@ export default async function UserProfilePage() {
               <em>{data.userBySessionToken.username}</em>
             </span>
 
-            <Link className="btn btn-outline btn-primary" href="/logout">
+            <Link
+              className="btn btn-outline btn-primary"
+              href="/logout"
+              prefetch={false}
+            >
               Logout
             </Link>
           </div>
