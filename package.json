@@ -35,6 +35,7 @@
     "react-dom": "^18.2.0",
     "sass": "^1.58.3",
     "sharp": "^0.31.3",
+    "stylelint-config-recommended-scss": "^9.0.1",
     "typescript": "4.9.5",
     "zod": "^3.21.4"
   },
