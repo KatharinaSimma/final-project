@@ -1,24 +1,35 @@
+import { gql } from '@apollo/client';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getValidSessionByToken } from '../../../database/sessions';
+import { initializeApollo } from '../../../util/graphql';
 import ApolloClientProvider from '../../ApolloClientProvider';
 import LoginForm from './loginForm';
 
 export default async function LoginPage() {
-  // check if we have a valid session
-  const sessionTokenCookie = cookies().get('sessionToken');
+  const client = initializeApollo(null);
+  const sessionToken = cookies().get('sessionToken');
 
-  const session =
-    sessionTokenCookie &&
-    (await getValidSessionByToken(sessionTokenCookie.value));
+  const { data, loading } = await client.query({
+    query: gql`
+    query userBySessionToken($token: String! = "${sessionToken?.value}") {
+      userBySessionToken(token: $token) {
+        id
+        username
+      }
+    }
+  `,
+  });
 
-  // if yes redirect to home
-  if (session) {
+  if (loading) return <button className="btn loading">loading</button>;
+
+  if (data.userBySessionToken) {
     redirect('/');
   }
 
   return (
-    <ApolloClientProvider initialApolloState={JSON.stringify([])}>
+    <ApolloClientProvider
+      initialApolloState={JSON.stringify(client.cache.extract())}
+    >
       <LoginForm />
     </ApolloClientProvider>
   );
