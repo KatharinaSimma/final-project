@@ -91,7 +91,7 @@ export const getUserBySessionToken = cache(async (token: string) => {
 
 export const getUserWithList = cache(async (id: number) => {
   const userWithList = await sql<
-    { id: number; title: string; description: string }[]
+    { id: number; title: string; description: string | null }[]
   >`
     SELECT
       lists.id AS id,

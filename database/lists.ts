@@ -31,9 +31,9 @@ export type ListWithTasks = {
 // //// //
 
 export const getLists = cache(async () => {
-  const lists = await sql<{ id: number; title: string; description: string }[]>`
+  const lists = await sql<{ id: number; title: string }[]>`
     SELECT
-      id, title, description
+      id, title
     FROM
       lists
   `;
@@ -81,11 +81,9 @@ export const getListById = cache(async (id: number) => {
     return undefined;
   }
 
-  const [list] = await sql<
-    { id: number; title: string; description: string }[]
-  >`
+  const [list] = await sql<{ id: number; title: string }[]>`
     SELECT
-      id, title, description
+      id, title
     FROM
       lists
     WHERE
@@ -99,7 +97,6 @@ export const getTaskByListId = cache(async (listId: number) => {
   if (Number.isNaN(listId)) {
     return undefined;
   }
-
   const task = await sql<
     { id: number; listId: number; title: string; done: boolean }[]
   >`
@@ -136,18 +133,30 @@ export const getListByTitle = cache(async (title: string) => {
 // CREATE //
 // ////// //
 export const createList = cache(async (title: string) => {
-  const [list] = await sql<
-    { id: number; title: string; description: string }[]
-  >`
+  const [list] = await sql<{ id: number; title: string }[]>`
     INSERT INTO lists
       (title)
     VALUES
       (${title})
     RETURNING
-      id, title, description
+      id, title
   `;
   return list;
 });
+
+export const createUserListRelation = cache(
+  async (userId: number, listId: number) => {
+    const [list] = await sql<{ id: number; userId: number; listId: number }[]>`
+    INSERT INTO users_lists
+      (user_id, list_id)
+    VALUES
+      (${userId}, ${listId} )
+    RETURNING
+      id, user_id, list_id
+  `;
+    return list;
+  },
+);
 
 export const createTask = cache(async (title: string, listId: number) => {
   const [task] = await sql<{ id: number; title: string; listId: number }[]>`

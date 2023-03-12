@@ -8,6 +8,7 @@ import { GraphQLError } from 'graphql';
 import {
   createList,
   createTask,
+  createUserListRelation,
   deleteListById,
   deleteTaskById,
   getListById,
@@ -112,7 +113,6 @@ const typeDefs = gql`
     listWithTasks: [ListWithTasks]
     singleListWithTasks(id: ID!): ListWithTasks
     userBySessionToken(token: String!): User
-    isUserLoggedIn: UserContext
     user: User
     users: [User]
     userListWithTasks: [ListWithTasks]
@@ -154,7 +154,7 @@ const resolvers = {
     },
 
     listWithTasks: async (parent: any, args: any, context: UserContext) => {
-      const allLists = await getUserWithList(context?.user.id);
+      const allLists = await getUserWithList(context.user.id);
       return allLists;
     },
 
@@ -196,7 +196,12 @@ const resolvers = {
       ) {
         throw new GraphQLError('Required field is missing');
       }
-      return await createList(args.title);
+      const newList = await createList(args.title);
+      if (!newList || !newList.id) {
+        throw new GraphQLError('Could not create new List');
+      }
+      await createUserListRelation(context.user.id, newList.id);
+      return newList;
     },
 
     createTask: async (
