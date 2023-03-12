@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import {
   EnvelopeIcon,
+  InformationCircleIcon,
   RectangleGroupIcon,
   UserCircleIcon,
 } from '@heroicons/react/20/solid';
@@ -34,6 +35,13 @@ export default async function Navigation() {
         <EnvelopeIcon className="w-6 h-6" />
         <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
           Contact
+        </div>
+      </Link>
+
+      <Link href="/about" className="flex justify-center gap-1 align-middle">
+        <InformationCircleIcon className="w-6 h-6" />
+        <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
+          About
         </div>
       </Link>
 

@@ -4,9 +4,7 @@ import { getValidSessionByToken } from '../../../database/sessions';
 import ApolloClientProvider from '../../ApolloClientProvider';
 import LoginForm from './loginForm';
 
-type Props = { searchParams: { returnTo?: string | string[] } };
-
-export default async function LoginPage(props: Props) {
+export default async function LoginPage() {
   // check if we have a valid session
   const sessionTokenCookie = cookies().get('sessionToken');
 
@@ -21,7 +19,7 @@ export default async function LoginPage(props: Props) {
 
   return (
     <ApolloClientProvider initialApolloState={JSON.stringify([])}>
-      <LoginForm returnTo={props.searchParams.returnTo} />
+      <LoginForm />
     </ApolloClientProvider>
   );
 }

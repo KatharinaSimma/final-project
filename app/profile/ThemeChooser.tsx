@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { setStringifiedCookie } from '../../util/cookies';
 import { themes } from '../../util/themes';
 
-export default function ListsPage() {
+export default function ThemeChooser() {
   const [listOpen, setListOpen] = useState(false);
   const router = useRouter();
   return (

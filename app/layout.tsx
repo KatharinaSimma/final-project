@@ -27,8 +27,6 @@ export default function RootLayout(props: Props) {
       ? JSON.parse(themeCookie.value)
       : 'light';
 
-  console.log('theme', theme);
-
   return (
     <html lang="en" data-theme={theme}>
       <head />
