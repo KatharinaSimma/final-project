@@ -1,28 +1,12 @@
-import { gql } from '@apollo/client';
 import {
   EnvelopeIcon,
   InformationCircleIcon,
   RectangleGroupIcon,
   UserCircleIcon,
 } from '@heroicons/react/20/solid';
-import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { initializeApollo } from '../util/graphql';
 
-export default async function Navigation() {
-  const client = initializeApollo(null);
-  const sessionToken = cookies().get('sessionToken');
-
-  const { data } = await client.query({
-    query: gql`
-      query userBySessionToken($token: String! = "${sessionToken?.value}") {
-        userBySessionToken(token: $token) {
-          username
-        }
-      }
-  `,
-  });
-
+export default function Navigation(props: { username: string }) {
   return (
     <nav className="flex justify-around gap-5 align-middle sm:justify-center ">
       <Link href="/" className="flex justify-center gap-1 align-middle">
@@ -45,7 +29,7 @@ export default async function Navigation() {
         </div>
       </Link>
 
-      {!data.userBySessionToken ? (
+      {!props.username ? (
         <Link href="/login" className="flex">
           <UserCircleIcon className="w-6 h-6" />
           <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
@@ -56,13 +40,11 @@ export default async function Navigation() {
         <Link href="/profile" prefetch={false} className="flex gap-1">
           <div className="avatar placeholder">
             <div className="w-6 rounded-full bg-primary text-neutral-content">
-              <span className="text-xs">
-                {data.userBySessionToken?.username.charAt(0)}
-              </span>
+              <span className="text-xs">{props.username.charAt(0)}</span>
             </div>
           </div>
           <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
-            {data.userBySessionToken?.username}
+            {props.username}
           </div>
         </Link>
       )}
