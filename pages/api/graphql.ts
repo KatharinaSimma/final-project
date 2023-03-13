@@ -17,7 +17,7 @@ import {
   getTaskByListId,
   updateTaskById,
 } from '../../database/lists';
-import { createSession } from '../../database/sessions';
+import { createSession, deleteSessionByToken } from '../../database/sessions';
 import {
   createUser,
   getUserById,
@@ -31,6 +31,10 @@ import { createSerializedRegisterSessionTokenCookie } from '../../util/cookies';
 
 type Args = {
   id: string;
+};
+
+type Token = {
+  token: string;
 };
 
 type RegisterUserInput = {
@@ -106,6 +110,10 @@ const typeDefs = gql`
     listWithTasks: [ListWithTasks]
   }
 
+  type Token {
+    token: String
+  }
+
   type Query {
     lists: [List]
     list(id: ID!): List
@@ -125,9 +133,10 @@ const typeDefs = gql`
 
     deleteListById(id: ID): List
     deleteTaskById(id: ID!): Task
-
     updateTaskById(id: ID!, title: String, done: Boolean): Task
+
     login(username: String!, password: String!): User
+    logout(token: String!): Token
   }
 `;
 
@@ -374,6 +383,10 @@ const resolvers = {
       }
 
       return await updateTaskById(parseInt(args.id), args.title, args.done);
+    },
+
+    logout: async (parent: string, args: Token) => {
+      return await deleteSessionByToken(args.token);
     },
   },
 };
