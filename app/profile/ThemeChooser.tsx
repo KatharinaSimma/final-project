@@ -29,7 +29,7 @@ export default function ThemeChooser() {
         </div>
       </div>
       <div
-        className={`max-w-4xl mx-auto my-4 h-fit grid grid-cols-5 gap-3 ${
+        className={`max-w-4xl mx-auto my-4 h-fit grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 ${
           listOpen ? '' : 'hidden'
         } `}
       >
