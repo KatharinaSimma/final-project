@@ -1,8 +1,8 @@
 // import lists from '../../database/lists.json';
-// import { gql } from '@apollo/client';
-// import { cookies } from 'next/headers';
-// import { redirect } from 'next/navigation';
-// import { initializeApollo } from '../../util/graphql';
+import { gql } from '@apollo/client';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { initializeApollo } from '../../util/graphql';
 import ApolloClientProvider from '../ApolloClientProvider';
 // import { listNotFoundMetadata } from './not-found';
 import SingleViewList from './SingleViewList';
@@ -28,25 +28,24 @@ type Props = {
 //   };
 // }
 
-export default function ListsPage(props: Props) {
-  // const client = initializeApollo(null);
-  // const nextCookies = cookies();
+export default async function ListsPage(props: Props) {
+  const client = initializeApollo(null);
+  const sessionToken = cookies().get('sessionToken');
 
-  // const fakeSessionToken = nextCookies.get('fakeSessionToken');
-  // const { data } = await client.query({
-  //   query: gql`
-  //     query GetLoggedInAnimalByFirstName($firstName: String! = ${fakeSessionToken?.value}) {
-  //       getLoggedInAnimalByFirstName(firstName: $firstName) {
-  //         accessory
-  //         firstName
-  //       }
-  //     }
-  //   `,
-  // });
+  const { data } = await client.query({
+    query: gql`
+    query userBySessionToken($token: String! = "${sessionToken?.value}") {
+      userBySessionToken(token: $token) {
+        id
+        username
+      }
+    }
+  `,
+  });
 
-  // if (!data.getLoggedInAnimalByFirstName) {
-  //   redirect('/login');
-  // }
+  if (!data.userBySessionToken) {
+    redirect('/login');
+  }
   return (
     <ApolloClientProvider initialApolloState={JSON.stringify([])}>
       <SingleViewList listsId={props.params.listsId} />

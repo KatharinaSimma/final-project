@@ -2,6 +2,7 @@
 
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { PlusIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
 import TaskContainer from '../TaskContainer';
@@ -89,9 +90,11 @@ export default function SingleViewList(props: Props) {
       await refetch();
     },
   });
-
   if (loading) return <button className="btn loading">loading</button>;
   if (error) return <p>Error: {error.message}</p>;
+  if (!data || !data.singleListWithTasks) {
+    redirect('/');
+  }
 
   return (
     <main className="flex flex-col max-w-lg p-3 m-auto mb-12 sm:p-0">
