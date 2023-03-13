@@ -20,6 +20,8 @@ import {
 import { createSession, deleteSessionByToken } from '../../database/sessions';
 import {
   createUser,
+  deleteUserById,
+  getListUserRelations,
   getUserById,
   getUserBySessionToken,
   getUserByUsername,
@@ -134,6 +136,7 @@ const typeDefs = gql`
     deleteListById(id: ID): List
     deleteTaskById(id: ID!): Task
     updateTaskById(id: ID!, title: String, done: Boolean): Task
+    deleteUserById(id: ID!): User
 
     login(username: String!, password: String!): User
     logout(token: String!): Token
@@ -387,6 +390,22 @@ const resolvers = {
 
     logout: async (parent: string, args: Token) => {
       return await deleteSessionByToken(args.token);
+    },
+
+    deleteUserById: async (parent: string, args: Args) => {
+      await deleteUserById(parseInt(args.id));
+      // clean up orphaned lists
+      const lists = await getLists();
+      const listRelations = await getListUserRelations();
+      lists.forEach(async (list) => {
+        const foundId = listRelations.find((relation) => {
+          return list.id === relation.listId;
+        });
+        if (!foundId) {
+          await deleteListById(list.id);
+        }
+      });
+      return;
     },
   },
 };

@@ -32,6 +32,16 @@ export const getUsers = cache(async () => {
   return user;
 });
 
+export const getListUserRelations = cache(async () => {
+  const listIds = await sql<{ listId: number }[]>`
+    SELECT
+      list_id
+    FROM
+      users_lists
+  `;
+  return listIds;
+});
+
 export const getUserByUsername = cache(async (username: string) => {
   const [user] = await sql<{ id: number; username: string }[]>`
     SELECT
@@ -91,7 +101,7 @@ export const getUserBySessionToken = cache(async (token: string) => {
 
 export const getUserWithList = cache(async (id: number) => {
   const userWithList = await sql<
-    { id: number; title: string; description: string | null }[]
+    { id: number; title: string; description: string }[]
   >`
     SELECT
       lists.id AS id,
@@ -108,4 +118,13 @@ export const getUserWithList = cache(async (id: number) => {
 
   `;
   return userWithList;
+});
+
+export const deleteUserById = cache(async (id: number) => {
+  await sql`
+    DELETE FROM
+      users
+    WHERE
+      id = ${id}
+  `;
 });
