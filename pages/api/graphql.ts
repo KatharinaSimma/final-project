@@ -19,6 +19,7 @@ import {
 } from '../../database/lists';
 import { createSession, deleteSessionByToken } from '../../database/sessions';
 import {
+  createListUserRelations,
   createUser,
   deleteUserById,
   getListUserRelations,
@@ -116,6 +117,11 @@ const typeDefs = gql`
     token: String
   }
 
+  type Relation {
+    userId: ID!
+    listId: ID!
+  }
+
   type Query {
     lists: [List]
     list(id: ID!): List
@@ -140,6 +146,7 @@ const typeDefs = gql`
 
     login(username: String!, password: String!): User
     logout(token: String!): Token
+    shareList(username: String!, listId: ID!): Relation
   }
 `;
 
@@ -406,6 +413,22 @@ const resolvers = {
         }
       });
       return;
+    },
+
+    shareList: async (
+      parent: string,
+      args: { username: string; listId: string },
+    ) => {
+      const user = await getUserByUsername(args.username);
+      if (!user || !user.id) {
+        throw new GraphQLError('User does not exist');
+      }
+      const newRelation = await createListUserRelations(
+        user.id,
+        parseInt(args.listId),
+      );
+      console.log('aaaaaaaaaaaaaaa', typeof newRelation);
+      return newRelation;
     },
   },
 };

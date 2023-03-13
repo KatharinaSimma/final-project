@@ -75,8 +75,10 @@ export default function ListComponent(props: Props) {
       >
         <TaskContainer list={list} />
         <p className="error">{onError}</p>
+
+        <div className="divider">Danger zone</div>
         <button
-          className="flex items-center gap-1 px-2 py-1 border border-black rounded-md"
+          className="flex items-center gap-1 px-2 py-1 m-auto btn btn-outline btn-error"
           onClick={async () => {
             await handleDeleteList({
               variables: {

@@ -42,6 +42,21 @@ export const getListUserRelations = cache(async () => {
   return listIds;
 });
 
+export const createListUserRelations = cache(
+  async (userId: number, listId: number) => {
+    const [listUserRelation] = await sql<{ userId: number; listId: number }[]>`
+    INSERT INTO users_lists
+      (user_id, list_id)
+      VALUES
+        (${userId}, ${listId})
+      RETURNING
+        user_id, list_id
+  `;
+    console.log(listUserRelation);
+    return listUserRelation;
+  },
+);
+
 export const getUserByUsername = cache(async (username: string) => {
   const [user] = await sql<{ id: number; username: string }[]>`
     SELECT
