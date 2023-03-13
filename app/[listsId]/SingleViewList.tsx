@@ -113,7 +113,10 @@ export default function SingleViewList(props: Props) {
     onCompleted: async () => {
       await refetch();
     },
+    pollInterval: 1000,
+    fetchPolicy: 'network-only',
   });
+
   if (loading) return <button className="btn loading">loading</button>;
   if (error) return <p>Error: {error.message}</p>;
   if (!data || !data.singleListWithTasks) {
@@ -147,6 +150,7 @@ export default function SingleViewList(props: Props) {
       </div>
 
       <TaskContainer list={data.singleListWithTasks} />
+      <p>This list is shared with someone</p>
 
       <div className="divider">List Actions</div>
 
