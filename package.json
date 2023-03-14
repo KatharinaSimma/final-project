@@ -36,7 +36,6 @@
     "react-dom": "^18.2.0",
     "sass": "^1.58.3",
     "sharp": "^0.31.3",
-    "stylelint-config-recommended-scss": "^9.0.1",
     "typescript": "4.9.5",
     "zod": "^3.21.4"
   },
@@ -74,11 +73,6 @@
     "eslint-plugin-unicorn": "46.0.0",
     "libpg-query": "latest",
     "postcss": "^8.4.21",
-    "postcss-styled-syntax": "latest",
-    "stylelint": "latest",
-    "stylelint-config-css-modules": "latest",
-    "stylelint-config-recommended": "latest",
-    "stylelint-config-recommended-scss": "latest",
     "tailwindcss": "^3.2.7",
     "typescript": "4.9.5"
   },
