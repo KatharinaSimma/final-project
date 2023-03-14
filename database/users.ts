@@ -54,7 +54,6 @@ export const createListUserRelations = cache(
       RETURNING
         user_id, list_id
   `;
-    console.log(listUserRelation);
     return listUserRelation;
   },
 );

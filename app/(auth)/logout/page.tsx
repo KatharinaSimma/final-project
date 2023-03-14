@@ -7,8 +7,6 @@ export default async function LogoutPage() {
   const client = initializeApollo(null);
   const sessionToken = await headers().get('x-sessionToken-to-delete');
 
-  console.log('sessionToken', sessionToken);
-
   if (sessionToken) {
     await client.mutate({
       mutation: gql`

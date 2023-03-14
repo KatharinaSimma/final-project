@@ -428,7 +428,6 @@ const resolvers = {
         user.id,
         parseInt(args.listId),
       );
-      console.log('aaaaaaaaaaaaaaa', typeof newRelation);
       return newRelation;
     },
   },
