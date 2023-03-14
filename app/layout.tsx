@@ -1,8 +1,8 @@
 import './globals.css';
 import { cookies } from 'next/headers';
 import { themes } from '../util/themes';
-import Footer from './Footer';
-import Header from './Header';
+import Footer from './components/Footer';
+import Header from './components/Header';
 
 export const metadata = {
   title: {

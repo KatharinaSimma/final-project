@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { initializeApollo } from '../util/graphql';
 import ApolloClientProvider from './ApolloClientProvider';
-import ListContainer from './ListContainer';
+import ListContainer from './components/ListContainer';
 
 export default async function HomePage() {
   const client = initializeApollo(null);

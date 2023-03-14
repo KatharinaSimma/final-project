@@ -1,4 +1,3 @@
-// import lists from '../../database/lists.json';
 import { gql } from '@apollo/client';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';

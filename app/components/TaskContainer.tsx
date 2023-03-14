@@ -1,6 +1,6 @@
 'use client';
 
-import { Task } from '../database/lists';
+import { Task } from '../../database/lists';
 import { ListWithTaskResponse } from './ListContainer';
 import TaskComponent from './TaskComponent';
 

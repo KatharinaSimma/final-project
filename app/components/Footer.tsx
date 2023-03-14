@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { HeartIcon } from '@heroicons/react/20/solid';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { initializeApollo } from '../util/graphql';
+import { initializeApollo } from '../../util/graphql';
 import Navigation from './Navigation';
 
 export default async function Footer() {

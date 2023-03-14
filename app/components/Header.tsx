@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { cookies } from 'next/headers';
-import { initializeApollo } from '../util/graphql';
+import { initializeApollo } from '../../util/graphql';
 import Navigation from './Navigation';
 
 export default async function Header() {

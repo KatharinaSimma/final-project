@@ -5,7 +5,7 @@ import { PlusIcon, ShareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
-import TaskContainer from '../TaskContainer';
+import TaskContainer from '../components/TaskContainer';
 
 export type ListWithTaskResponse = {
   id: number;

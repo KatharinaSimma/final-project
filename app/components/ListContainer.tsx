@@ -3,7 +3,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
-import { Task } from '../database/lists';
+import { Task } from '../../database/lists';
 import ListComponent from './ListComponent';
 
 export type ListWithTaskResponse = {

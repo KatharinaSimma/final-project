@@ -400,6 +400,7 @@ const resolvers = {
     },
 
     deleteUserById: async (parent: string, args: Args) => {
+      // FIXME: make sure user is authorized
       await deleteUserById(parseInt(args.id));
       // clean up orphaned lists
       const lists = await getLists();
