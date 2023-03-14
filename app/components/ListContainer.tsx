@@ -56,11 +56,11 @@ export default function ListContainer() {
   });
 
   const { loading, error, data, refetch } = useQuery(getListWithTask, {
-    // onCompleted: async () => {
-    //   await refetch();
-    // },
-    pollInterval: 1000,
-    fetchPolicy: 'network-only',
+    onCompleted: async () => {
+      await refetch();
+    },
+    // pollInterval: 1000,
+    // fetchPolicy: 'network-only',
   });
 
   if (loading) return <button className="btn loading">loading</button>;

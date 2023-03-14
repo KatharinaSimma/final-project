@@ -150,7 +150,6 @@ export default function SingleViewList(props: Props) {
       </div>
 
       <TaskContainer list={data.singleListWithTasks} />
-      <p>This list is shared with someone</p>
 
       <div className="divider">List Actions</div>
 

@@ -4,6 +4,7 @@ import { gql, useMutation } from '@apollo/client';
 import { TrashIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
+import LocationButton from './LocationButton';
 
 type Props = { task: Task };
 
@@ -85,7 +86,9 @@ export default function TaskComponent(props: Props) {
           <span className="label-text">{task.title}</span>
         </label>
       </div>
-      <div className="flex gap-2">
+
+      <div className="flex justify-end gap-5">
+        <LocationButton location={task.title} />
         <button
           onClick={async () => {
             await handleDeleteTask({
@@ -95,7 +98,7 @@ export default function TaskComponent(props: Props) {
             });
           }}
         >
-          <TrashIcon className="w-5 h-5 fill-secondary" />
+          <TrashIcon className="w-5 h-5 hover:fill-error" />
         </button>
         <p className="error">{onError}</p>
       </div>

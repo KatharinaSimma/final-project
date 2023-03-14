@@ -1,49 +1,24 @@
 'use client';
 
-import { gql, useMutation } from '@apollo/client';
 import {
   ChevronDownIcon,
   ChevronUpIcon,
   EllipsisVerticalIcon,
-  TrashIcon,
 } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import { useState } from 'react';
 import { ListWithTaskResponse } from './ListContainer';
+import LocationButton from './LocationButton';
 import TaskContainer from './TaskContainer';
 
 type Props = {
   list: ListWithTaskResponse;
 };
 
-const deleteListMutation = gql`
-  mutation DeleteList($id: ID!) {
-    deleteListById(id: $id) {
-      id
-    }
-  }
-`;
-
 export default function ListComponent(props: Props) {
   const [listOpen, setListOpen] = useState(false);
-  const [onError, setOnError] = useState('');
 
   const { list } = props;
-
-  const [handleDeleteList, { loading }] = useMutation(deleteListMutation, {
-    variables: {
-      id: list.id,
-    },
-    onError: (err) => {
-      setOnError(err.message);
-    },
-    onCompleted: () => {
-      setOnError('');
-    },
-    refetchQueries: ['ListWithTask', 'SingleListWithTasks'],
-  });
-
-  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="max-w-lg p-2 mx-auto my-4 border border-solid rounded-md border-primary min-w-md">
@@ -61,7 +36,7 @@ export default function ListComponent(props: Props) {
               <ChevronDownIcon className="w-6 h-6" />
             )}
           </button>
-
+          <LocationButton location={list.title} />
           <Link href={`/${list.id}`}>
             <EllipsisVerticalIcon className="w-6 h-6" />
           </Link>
@@ -74,22 +49,6 @@ export default function ListComponent(props: Props) {
         } `}
       >
         <TaskContainer list={list} />
-        <p className="error">{onError}</p>
-
-        <div className="divider">Danger zone</div>
-        <button
-          className="flex items-center gap-1 px-2 py-1 m-auto btn btn-outline btn-error"
-          onClick={async () => {
-            await handleDeleteList({
-              variables: {
-                id: list.id,
-              },
-            });
-          }}
-        >
-          <TrashIcon className="w-4 h-4" />
-          Delete List
-        </button>
       </div>
     </div>
   );
