@@ -2,8 +2,8 @@ import { HeartIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Contact',
-  description: 'Contact Katharina Simma, she is a great developer!',
+  title: 'About',
+  description: 'Learn about Katharina Simma, a great developer!',
 };
 
 export default function AboutPage() {

@@ -69,8 +69,8 @@ export default function ListContainer(props: Props) {
     onCompleted: async () => {
       await refetch();
     },
-    // pollInterval: 1000,
-    // fetchPolicy: 'network-only',
+    pollInterval: 1000,
+    fetchPolicy: 'network-only',
   });
 
   if (loading) return <button className="btn loading">loading</button>;
