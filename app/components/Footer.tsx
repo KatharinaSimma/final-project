@@ -24,7 +24,7 @@ export default async function Footer() {
       <span className="align-middle flexjustify-center">
         Created by Katharina Simma with
       </span>
-      <HeartIcon className="w-6 h-6 fill-primary" />
+      <HeartIcon className="w-6 h-6 fill-primary hover:animate-spin" />
     </Link>
   );
 
