@@ -86,14 +86,14 @@ export default function ListContainer(props: Props) {
           New List:
         </label>
         <input
-          className="flex-grow p-2 border rounded-md "
+          className="flex-grow p-2 input input-bordered input-primary "
           id="createList"
           placeholder="..."
           value={newListName}
           onChange={(event) => setNewListName(event.currentTarget.value)}
         />
         <button
-          className="flex justify-center gap-2 p-2 border border-black border-solid rounded-md"
+          className="flex btn btn-outline btn-primary"
           onClick={async () => await handleCreateList()}
         >
           <PlusIcon className="w-6 h-6" />

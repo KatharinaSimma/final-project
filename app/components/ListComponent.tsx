@@ -24,27 +24,8 @@ export default function ListComponent(props: Props) {
   return (
     <div className="max-w-lg p-2 mx-auto my-4 border border-solid rounded-md border-primary min-w-md">
       <div className="flex justify-between">
-        {list.title}
         <div className="flex items-center gap-2 ">
-          <div className="-space-x-3 avatar-group">
-            {list.sharedUsers.map((user) => {
-              if (props.currentUser === user.username) {
-                return null;
-              }
-              return (
-                <div
-                  className="avatar placeholder"
-                  key={`shared-with-${user.id}`}
-                >
-                  <div className="w-6 rounded-full bg-neutral-focus text-neutral-content">
-                    <span className="text-xs">
-                      <span className="text-xs">{user.username.charAt(0)}</span>
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {list.title}
           <button
             onClick={() => {
               setListOpen(!listOpen);
@@ -56,9 +37,29 @@ export default function ListComponent(props: Props) {
               <ChevronDownIcon className="w-6 h-6" />
             )}
           </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="-space-x-3 avatar-group">
+            {list.sharedUsers.map((user) => {
+              if (props.currentUser === user.username) {
+                return null;
+              }
+              return (
+                <div
+                  className="avatar placeholder"
+                  key={`shared-with-${user.id}`}
+                >
+                  <div className="w-6 rounded-full bg-neutral-focus text-neutral-content hover:bg-primary">
+                    <span className="text-xs">{user.username.charAt(0)}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
           <LocationButton location={list.title} />
           <Link href={`/${list.id}`}>
-            <EllipsisVerticalIcon className="w-6 h-6" />
+            <EllipsisVerticalIcon className="w-7 h-7 hover:fill-primary" />
           </Link>
         </div>
       </div>

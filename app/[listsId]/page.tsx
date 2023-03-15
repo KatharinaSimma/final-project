@@ -49,7 +49,7 @@ export default async function ListsPage(props: Props) {
     <ApolloClientProvider initialApolloState={JSON.stringify([])}>
       <SingleViewList
         listsId={props.params.listsId}
-        currentUser={data.userBySessionToken.usernames}
+        currentUser={data.userBySessionToken.username}
       />
     </ApolloClientProvider>
   );

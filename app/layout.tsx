@@ -1,4 +1,4 @@
-import './globals.css';
+import './styles/globals.css';
 import { cookies } from 'next/headers';
 import { themes } from '../util/themes';
 import Footer from './components/Footer';

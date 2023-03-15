@@ -126,7 +126,9 @@ export default function SingleViewList(props: Props) {
     fetchPolicy: 'network-only',
   });
 
-  if (loading) return <button className="btn loading">loading</button>;
+  if (loading) {
+    return <button className="btn loading ">loading</button>;
+  }
   if (error) return <p>Error: {error.message}</p>;
   if (!data || !data.singleListWithTasks) {
     redirect('/');

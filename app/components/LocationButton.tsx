@@ -18,7 +18,7 @@ export default function LocationButton(props: Props) {
       rel="noreferrer noopener"
       target="_blank"
     >
-      <MapPinIcon className="w-5 h-5 hover:fill-primary" />
+      <MapPinIcon className="w-6 h-6 hover:fill-primary" />
     </a>
   );
 }
