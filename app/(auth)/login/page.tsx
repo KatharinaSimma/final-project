@@ -5,6 +5,11 @@ import { initializeApollo } from '../../../util/graphql';
 import ApolloClientProvider from '../../ApolloClientProvider';
 import LoginForm from './loginForm';
 
+export const metadata = {
+  title: 'Login',
+  description: 'Login to Taskology, a wunderlist-style task list app.',
+};
+
 export default async function LoginPage() {
   const client = initializeApollo(null);
   const sessionToken = cookies().get('sessionToken');

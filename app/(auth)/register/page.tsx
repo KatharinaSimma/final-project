@@ -5,6 +5,11 @@ import { initializeApollo } from '../../../util/graphql';
 import ApolloClientProvider from '../../ApolloClientProvider';
 import RegisterForm from './registerForm';
 
+export const metadata = {
+  title: 'Register',
+  description: 'Register for Taskology, a wunderlist-style task list app.',
+};
+
 type Props = { searchParams: { returnTo?: string | string[] } };
 export default async function RegistrationPage(props: Props) {
   const client = initializeApollo(null);

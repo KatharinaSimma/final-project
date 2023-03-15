@@ -1,6 +1,6 @@
 export const rootNotFoundMetadata = {
   title: 'Not Found',
-  description: "sorry can't find the page you are looking for",
+  description: "Sorry, we can't find the page you are looking for.",
 };
 
 export default function RootNotFound() {

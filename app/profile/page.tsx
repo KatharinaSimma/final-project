@@ -7,6 +7,26 @@ import DeleteUser from './DeleteUser';
 import ThemeChooser from './ThemeChooser';
 import UserInfoBox from './UserInfoBox';
 
+export async function generateMetadata() {
+  const client = initializeApollo(null);
+  const sessionToken = cookies().get('sessionToken');
+
+  const { data } = await client.query({
+    query: gql`
+    query userBySessionToken($token: String! = "${sessionToken?.value}") {
+      userBySessionToken(token: $token) {
+        username
+      }
+    }
+  `,
+  });
+
+  return {
+    title: data.userBySessionToken.username,
+    description: `${data.userBySessionToken.username}'s user profile`,
+  };
+}
+
 export default async function UserProfilePage() {
   const client = initializeApollo(null);
   const sessionToken = cookies().get('sessionToken');
