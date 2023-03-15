@@ -42,7 +42,7 @@ export const getLists = cache(async () => {
 
 export const getListWithTask = cache(async (id: number) => {
   const tasks = await sql<
-    { id: number; listId: number | null; title: string; done: boolean | null }[]
+    { id: number; listId: number; title: string; done: boolean }[]
   >`
     SELECT
       id, list_id, title, done
@@ -55,7 +55,7 @@ export const getListWithTask = cache(async (id: number) => {
 
 export const getTasks = cache(async () => {
   const tasks = await sql<
-    { id: number; listId: number | null; title: string; done: boolean | null }[]
+    { id: number; listId: number; title: string; done: boolean }[]
   >`
     SELECT
       id, list_id, title,  done
@@ -88,7 +88,7 @@ export const getTaskByListId = cache(async (listId: number) => {
     return undefined;
   }
   const task = await sql<
-    { id: number; listId: number | null; title: string; done: boolean | null }[]
+    { id: number; listId: number; title: string; done: boolean }[]
   >`
     SELECT
       id, list_id, title, done
@@ -107,12 +107,7 @@ export const getListByTitle = cache(async (title: string) => {
   }
 
   const [list] = await sql<
-    {
-      id: number;
-      title: string;
-      description: string | null;
-      createdAt: Date | null;
-    }[]
+    { id: number; title: string; description: string; createdAt: Date }[]
   >`
       SELECT
         *
@@ -141,9 +136,7 @@ export const createList = cache(async (title: string) => {
 
 export const createUserListRelation = cache(
   async (userId: number, listId: number) => {
-    const [list] = await sql<
-      { id: number; userId: number | null; listId: number | null }[]
-    >`
+    const [list] = await sql<{ id: number; userId: number; listId: number }[]>`
     INSERT INTO users_lists
       (user_id, list_id)
     VALUES
@@ -156,9 +149,7 @@ export const createUserListRelation = cache(
 );
 
 export const createTask = cache(async (title: string, listId: number) => {
-  const [task] = await sql<
-    { id: number; title: string; listId: number | null }[]
-  >`
+  const [task] = await sql<{ id: number; title: string; listId: number }[]>`
     INSERT INTO tasks
       (title, list_id)
     VALUES
@@ -182,12 +173,12 @@ export const updateTaskById = cache(
     const [task] = await sql<
       {
         id: number;
-        listId: number | null;
+        listId: number;
         title: string;
-        done: boolean | null;
-        dueDate: Date | null;
-        inUse: boolean | null;
-        createdAt: Date | null;
+        done: boolean;
+        dueDate: Date;
+        inUse: boolean;
+        createdAt: Date;
       }[]
     >`
     UPDATE
@@ -233,12 +224,7 @@ export const deleteListById = cache(async (id: number) => {
   }
 
   const [list] = await sql<
-    {
-      id: number;
-      title: string;
-      description: string | null;
-      createdAt: Date | null;
-    }[]
+    { id: number; title: string; description: string; createdAt: Date }[]
   >`
     DELETE FROM
       lists
@@ -257,12 +243,12 @@ export const deleteTaskById = cache(async (id: number) => {
   const [task] = await sql<
     {
       id: number;
-      listId: number | null;
+      listId: number;
       title: string;
-      done: boolean | null;
-      dueDate: Date | null;
-      inUse: boolean | null;
-      createdAt: Date | null;
+      done: boolean;
+      dueDate: Date;
+      inUse: boolean;
+      createdAt: Date;
     }[]
   >`
     DELETE FROM

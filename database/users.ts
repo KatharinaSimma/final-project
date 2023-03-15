@@ -7,6 +7,11 @@ export type User = {
   passwordHash: string;
 };
 
+export type Relation = {
+  userId: number;
+  listId: number;
+};
+
 export const createUser = cache(
   async (username: string, passwordHash: string) => {
     const [user] = await sql<{ id: number; username: string }[]>`
@@ -33,7 +38,7 @@ export const getUsers = cache(async () => {
 });
 
 export const getListUserRelations = cache(async () => {
-  const listIds = await sql<{ listId: number | null }[]>`
+  const listIds = await sql<{ listId: number }[]>`
     SELECT
       list_id
     FROM
@@ -42,11 +47,24 @@ export const getListUserRelations = cache(async () => {
   return listIds;
 });
 
+export const getListUserRelationsByListId = cache(async (listId: number) => {
+  const user = await sql<{ id: number; username: string }[]>`
+    SELECT
+      users.id AS id,
+      users.username AS username
+    FROM
+      users
+    INNER JOIN
+      users_lists ON users.id = users_lists.user_id
+    WHERE
+      list_id = ${listId}
+  `;
+  return user;
+});
+
 export const createListUserRelations = cache(
   async (userId: number, listId: number) => {
-    const [listUserRelation] = await sql<
-      { userId: number | null; listId: number | null }[]
-    >`
+    const [listUserRelation] = await sql<{ userId: number; listId: number }[]>`
     INSERT INTO users_lists
       (user_id, list_id)
       VALUES
@@ -117,7 +135,7 @@ export const getUserBySessionToken = cache(async (token: string) => {
 
 export const getUserWithList = cache(async (id: number) => {
   const userWithList = await sql<
-    { id: number; title: string; description: string | null }[]
+    { id: number; title: string; description: string }[]
   >`
     SELECT
       lists.id AS id,

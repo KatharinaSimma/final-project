@@ -4,12 +4,14 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
+import { User } from '../../database/users';
 import ListComponent from './ListComponent';
 
 export type ListWithTaskResponse = {
   id: number;
   title: string;
   description?: string;
+  sharedUsers: [User];
   tasks: [Task];
 };
 
@@ -19,6 +21,10 @@ const getListWithTask = gql`
       id
       title
       description
+      sharedUsers {
+        id
+        username
+      }
       tasks {
         id
         title
@@ -38,7 +44,11 @@ const createList = gql`
   }
 `;
 
-export default function ListContainer() {
+type Props = {
+  currentUser: string;
+};
+
+export default function ListContainer(props: Props) {
   const [newListName, setNewListName] = useState('');
   const [onError, setOnError] = useState('');
 
@@ -90,7 +100,13 @@ export default function ListContainer() {
         </button>
       </div>
       {reversedListWithTasks.map((list: ListWithTaskResponse) => {
-        return <ListComponent list={list} key={`list_name_${list.id}`} />;
+        return (
+          <ListComponent
+            list={list}
+            key={`list_name_${list.id}`}
+            currentUser={props.currentUser}
+          />
+        );
       })}
     </div>
   );

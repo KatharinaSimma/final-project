@@ -33,7 +33,7 @@ export default async function HomePage() {
         <ApolloClientProvider
           initialApolloState={JSON.stringify(client.cache.extract())}
         >
-          <ListContainer />
+          <ListContainer currentUser={data.userBySessionToken.username} />
         </ApolloClientProvider>
       </div>
     </main>

@@ -5,11 +5,13 @@ import { PlusIcon, ShareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
+import { User } from '../../database/users';
 import TaskContainer from '../components/TaskContainer';
 
 export type ListWithTaskResponse = {
   id: number;
   title: string;
+  sharedUsers: [User];
   tasks: [Task];
 };
 
@@ -19,6 +21,10 @@ const getSingleListWithTask = gql`
       id
       title
       description
+      sharedUsers {
+        id
+        username
+      }
       tasks {
         id
         title
@@ -56,10 +62,11 @@ const shareList = gql`
   }
 `;
 
-type Props = { listsId: string };
+type Props = { listsId: string; currentUser: string };
 
 export default function SingleViewList(props: Props) {
   const [onError, setOnError] = useState('');
+  const [onShareError, setOnShareError] = useState('');
   const [newTaskName, setNewTaskName] = useState('');
   const [username, setUsername] = useState('');
 
@@ -98,11 +105,13 @@ export default function SingleViewList(props: Props) {
       listId: props.listsId,
     },
     onError: (error) => {
-      setOnError(error.message);
+      setOnShareError(error.message);
+      setUsername('');
     },
     onCompleted: async () => {
       await refetch();
       setUsername('');
+      setOnShareError('');
     },
   });
 
@@ -154,6 +163,27 @@ export default function SingleViewList(props: Props) {
       <div className="divider">List Actions</div>
 
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
+        {data.singleListWithTasks.sharedUsers.length > 1 && (
+          <ul className="w-full">
+            You
+            {data.singleListWithTasks.sharedUsers.map((user: User) => {
+              if (props.currentUser === user.username) {
+                return null;
+              }
+              return (
+                <span key={`shared-with-${user.id}`}>
+                  {' '}
+                  and{' '}
+                  <strong className="text-primary-content">
+                    {user.username}{' '}
+                  </strong>
+                </span>
+              );
+            })}
+            share this list.
+          </ul>
+        )}
+        {onShareError ? <p className="text-error">{onShareError}</p> : null}
         <label className="p-2 text-lg text-primary " htmlFor="shareList">
           Share List:
         </label>
@@ -166,7 +196,9 @@ export default function SingleViewList(props: Props) {
         />
         <button
           className="flex btn btn-outline btn-primary"
-          onClick={async () => await handleShareList()}
+          onClick={async () => {
+            await handleShareList();
+          }}
         >
           <ShareIcon className="w-6 h-6" />
         </button>

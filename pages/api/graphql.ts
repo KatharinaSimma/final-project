@@ -23,6 +23,7 @@ import {
   createUser,
   deleteUserById,
   getListUserRelations,
+  getListUserRelationsByListId,
   getUserById,
   getUserBySessionToken,
   getUserByUsername,
@@ -101,6 +102,7 @@ const typeDefs = gql`
     title: String!
     description: String
     tasks: [Task]
+    sharedUsers: [User]
   }
 
   type UserListWithTasks {
@@ -189,6 +191,9 @@ const resolvers = {
   ListWithTasks: {
     tasks: async (parent: any) => {
       return await getListWithTask(parseInt(parent.id));
+    },
+    sharedUsers: async (parent: any) => {
+      return await getListUserRelationsByListId(parseInt(parent.id));
     },
   },
 
@@ -421,9 +426,26 @@ const resolvers = {
       args: { username: string; listId: string },
     ) => {
       const user = await getUserByUsername(args.username);
+      // check if username is a valid user
       if (!user || !user.id) {
-        throw new GraphQLError('User does not exist');
+        throw new GraphQLError(
+          'Username does not exist. Enter the username of a registered user.',
+        );
       }
+      // check if list is already shared with this user
+      const sharedWith = await getListUserRelationsByListId(
+        parseInt(args.listId),
+      );
+      const isUserAlreadySharedWith = sharedWith.find((relation) => {
+        return relation.id === user.id;
+      });
+
+      if (isUserAlreadySharedWith) {
+        throw new GraphQLError(
+          `You already share this list with ${args.username}!`,
+        );
+      }
+
       const newRelation = await createListUserRelations(
         user.id,
         parseInt(args.listId),
