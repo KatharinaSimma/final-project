@@ -69,6 +69,7 @@ export default function LoginForm() {
                 </label>
                 <input
                   id="password"
+                  type="password"
                   placeholder="password"
                   className="input input-bordered"
                   value={password}

@@ -71,6 +71,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
               </label>
               <input
                 id="password"
+                type="password"
                 placeholder="password"
                 className="input input-bordered"
                 value={password}
