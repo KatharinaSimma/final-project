@@ -1,10 +1,5 @@
 import { gql } from '@apollo/client';
-import {
-  CheckIcon,
-  HeartIcon,
-  MapPinIcon,
-  SparklesIcon,
-} from '@heroicons/react/20/solid';
+import { CheckIcon, MapPinIcon, SparklesIcon } from '@heroicons/react/20/solid';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { initializeApollo } from '../../util/graphql';
