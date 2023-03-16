@@ -27,7 +27,7 @@ export default async function RootLayout(props: Props) {
     themeCookie &&
     themes.find((themeName) => JSON.parse(themeCookie.value) === themeName)
       ? JSON.parse(themeCookie.value)
-      : 'light';
+      : 'pastel';
 
   const client = initializeApollo(null);
   const sessionToken = cookies().get('sessionToken');
