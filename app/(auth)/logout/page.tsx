@@ -19,5 +19,5 @@ export default async function LogoutPage() {
     });
   }
 
-  redirect('/login');
+  redirect('/about');
 }
