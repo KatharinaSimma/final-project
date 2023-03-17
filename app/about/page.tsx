@@ -27,6 +27,27 @@ export default async function AboutPage() {
       <h1 className="py-5 text-3xl text-center">About Taskology</h1>
 
       <div className="flex flex-wrap items-center justify-center gap-12">
+        {data &&
+        data.userBySessionToken &&
+        data.userBySessionToken.id ? null : (
+          <div className="p-8 shadow-xl card">
+            <div className="card-body">
+              <h2 className="card-title">Be productive with Taskology</h2>
+              <p>Making an account is easy and free.</p>
+              <div className="mt-6 form-control">
+                <Link href="/register" className="btn btn-primary btn-wide">
+                  Register
+                </Link>
+                <Link
+                  href="/login"
+                  className="mt-5 label-text-alt link link-hover"
+                >
+                  Already have an account?
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex flex-col items-center justify-center mt-5">
           <CheckIcon className="w-12 h-12 fill-primary" />
           <p className="flex flex-col justify-center my-5 align-middle max-w-prose">
@@ -51,28 +72,6 @@ export default async function AboutPage() {
             the list of favorite Pizza places in town
           </p>
         </div>
-
-        {data &&
-        data.userBySessionToken &&
-        data.userBySessionToken.id ? null : (
-          <div className="p-8 shadow-xl card">
-            <div className="card-body">
-              <h2 className="card-title">Be productive with Taskology</h2>
-              <p>Making an account is easy and free.</p>
-              <div className="mt-6 form-control">
-                <Link href="/register" className="btn btn-primary btn-wide">
-                  Register
-                </Link>
-                <Link
-                  href="/login"
-                  className="mt-5 label-text-alt link link-hover"
-                >
-                  Already have an account?
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </main>
   );

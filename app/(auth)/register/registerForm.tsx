@@ -61,6 +61,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
                   placeholder="username"
                   autoComplete="username"
                   className="input input-bordered"
+                  required
                   value={username}
                   onChange={(event) => {
                     setUsername(event.currentTarget.value);
@@ -75,6 +76,8 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
                 <input
                   id="password"
                   type="password"
+                  placeholder="password"
+                  required
                   autoComplete="current-password"
                   className="input input-bordered"
                   value={password}

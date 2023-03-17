@@ -41,11 +41,6 @@ export default function LoginForm() {
         <div className="flex-col">
           <div className="text-center">
             <h1 className="mx-auto text-3xl font-bold">Login now!</h1>
-            <p className="max-w-lg py-6 mx-auto">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
           </div>
           <div className="flex-shrink-0 w-full max-w-md mx-auto shadow-2xl card bg-base-100">
             <div className="card-body">
@@ -60,6 +55,9 @@ export default function LoginForm() {
                     autoComplete="username"
                     className="input input-bordered"
                     value={username}
+                    required
+                    minLength={3}
+                    maxLength={49}
                     onChange={(event) => {
                       setUsername(event.currentTarget.value);
                     }}
@@ -72,9 +70,12 @@ export default function LoginForm() {
                   <input
                     id="password"
                     type="password"
+                    required
                     autoComplete="current-password"
                     placeholder="password"
                     className="input input-bordered"
+                    minLength={8}
+                    maxLength={16}
                     value={password}
                     onChange={(event) => {
                       setPassword(event.currentTarget.value);
@@ -87,7 +88,7 @@ export default function LoginForm() {
                     Don't have an account?
                   </Link>
                 </div>
-                <div className="error">{onError}</div>
+                <p className="text-error min-h-8">{onError}</p>
                 <div className="mt-6 form-control">
                   <button
                     className="btn btn-primary"
