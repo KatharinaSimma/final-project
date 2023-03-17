@@ -63,6 +63,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
                 onChange={(event) => {
                   setUsername(event.currentTarget.value);
                 }}
+                onFocus={() => setOnError('')}
               />
             </div>
             <div className="form-control">
@@ -78,6 +79,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
                 onChange={(event) => {
                   setPassword(event.currentTarget.value);
                 }}
+                onFocus={() => setOnError('')}
               />
               <Link
                 href="/login"
@@ -86,7 +88,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
                 Already have an account?
               </Link>
             </div>
-            <div className="error">{onError}</div>
+            <p className="text-error min-h-8">{onError}</p>
             <div className="mt-6 form-control">
               <button
                 className="btn btn-primary"

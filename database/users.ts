@@ -38,7 +38,7 @@ export const getUsers = cache(async () => {
 });
 
 export const getListUserRelations = cache(async () => {
-  const listIds = await sql<{ listId: number }[]>`
+  const listIds = await sql<{ listId: number | null }[]>`
     SELECT
       list_id
     FROM
@@ -64,7 +64,9 @@ export const getListUserRelationsByListId = cache(async (listId: number) => {
 
 export const createListUserRelations = cache(
   async (userId: number, listId: number) => {
-    const [listUserRelation] = await sql<{ userId: number; listId: number }[]>`
+    const [listUserRelation] = await sql<
+      { userId: number | null; listId: number | null }[]
+    >`
     INSERT INTO users_lists
       (user_id, list_id)
       VALUES
@@ -135,7 +137,7 @@ export const getUserBySessionToken = cache(async (token: string) => {
 
 export const getUserWithList = cache(async (id: number) => {
   const userWithList = await sql<
-    { id: number; title: string; description: string }[]
+    { id: number; title: string; description: string | null }[]
   >`
     SELECT
       lists.id AS id,

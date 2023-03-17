@@ -139,8 +139,7 @@ export default function SingleViewList(props: Props) {
       <h1 className="py-5 text-3xl text-center ">
         Edit List: {data.singleListWithTasks.title}
       </h1>
-      <p className="error">{onError}</p>
-
+      <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label className="p-2 text-lg text-primary " htmlFor="createTask">
           New Task:
@@ -151,6 +150,7 @@ export default function SingleViewList(props: Props) {
           className="w-full max-w-xs input input-bordered input-primary"
           value={newTaskName}
           onChange={(event) => setNewTaskName(event.currentTarget.value)}
+          onFocus={() => setOnError('')}
         />
         <button
           className="flex btn btn-outline btn-primary"
@@ -159,11 +159,8 @@ export default function SingleViewList(props: Props) {
           <PlusIcon className="w-6 h-6" />
         </button>
       </div>
-
       <TaskContainer list={data.singleListWithTasks} />
-
       <div className="divider">List Actions</div>
-
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         {data.singleListWithTasks.sharedUsers.length > 1 && (
           <ul className="w-full">
@@ -176,7 +173,7 @@ export default function SingleViewList(props: Props) {
                 <span key={`shared-with-${user.id}`}>
                   {' '}
                   and{' '}
-                  <strong className="text-primary-content">
+                  <strong className="text-primary-focus">
                     {user.username}{' '}
                   </strong>
                 </span>
@@ -205,7 +202,6 @@ export default function SingleViewList(props: Props) {
           <ShareIcon className="w-6 h-6" />
         </button>
       </div>
-
       <div className="flex justify-end gap-2 my-3">
         <button
           className="flex items-center gap-1 px-4 py-2 m-auto btn btn-outline btn-error"

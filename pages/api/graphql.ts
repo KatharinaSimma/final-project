@@ -5,6 +5,7 @@ import { startServerAndCreateNextHandler } from '@as-integrations/next';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import bcrypt from 'bcrypt';
 import { GraphQLError } from 'graphql';
+import { z } from 'zod';
 import {
   createList,
   createTask,
@@ -213,12 +214,14 @@ const resolvers = {
       if (!context.isUserLoggedIn) {
         throw new GraphQLError('Unauthorized operation');
       }
-      if (
-        typeof args.title !== 'string' ||
-        (args.description && typeof args.description !== 'string') ||
-        !args.title
-      ) {
+      if (!args.title) {
         throw new GraphQLError('Required field is missing');
+      }
+      const title = z.string().nonempty().max(49);
+      if (!args.title || !title.safeParse(args.title).success) {
+        throw new GraphQLError(
+          'The title must be less than 50 characters long.',
+        );
       }
       const newList = await createList(args.title);
       if (!newList || !newList.id) {
@@ -236,13 +239,14 @@ const resolvers = {
       if (!context.isUserLoggedIn) {
         throw new GraphQLError('Unauthorized operation');
       }
-      if (
-        !args.title ||
-        !args.listId ||
-        typeof args.title !== 'string' ||
-        typeof args.listId !== 'string'
-      ) {
+      if (!args.title) {
         throw new GraphQLError('Required field is missing');
+      }
+      const title = z.string().nonempty().max(49);
+      if (!title.safeParse(args.title).success) {
+        throw new GraphQLError(
+          'The title must be less than 50 characters long.',
+        );
       }
       return await createTask(args.title, parseInt(args.listId));
     },
@@ -252,26 +256,38 @@ const resolvers = {
       args: RegisterUserInput,
       context: UserContext,
     ) => {
-      // validate input
-      // FIXME: Add zod types???
-      if (
-        !args.username ||
-        !args.password ||
-        typeof args.username !== 'string' ||
-        typeof args.password !== 'string'
-      ) {
+      if (context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
+      if (!args.username || !args.password) {
         throw new GraphQLError('Required field is missing');
+      }
+      const username = z.string().nonempty().min(3).max(49);
+      if (!username.safeParse(args.username).success) {
+        throw new GraphQLError(
+          'Username must be between 3 and 49 characters long.',
+        );
+      }
+      const password = z
+        .string()
+        .nonempty()
+        .min(8)
+        .max(16)
+        .regex(
+          new RegExp(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$/),
+        );
+      if (!password.safeParse(args.password).success) {
+        throw new GraphQLError(
+          'Password must be between 8 and 16 characters long and contain at least one number and one special character.',
+        );
       }
 
       const user = await getUserByUsername(args.username);
       if (user) {
         throw new GraphQLError('User already exists');
       }
-
       const passwordHash = await bcrypt.hash(args.password, 12);
-
       const newUser = await createUser(args.username, passwordHash);
-
       if (!newUser) {
         throw new GraphQLError(
           'Internal server error (500): User creation failed',
@@ -306,14 +322,18 @@ const resolvers = {
       args: LoginArgument,
       context: UserContext,
     ) => {
-      // check input type
+      if (context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
+      const username = z.string().nonempty();
+      const password = z.string().nonempty();
       if (
         !args.username ||
         !args.password ||
-        typeof args.username !== 'string' ||
-        typeof args.password !== 'string'
+        !username.safeParse(args.username).success ||
+        !password.safeParse(args.password).success
       ) {
-        throw new GraphQLError('Required field missing');
+        throw new GraphQLError('Credentials are not valid');
       }
 
       // check if username exists
@@ -364,7 +384,6 @@ const resolvers = {
       if (!context.isUserLoggedIn) {
         throw new GraphQLError('Unauthorized operation');
       }
-
       return await deleteListById(parseInt(args.id));
     },
 
@@ -400,12 +419,21 @@ const resolvers = {
       return await updateTaskById(parseInt(args.id), args.title, args.done);
     },
 
-    logout: async (parent: string, args: Token) => {
+    logout: async (parent: string, args: Token, context: UserContext) => {
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       return await deleteSessionByToken(args.token);
     },
 
-    deleteUserById: async (parent: string, args: Args) => {
-      // FIXME: make sure user is authorized
+    deleteUserById: async (
+      parent: string,
+      args: Args,
+      context: UserContext,
+    ) => {
+      if (context.user.id && context.user.id !== parseInt(args.id)) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       await deleteUserById(parseInt(args.id));
       // clean up orphaned lists
       const lists = await getLists();
@@ -424,7 +452,11 @@ const resolvers = {
     shareList: async (
       parent: string,
       args: { username: string; listId: string },
+      context: UserContext,
     ) => {
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
       const user = await getUserByUsername(args.username);
       // check if username is a valid user
       if (!user || !user.id) {

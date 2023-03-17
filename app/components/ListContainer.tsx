@@ -62,6 +62,7 @@ export default function ListContainer(props: Props) {
     onCompleted: async () => {
       await refetch();
       setNewListName('');
+      setOnError('');
     },
   });
 
@@ -80,7 +81,7 @@ export default function ListContainer(props: Props) {
 
   return (
     <div className="max-w-lg mx-auto my-4 min-w-md">
-      <p className="error">{onError}</p>
+      <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-2 justify-items-stretch">
         <label className="p-2" htmlFor="createList">
           New List:
@@ -91,6 +92,7 @@ export default function ListContainer(props: Props) {
           placeholder="..."
           value={newListName}
           onChange={(event) => setNewListName(event.currentTarget.value)}
+          onFocus={() => setOnError('')}
         />
         <button
           className="flex btn btn-outline btn-primary"
