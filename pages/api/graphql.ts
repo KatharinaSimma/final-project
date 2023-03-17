@@ -419,10 +419,7 @@ const resolvers = {
       return await updateTaskById(parseInt(args.id), args.title, args.done);
     },
 
-    logout: async (parent: string, args: Token, context: UserContext) => {
-      if (!context.isUserLoggedIn) {
-        throw new GraphQLError('Unauthorized operation');
-      }
+    logout: async (parent: string, args: Token) => {
       return await deleteSessionByToken(args.token);
     },
 
