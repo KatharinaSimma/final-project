@@ -49,52 +49,57 @@ export default function LoginForm() {
           </div>
           <div className="flex-shrink-0 w-full max-w-md mx-auto shadow-2xl card bg-base-100">
             <div className="card-body">
-              <div className="form-control">
-                <label className="label" htmlFor="username">
-                  <span className="label-text">Username</span>
-                </label>
-                <input
-                  id="username"
-                  placeholder="username"
-                  className="input input-bordered"
-                  value={username}
-                  onChange={(event) => {
-                    setUsername(event.currentTarget.value);
-                  }}
-                />
-              </div>
-              <div className="form-control">
-                <label className="label" htmlFor="password">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="password"
-                  className="input input-bordered"
-                  value={password}
-                  onChange={(event) => {
-                    setPassword(event.currentTarget.value);
-                  }}
-                />
-                <Link
-                  href="/register"
-                  className="mt-5 label-text-alt link link-hover"
-                >
-                  Don't have an account?
-                </Link>
-              </div>
-              <div className="error">{onError}</div>
-              <div className="mt-6 form-control">
-                <button
-                  className="btn btn-primary"
-                  onClick={async () => {
-                    await loginHandler();
-                  }}
-                >
-                  Login
-                </button>
-              </div>
+              <form autoComplete="on">
+                <div className="form-control">
+                  <label className="label" htmlFor="username">
+                    <span className="label-text">Username</span>
+                  </label>
+                  <input
+                    id="username"
+                    placeholder="username"
+                    autoComplete="username"
+                    className="input input-bordered"
+                    value={username}
+                    onChange={(event) => {
+                      setUsername(event.currentTarget.value);
+                    }}
+                  />
+                </div>
+                <div className="form-control">
+                  <label className="label" htmlFor="password">
+                    <span className="label-text">Password</span>
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    autoComplete="current-password"
+                    placeholder="password"
+                    className="input input-bordered"
+                    value={password}
+                    onChange={(event) => {
+                      setPassword(event.currentTarget.value);
+                    }}
+                  />
+                  <Link
+                    href="/register"
+                    className="mt-5 label-text-alt link link-hover"
+                  >
+                    Don't have an account?
+                  </Link>
+                </div>
+                <div className="error">{onError}</div>
+                <div className="mt-6 form-control">
+                  <button
+                    className="btn btn-primary"
+                    onClick={async (event) => {
+                      event.preventDefault();
+                      await loginHandler();
+                    }}
+                  >
+                    Login
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
