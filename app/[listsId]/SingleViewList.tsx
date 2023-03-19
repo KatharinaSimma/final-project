@@ -134,11 +134,30 @@ export default function SingleViewList(props: Props) {
     redirect('/');
   }
 
+  const numberOfAllTasks = data.singleListWithTasks.tasks.length;
+  const numberOfDoneTasks = data.singleListWithTasks.tasks.filter(
+    (task: Task) => task.done,
+  ).length;
+  const progress =
+    numberOfAllTasks > 0
+      ? ((numberOfDoneTasks / numberOfAllTasks) * 100).toFixed(0)
+      : '0';
+  const style = {
+    '--value': progress,
+    '--size': '3.3rem',
+    '--thickness': '5px',
+  } as React.CSSProperties;
+
   return (
     <main className="flex flex-col max-w-lg p-3 m-auto mb-12 sm:p-0">
-      <h1 className="py-5 text-3xl text-center ">
-        Edit List: {data.singleListWithTasks.title}
-      </h1>
+      <div className="flex items-center justify-center gap-3">
+        <h1 className="py-5 text-3xl text-center ">
+          {data.singleListWithTasks.title}
+        </h1>
+        <div className="radial-progress text-primary" style={style}>
+          {progress}%
+        </div>
+      </div>
       <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label className="p-2 text-lg text-primary " htmlFor="createTask">

@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Task } from '../../database/lists';
 import { ListWithTaskResponse } from './ListContainer';
 import LocationButton from './LocationButton';
 import TaskContainer from './TaskContainer';
@@ -18,8 +19,9 @@ type Props = {
 
 export default function ListComponent(props: Props) {
   const [listOpen, setListOpen] = useState(false);
-
   const { list } = props;
+  const tasks = list.tasks.length;
+  const dones = list.tasks.filter((task: Task) => task.done).length;
 
   return (
     <div className="max-w-lg p-2 mx-auto my-4 border border-solid rounded-md border-primary min-w-md">
@@ -49,7 +51,7 @@ export default function ListComponent(props: Props) {
                   className="avatar placeholder"
                   key={`shared-with-${user.id}`}
                 >
-                  <div className="w-6 rounded-full bg-neutral-focus text-neutral-content hover:bg-primary">
+                  <div className="w-6 rounded-full bg-neutral-content text-base-100 hover:bg-primary">
                     <span className="text-xs">{user.username.charAt(0)}</span>
                   </div>
                 </div>
@@ -63,6 +65,11 @@ export default function ListComponent(props: Props) {
           </Link>
         </div>
       </div>
+      <progress
+        className="w-full progress progress-primary"
+        value={dones}
+        max={tasks}
+      />
 
       <div
         className={`max-w-lg mx-auto my-4 rounded-md ${
