@@ -262,10 +262,10 @@ const resolvers = {
       if (!args.username || !args.password) {
         throw new GraphQLError('Required field is missing');
       }
-      const username = z.string().nonempty().min(3).max(49);
+      const username = z.string().nonempty().min(3).max(50);
       if (!username.safeParse(args.username).success) {
         throw new GraphQLError(
-          'Username must be between 3 and 49 characters long.',
+          'Username must be between 3 and 50 characters long.',
         );
       }
       const password = z

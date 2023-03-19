@@ -23,6 +23,7 @@
     "dotenv-cli": "^7.0.0",
     "dotenv-safe": "^8.2.0",
     "eslint-config-next": "^13.2.0",
+    "formik": "^2.2.9",
     "graphql": "^16.6.0",
     "js-cookie": "^3.0.1",
     "ley": "^0.8.1",

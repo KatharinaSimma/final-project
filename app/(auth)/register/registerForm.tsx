@@ -1,10 +1,15 @@
 'use client';
 
 import { gql, useMutation } from '@apollo/client';
+import { useFormik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { getSafeReturnToPath } from '../../../util/validation';
+import {
+  formValidation,
+  getSafeReturnToPath,
+  Values,
+} from '../../../util/validation';
 
 const registerMutation = gql`
   mutation Register($username: String!, $password: String!) {
@@ -16,17 +21,10 @@ const registerMutation = gql`
 `;
 
 export default function RegisterForm(props: { returnTo?: string | string[] }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [onError, setOnError] = useState('');
   const router = useRouter();
 
   const [registerUserHandler] = useMutation(registerMutation, {
-    variables: {
-      username,
-      password,
-    },
-
     onError: (error) => {
       setOnError(error.message);
     },
@@ -42,6 +40,17 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
     },
   });
 
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validate: formValidation,
+    onSubmit: async (values: Values) => {
+      await registerUserHandler({ variables: { ...values } });
+    },
+  });
+
   return (
     <div className="min-h-screen pt-9 bg-base-200">
       <div className="flex-col">
@@ -51,23 +60,26 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
         </div>
         <div className="flex-shrink-0 w-full max-w-md mx-auto shadow-2xl card bg-base-100">
           <div className="card-body">
-            <form autoComplete="on">
+            <form onSubmit={formik.handleSubmit} noValidate>
               <div className="form-control">
                 <label className="label" htmlFor="username">
                   <span className="label-text">Username</span>
                 </label>
                 <input
                   id="username"
+                  name="username"
                   placeholder="username"
+                  className={`input input-bordered ${
+                    formik.errors.username ? 'border-error' : ''
+                  }`}
                   autoComplete="username"
-                  className="input input-bordered"
-                  required
-                  value={username}
-                  onChange={(event) => {
-                    setUsername(event.currentTarget.value);
-                  }}
-                  onFocus={() => setOnError('')}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.username}
                 />
+                {formik.touched.username && formik.errors.username ? (
+                  <p className="text-error">{formik.errors.username}</p>
+                ) : null}
               </div>
               <div className="form-control">
                 <label className="label" htmlFor="password">
@@ -75,35 +87,30 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
                 </label>
                 <input
                   id="password"
+                  name="password"
                   type="password"
                   placeholder="password"
-                  required
+                  className={`input input-bordered ${
+                    formik.errors.password ? 'border-error' : ''
+                  }`}
                   autoComplete="current-password"
-                  className="input input-bordered"
-                  value={password}
-                  onChange={(event) => {
-                    setPassword(event.currentTarget.value);
-                  }}
-                  onFocus={() => setOnError('')}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
                 />
-                <Link
-                  href="/login"
-                  className="mt-5 label-text-alt link link-hover"
-                >
-                  Already have an account?
-                </Link>
+                {formik.touched.password && formik.errors.password ? (
+                  <p className="text-error">{formik.errors.password}</p>
+                ) : null}
               </div>
+              <Link
+                href="/login"
+                className="mt-5 label-text-alt link link-hover"
+              >
+                Already have an account?
+              </Link>
               <p className="text-error min-h-8">{onError}</p>
               <div className="mt-6 form-control">
-                <button
-                  className="btn btn-primary"
-                  onClick={async (event) => {
-                    event.preventDefault();
-                    await registerUserHandler();
-                  }}
-                >
-                  Register
-                </button>
+                <button className="btn btn-primary">Login</button>
               </div>
             </form>
           </div>
