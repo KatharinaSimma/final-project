@@ -1,6 +1,12 @@
 {
   "short_name": "Taskology",
   "name": "Taskology",
+  "description": "A nifty little ToDo App",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "favicon.ico",
@@ -17,9 +23,5 @@
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  ]
 }

@@ -12,9 +12,7 @@ export const metadata = {
     default: 'Taskology',
     template: '%s | Taskology',
   },
-  icons: {
-    shortcut: '/favicon.ico',
-  },
+  manifest: '/manifest.json',
 };
 
 type Props = {
