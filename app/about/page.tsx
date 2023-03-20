@@ -6,7 +6,8 @@ import { initializeApollo } from '../../util/graphql';
 
 export const metadata = {
   title: 'About',
-  description: 'Learn about Katharina Simma, a great developer!',
+  description:
+    'Learn about Taskology, a great shareable list ab with a cool location feature!',
 };
 
 export default async function AboutPage() {
