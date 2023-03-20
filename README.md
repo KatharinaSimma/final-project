@@ -18,11 +18,11 @@ The extra feature that makes Taskology different from other list apps is a locat
 
 ## To Do Backlog
 
-- A progress bar for each list so the user can see how many list items are ticked off.
-- More choices for the location feature, e.g. let user define a geolocation for the list.
-- Implement a progressive Web App.
-- Use a websocket for synchronising lists between users.
-- Make Taskology 100% keyboard navigatable!
+- [x] A progress bar for each list so the user can see how many list items are ticked off.
+- [ ] More choices for the location feature, e.g. let user define a geolocation for the list.
+- [ ] Implement a progressive Web App.
+- [ ] Use a websocket for synchronising lists between users.
+- [ ] Make Taskology 100% keyboard navigatable!
 
 ## Technologies
 
