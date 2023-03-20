@@ -48,21 +48,27 @@ export default function ListComponent(props: Props) {
               }
               return (
                 <div
-                  className="avatar placeholder"
+                  className="tooltip"
+                  data-tip="hoi"
                   key={`shared-with-${user.id}`}
                 >
-                  <div className="w-6 rounded-full bg-neutral-content text-base-100 hover:bg-primary">
-                    <span className="text-xs">{user.username.charAt(0)}</span>
+                  <div className="avatar placeholder">
+                    <div className="w-6 rounded-full bg-neutral-content text-base-100 hover:bg-primary">
+                      <span className="text-xs">{user.username.charAt(0)}</span>
+                    </div>
                   </div>
                 </div>
               );
             })}
           </div>
-
-          <LocationButton location={list.title} />
-          <Link href={`/${list.id}`}>
-            <EllipsisVerticalIcon className="w-7 h-7 hover:fill-primary" />
-          </Link>
+          <div className="tooltip" data-tip="Get location">
+            <LocationButton location={list.title} />
+          </div>
+          <div className="tooltip" data-tip="Edit list">
+            <Link href={`/${list.id}`}>
+              <EllipsisVerticalIcon className="w-7 h-7 hover:fill-primary" />
+            </Link>
+          </div>
         </div>
       </div>
       <progress

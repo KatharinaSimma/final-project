@@ -80,26 +80,28 @@ export default function ListContainer(props: Props) {
   const reversedListWithTasks = [...data.listWithTasks].reverse();
 
   return (
-    <div className="max-w-lg mx-auto my-4 min-w-md">
+    <div className="max-w-lg m-auto min-w-md sm:p-0">
       <p className="text-error min-h-8">{onError}</p>
-      <div className="flex flex-wrap items-center gap-2 justify-items-stretch">
-        <label className="p-2" htmlFor="createList">
-          New List:
+      <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
+        <label className="p-2 text-lg text-primary" htmlFor="createList">
+          New List:{' '}
         </label>
-        <input
-          className="flex-grow p-2 input input-bordered input-primary "
-          id="createList"
-          placeholder="..."
-          value={newListName}
-          onChange={(event) => setNewListName(event.currentTarget.value)}
-          onFocus={() => setOnError('')}
-        />
-        <button
-          className="flex btn btn-outline btn-primary"
-          onClick={async () => await handleCreateList()}
-        >
-          <PlusIcon className="w-6 h-6" />
-        </button>
+        <div className="flex flex-grow gap-1">
+          <input
+            className="flex-grow p-2 input input-bordered input-primary "
+            id="createList"
+            placeholder="..."
+            value={newListName}
+            onChange={(event) => setNewListName(event.currentTarget.value)}
+            onFocus={() => setOnError('')}
+          />
+          <button
+            className="flex btn btn-outline btn-primary"
+            onClick={async () => await handleCreateList()}
+          >
+            <PlusIcon className="w-6 h-6" />
+          </button>
+        </div>
       </div>
       {reversedListWithTasks.map((list: ListWithTaskResponse) => {
         return (

@@ -1,7 +1,12 @@
 'use client';
 
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { PlusIcon, ShareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import {
+  PlusIcon,
+  ShareIcon,
+  TrashIcon,
+  WrenchIcon,
+} from '@heroicons/react/20/solid';
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
@@ -69,6 +74,7 @@ export default function SingleViewList(props: Props) {
   const [onShareError, setOnShareError] = useState('');
   const [newTaskName, setNewTaskName] = useState('');
   const [username, setUsername] = useState('');
+  const [showActions, setShowActions] = useState(false);
 
   const [handleDeleteList] = useMutation(deleteListMutation, {
     variables: {
@@ -160,82 +166,103 @@ export default function SingleViewList(props: Props) {
       </div>
       <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
-        <label className="p-2 text-lg text-primary " htmlFor="createTask">
+        <label className="p-2 text-lg text-primary" htmlFor="createTask">
           New Task:
         </label>
-        <input
-          placeholder="..."
-          id="createTask"
-          className="w-full max-w-xs input input-bordered input-primary"
-          value={newTaskName}
-          onChange={(event) => setNewTaskName(event.currentTarget.value)}
-          onFocus={() => setOnError('')}
-        />
-        <button
-          className="flex btn btn-outline btn-primary"
-          onClick={async () => await handleCreateTask()}
-        >
-          <PlusIcon className="w-6 h-6" />
-        </button>
+        <div className="flex flex-grow gap-1">
+          <input
+            className="w-full max-w-xs input input-bordered input-primary"
+            id="createTask"
+            placeholder="..."
+            value={newTaskName}
+            onChange={(event) => setNewTaskName(event.currentTarget.value)}
+            onFocus={() => setOnError('')}
+          />
+          <button
+            className="flex btn btn-outline btn-primary"
+            onClick={async () => await handleCreateTask()}
+          >
+            <PlusIcon className="w-6 h-6" />
+          </button>
+        </div>
       </div>
       <TaskContainer list={data.singleListWithTasks} />
-      <div className="divider">List Actions</div>
-      <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
-        {data.singleListWithTasks.sharedUsers.length > 1 && (
-          <ul className="w-full">
-            You
-            {data.singleListWithTasks.sharedUsers.map((user: User) => {
-              if (props.currentUser === user.username) {
-                return null;
-              }
-              return (
-                <span key={`shared-with-${user.id}`}>
-                  {' '}
-                  and{' '}
-                  <strong className="text-primary-focus">
-                    {user.username}{' '}
-                  </strong>
-                </span>
-              );
-            })}
-            share this list.
-          </ul>
-        )}
-        {onShareError ? <p className="text-error">{onShareError}</p> : null}
-        <label className="p-2 text-lg text-primary " htmlFor="shareList">
-          Share List:
-        </label>
-        <input
-          placeholder="enter username"
-          id="shareList"
-          className="w-full max-w-xs input input-bordered input-primary"
-          value={username}
-          onChange={(event) => setUsername(event.currentTarget.value)}
-        />
+
+      <div className="divider">
         <button
-          className="flex btn btn-outline btn-primary"
-          onClick={async () => {
-            await handleShareList();
+          className="flex items-center justify-center gap-2"
+          onClick={() => {
+            setShowActions(!showActions);
           }}
         >
-          <ShareIcon className="w-6 h-6" />
+          <WrenchIcon className="transition-all w-7 h-7 fill-primary hover:w-10 hover:h-10" />{' '}
+          {showActions ? 'Hide' : 'Show'} list actions
         </button>
       </div>
-      <div className="flex justify-end gap-2 my-3">
-        <button
-          className="flex items-center gap-1 px-4 py-2 m-auto btn btn-outline btn-error"
-          onClick={async () => {
-            await handleDeleteList({
-              variables: {
-                id: data.singleListWithTasks.id,
-              },
-            });
-          }}
-        >
-          <TrashIcon className="w-4 h-4" />
-          Delete List
-        </button>
-      </div>
+      {showActions ? (
+        <>
+          <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
+            {data.singleListWithTasks.sharedUsers.length > 1 && (
+              <ul className="w-full">
+                You
+                {data.singleListWithTasks.sharedUsers.map((user: User) => {
+                  if (props.currentUser === user.username) {
+                    return null;
+                  }
+                  return (
+                    <span key={`shared-with-${user.id}`}>
+                      {' '}
+                      and{' '}
+                      <strong className="text-primary-focus">
+                        {user.username}{' '}
+                      </strong>
+                    </span>
+                  );
+                })}
+                share this list.
+              </ul>
+            )}
+            {onShareError ? <p className="text-error">{onShareError}</p> : null}
+            <div className="flex flex-wrap items-center w-full gap-1 my-2 justify-items-center">
+              <label className="p-2 text-lg text-primary " htmlFor="shareList">
+                Share List:
+              </label>
+              <div className="flex flex-grow gap-1">
+                <input
+                  placeholder="enter username"
+                  id="shareList"
+                  className="w-full max-w-xs input input-bordered input-primary"
+                  value={username}
+                  onChange={(event) => setUsername(event.currentTarget.value)}
+                />
+                <button
+                  className="flex btn btn-outline btn-primary"
+                  onClick={async () => {
+                    await handleShareList();
+                  }}
+                >
+                  <ShareIcon className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="w-full my-3">
+            <button
+              className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error"
+              onClick={async () => {
+                await handleDeleteList({
+                  variables: {
+                    id: data.singleListWithTasks.id,
+                  },
+                });
+              }}
+            >
+              <TrashIcon className="w-4 h-4" />
+              Delete List
+            </button>
+          </div>
+        </>
+      ) : null}
     </main>
   );
 }

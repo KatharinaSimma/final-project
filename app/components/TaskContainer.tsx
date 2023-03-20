@@ -29,7 +29,7 @@ export default function TaskContainer(props: Props) {
           }}
         >
           <CheckIcon className="w-8 h-8 transition-all fill-primary hover:w-10 hover:h-10" />{' '}
-          Show done items
+          {showDone ? 'Hide' : 'Show'} done items
         </button>
       </div>
       {showDone
