@@ -8,7 +8,8 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
-import { ListWithTaskResponse } from './ListContainer';
+import { getLengthOfDoneTasks } from '../../util/dataStructures';
+import { ListWithTaskResponse } from '../[listsId]/SingleViewList';
 import LocationButton from './LocationButton';
 import TaskContainer from './TaskContainer';
 
@@ -20,8 +21,8 @@ type Props = {
 export default function ListComponent(props: Props) {
   const [listOpen, setListOpen] = useState(false);
   const { list } = props;
-  const tasks = list.tasks.length;
-  const dones = list.tasks.filter((task: Task) => task.done).length;
+  const tasks: Task[] = list.tasks;
+  const doneTasksLength = tasks.length > 0 ? getLengthOfDoneTasks(tasks) : '0';
 
   return (
     <div className="max-w-lg p-2 mx-auto my-4 border border-solid rounded-md border-primary min-w-md">
@@ -71,11 +72,13 @@ export default function ListComponent(props: Props) {
           </div>
         </div>
       </div>
-      <progress
-        className="w-full progress progress-primary"
-        value={dones}
-        max={tasks}
-      />
+      {tasks.length > 0 ? (
+        <progress
+          className="w-full progress progress-primary"
+          value={doneTasksLength}
+          max={list.tasks.length}
+        />
+      ) : null}
 
       <div
         className={`max-w-lg mx-auto my-4 rounded-md ${

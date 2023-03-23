@@ -11,6 +11,7 @@ import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
 import { User } from '../../database/users';
+import { calculateTaskProgress } from '../../util/dataStructures';
 import TaskContainer from '../components/TaskContainer';
 
 export type ListWithTaskResponse = {
@@ -140,14 +141,11 @@ export default function SingleViewList(props: Props) {
     redirect('/');
   }
 
-  const numberOfAllTasks = data.singleListWithTasks.tasks.length;
-  const numberOfDoneTasks = data.singleListWithTasks.tasks.filter(
-    (task: Task) => task.done,
-  ).length;
   const progress =
-    numberOfAllTasks > 0
-      ? ((numberOfDoneTasks / numberOfAllTasks) * 100).toFixed(0)
+    data.singleListWithTasks.tasks.length > 0
+      ? calculateTaskProgress(data.singleListWithTasks.tasks)
       : '0';
+
   const style = {
     '--value': progress,
     '--size': '3.3rem',
@@ -160,9 +158,11 @@ export default function SingleViewList(props: Props) {
         <h1 className="py-5 text-3xl text-center ">
           {data.singleListWithTasks.title}
         </h1>
-        <div className="radial-progress text-primary" style={style}>
-          {progress}%
-        </div>
+        {data.singleListWithTasks.tasks.length > 0 ? (
+          <div className="radial-progress text-primary" style={style}>
+            {progress}%
+          </div>
+        ) : null}
       </div>
       <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
