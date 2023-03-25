@@ -109,24 +109,10 @@ export default function TaskComponent(props: Props) {
         )}
       </div>
 
-      <div className="flex flex-row-reverse items-center justify-end gap-3">
-        <button
-          className="flex justify-center"
-          onClick={async () => {
-            await handleDeleteTask({
-              variables: {
-                id: task.id,
-              },
-            });
-          }}
-        >
-          <div className="tooltip" data-tip="Delete Task">
-            <TrashIcon className="w-5 h-5 hover:fill-error" />
-          </div>
-        </button>
-        <LocationButton location={task.title} />
+      <div className="flex flex-row items-center justify-between gap-2">
         {editTitle ? (
           <button
+            className="flex justify-center"
             onClick={async () => {
               setEditTitle(!editTitle);
               await handleUpdateTask({
@@ -152,6 +138,21 @@ export default function TaskComponent(props: Props) {
             </div>
           </button>
         )}
+        <LocationButton location={task.title} />
+        <button
+          className="flex justify-center"
+          onClick={async () => {
+            await handleDeleteTask({
+              variables: {
+                id: task.id,
+              },
+            });
+          }}
+        >
+          <div className="tooltip" data-tip="Delete Task">
+            <TrashIcon className="w-5 h-5 hover:fill-error" />
+          </div>
+        </button>
         <p className="error">{onError}</p>
       </div>
     </div>
