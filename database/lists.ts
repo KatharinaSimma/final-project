@@ -8,7 +8,6 @@ import { sql } from './connect';
 export type List = {
   id: number;
   title: string;
-  description?: string;
 };
 
 export type Task = {
@@ -204,26 +203,22 @@ export const updateTaskById = cache(
   },
 );
 
-// Update list
-// export const updateListById = cache(
-//   async (id: number, title: string, description: string) => {
-//     if (Number.isNaN(id)) {
-//       return undefined;
-//     }
-
-//     const [list] = await sql<List[]>`
-//     UPDATE
-//       lists
-//     SET
-//       title = ${title},
-//       description = ${description}
-//     WHERE
-//       id = ${id}
-//     RETURNING *
-//   `;
-//     return list;
-//   },
-// );
+export const updateListById = cache(async (id: number, title: string) => {
+  if (Number.isNaN(id)) {
+    return undefined;
+  }
+  const [list] = await sql<{ id: number; title: string }[]>`
+    UPDATE
+      lists
+    SET
+      title = ${title}
+    WHERE
+      id = ${id}
+    RETURNING
+      id, title
+  `;
+  return list;
+});
 
 // /////// //
 // DELETE  //

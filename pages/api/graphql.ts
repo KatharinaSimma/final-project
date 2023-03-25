@@ -16,6 +16,7 @@ import {
   getLists,
   getListWithTask,
   getTaskByListId,
+  updateListById,
   updateTaskById,
 } from '../../database/lists';
 import { createSession, deleteSessionByToken } from '../../database/sessions';
@@ -67,7 +68,6 @@ type UserContext = {
 type ListInput = {
   id: string;
   title: string;
-  description: string;
 };
 
 type TaskInput = {
@@ -87,7 +87,6 @@ const typeDefs = gql`
   type List {
     id: ID!
     title: String!
-    description: String
   }
 
   type Task {
@@ -144,8 +143,10 @@ const typeDefs = gql`
 
     deleteListById(id: ID): List
     deleteTaskById(id: ID!): Task
-    updateTaskById(id: ID!, title: String, done: Boolean): Task
     deleteUserById(id: ID!): User
+
+    updateTaskById(id: ID!, title: String, done: Boolean): Task
+    updateListById(id: ID!, title: String): List
 
     login(username: String!, password: String!): User
     logout(token: String!): Token
@@ -421,6 +422,23 @@ const resolvers = {
         throw new GraphQLError('Required field missing');
       }
       return await updateTaskById(parseInt(args.id), args.title, args.done);
+    },
+
+    updateListById: async (
+      parent: string,
+      args: ListInput,
+      context: UserContext,
+    ) => {
+      if (!context.isUserLoggedIn) {
+        throw new GraphQLError('Unauthorized operation');
+      }
+      const title = z.string().nonempty().max(49);
+      if (!title.safeParse(args.title).success) {
+        throw new GraphQLError(
+          'The title must be less than 50 characters long.',
+        );
+      }
+      return await updateListById(parseInt(args.id), args.title);
     },
 
     logout: async (parent: string, args: Token) => {

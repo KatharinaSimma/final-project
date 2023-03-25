@@ -13,6 +13,7 @@ import { Task } from '../../database/lists';
 import { User } from '../../database/users';
 import { calculateTaskProgress } from '../../util/dataStructures';
 import TaskContainer from '../components/TaskContainer';
+import ListTitle from './ListTitle';
 
 export type ListWithTaskResponse = {
   id: number;
@@ -146,32 +147,17 @@ export default function SingleViewList(props: Props) {
       ? calculateTaskProgress(data.singleListWithTasks.tasks)
       : '0';
 
-  const style = {
-    '--value': progress,
-    '--size': '3.3rem',
-    '--thickness': '5px',
-  } as React.CSSProperties;
-
   return (
     <main className="flex flex-col max-w-lg p-3 m-auto mb-12 sm:p-0">
-      <div className="flex items-center justify-center gap-3">
-        <h1 className="py-5 text-3xl text-center ">
-          {data.singleListWithTasks.title}
-        </h1>
-        {data.singleListWithTasks.tasks.length > 0 ? (
-          <div className="radial-progress text-primary" style={style}>
-            {progress}%
-          </div>
-        ) : null}
-      </div>
-      <p className="text-error min-h-8">{onError}</p>
+      <ListTitle list={data.singleListWithTasks} progress={progress} />
+      {onError ? <p className="text-error min-h-8">{onError}</p> : null}
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label className="p-2 text-lg text-primary" htmlFor="createTask">
           New Task:
         </label>
-        <div className="flex flex-grow gap-1">
+        <div className="flex justify-end flex-grow gap-1">
           <input
-            className="w-full max-w-xs input input-bordered input-primary"
+            className="w-full input input-bordered input-primary"
             id="createTask"
             placeholder="..."
             value={newTaskName}
