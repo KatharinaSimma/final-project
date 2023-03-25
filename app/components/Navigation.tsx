@@ -12,25 +12,25 @@ export default function Navigation(props: {
 }) {
   return (
     <nav
-      className={`flex justify-around gap-5 sm:justify-center ${
+      className={`flex justify-around gap-7 sm:justify-center ${
         props.isBottom ? 'btm-nav' : ''
       }`}
     >
       <Link href="/" className="flex justify-center gap-1 align-middle">
-        <RectangleGroupIcon className="w-6 h-6" />
+        <RectangleGroupIcon className="w-7 h-7" />
         <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
           Home
         </div>
       </Link>
       <Link href="/contact" className="flex justify-center gap-1 align-middle">
-        <EnvelopeIcon className="w-6 h-6" />
+        <EnvelopeIcon className="w-7 h-7" />
         <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
           Contact
         </div>
       </Link>
 
       <Link href="/about" className="flex justify-center gap-1 align-middle">
-        <InformationCircleIcon className="w-6 h-6" />
+        <InformationCircleIcon className="w-7 h-7" />
         <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
           About
         </div>
@@ -38,7 +38,7 @@ export default function Navigation(props: {
 
       {!props.username ? (
         <Link href="/login" className="flex">
-          <UserCircleIcon className="w-6 h-6" />
+          <UserCircleIcon className="w-7 h-7" />
           <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">
             Login
           </div>
@@ -46,7 +46,7 @@ export default function Navigation(props: {
       ) : (
         <Link href="/profile" prefetch={false} className="flex gap-1">
           <div className="avatar placeholder">
-            <div className="w-6 rounded-full bg-primary text-neutral-content">
+            <div className="rounded-full w-7 bg-primary text-neutral-content">
               <span className="text-xs">{props.username.charAt(0)}</span>
             </div>
           </div>
