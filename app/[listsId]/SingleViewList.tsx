@@ -13,6 +13,7 @@ import { Task } from '../../database/lists';
 import { User } from '../../database/users';
 import { calculateTaskProgress } from '../../util/dataStructures';
 import TaskContainer from '../components/TaskContainer';
+import EditLIstTitle from './EditListTitle';
 import ListTitle from './ListTitle';
 
 export type ListWithTaskResponse = {
@@ -149,10 +150,10 @@ export default function SingleViewList(props: Props) {
 
   return (
     <main className="flex flex-col max-w-lg p-3 m-auto mb-12 sm:p-0">
-      <ListTitle list={data.singleListWithTasks} progress={progress} />
+      <ListTitle title={data.singleListWithTasks.title} progress={progress} />
       {onError ? <p className="text-error min-h-8">{onError}</p> : null}
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
-        <label className="p-2 text-lg text-primary" htmlFor="createTask">
+        <label className="p-1 text-lg text-primary" htmlFor="createTask">
           New Task:
         </label>
         <div className="flex justify-end flex-grow gap-1">
@@ -209,29 +210,32 @@ export default function SingleViewList(props: Props) {
               </ul>
             )}
             {onShareError ? <p className="text-error">{onShareError}</p> : null}
-            <div className="flex flex-wrap items-center w-full gap-1 my-2 justify-items-center">
-              <label className="p-2 text-lg text-primary " htmlFor="shareList">
-                Share List:
-              </label>
-              <div className="flex flex-grow gap-1">
-                <input
-                  placeholder="enter username"
-                  id="shareList"
-                  className="w-full max-w-xs input input-bordered input-primary"
-                  value={username}
-                  onChange={(event) => setUsername(event.currentTarget.value)}
-                />
-                <button
-                  className="flex btn btn-outline btn-primary"
-                  onClick={async () => {
-                    await handleShareList();
-                  }}
-                >
-                  <ShareIcon className="w-6 h-6" />
-                </button>
-              </div>
+          </div>
+
+          <div className="flex flex-wrap items-center my-2 justify-items-center">
+            <label className="p-1 text-lg text-primary" htmlFor="shareList">
+              Share this List:
+            </label>
+            <div className="flex justify-end flex-grow gap-1">
+              <input
+                className="w-full input input-bordered input-primary"
+                id="shareList"
+                placeholder="enter a username"
+                value={username}
+                onChange={(event) => setUsername(event.currentTarget.value)}
+                onFocus={() => setOnError('')}
+              />
+              <button
+                className="flex btn btn-outline btn-primary"
+                onClick={async () => {
+                  await handleShareList();
+                }}
+              >
+                <ShareIcon className="w-6 h-6" />
+              </button>
             </div>
           </div>
+          <EditLIstTitle list={data.singleListWithTasks} />
           <div className="w-full my-3">
             <button
               className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error"
