@@ -47,7 +47,7 @@ export default async function UserProfilePage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-7rem)] mb-16 p-2 text-center pt-9 bg-base-200">
+    <main className="p-2 mb-16 text-center pt-9">
       <div className="flex-col">
         <h1 className="mx-auto my-5 text-3xl font-bold">User Profile</h1>
 

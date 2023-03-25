@@ -33,8 +33,10 @@ export default async function RegistrationPage(props: Props) {
   }
 
   return (
-    <ApolloClientProvider initialApolloState={JSON.stringify([])}>
-      <RegisterForm returnTo={props.searchParams.returnTo} />
-    </ApolloClientProvider>
+    <main className="min-h-screen">
+      <ApolloClientProvider initialApolloState={JSON.stringify([])}>
+        <RegisterForm returnTo={props.searchParams.returnTo} />
+      </ApolloClientProvider>
+    </main>
   );
 }

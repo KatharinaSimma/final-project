@@ -86,9 +86,9 @@ export default function ListContainer(props: Props) {
         <label className="p-2 text-lg text-primary" htmlFor="createList">
           New List:{' '}
         </label>
-        <div className="flex flex-grow gap-1">
+        <div className="flex justify-end flex-grow gap-1">
           <input
-            className="flex-grow p-2 input input-bordered input-primary "
+            className="w-full input input-bordered input-primary"
             id="createList"
             placeholder="..."
             value={newListName}

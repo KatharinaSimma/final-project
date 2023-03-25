@@ -24,7 +24,7 @@ export default async function AboutPage() {
   `,
   });
   return (
-    <main className="min-h-[calc(100vh-7rem)] mx-auto mb-12 p-5">
+    <main className="p-5 mx-auto mb-12 ">
       <h1 className="py-5 text-3xl text-center">About Taskology</h1>
 
       <div className="flex flex-wrap items-center justify-center gap-12">

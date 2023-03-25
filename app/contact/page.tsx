@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function Contact() {
   return (
-    <main className="min-h-[calc(100vh-7rem)] mb-12 flex flex-col justify-center items-center p-5">
+    <main className="flex flex-col items-center justify-center p-5 mb-12">
       <h1 className="py-5 text-3xl text-center">Contact</h1>
 
       <div className="flex flex-wrap items-center justify-center gap-12">

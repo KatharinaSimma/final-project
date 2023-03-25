@@ -6,9 +6,16 @@ import {
 } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
-export default function Navigation(props: { username: string }) {
+export default function Navigation(props: {
+  username: string;
+  isBottom: boolean;
+}) {
   return (
-    <nav className="flex justify-around gap-5 align-middle sm:justify-center ">
+    <nav
+      className={`flex justify-around gap-5 sm:justify-center ${
+        props.isBottom ? 'btm-nav' : ''
+      }`}
+    >
       <Link href="/" className="flex justify-center gap-1 align-middle">
         <RectangleGroupIcon className="w-6 h-6" />
         <div className="hidden sm:flex-col sm:justify-center sm:align-middle sm:flex">

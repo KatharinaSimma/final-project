@@ -71,7 +71,7 @@ export default function TaskComponent(props: Props) {
 
   return (
     <div
-      className={`flex items-center justify-between gap-5 px-1 my-2 border border-transparent  ${
+      className={`flex items-center justify-between gap-5 my-2 border border-transparent  ${
         !editTitle ? 'hover:border hover:border-primary hover:rounded-md' : ''
       }`}
       key={`task-${task.id}`}
@@ -109,7 +109,22 @@ export default function TaskComponent(props: Props) {
         )}
       </div>
 
-      <div className="flex justify-end gap-3">
+      <div className="flex flex-row-reverse items-center justify-end gap-3">
+        <button
+          className="flex justify-center"
+          onClick={async () => {
+            await handleDeleteTask({
+              variables: {
+                id: task.id,
+              },
+            });
+          }}
+        >
+          <div className="tooltip" data-tip="Delete Task">
+            <TrashIcon className="w-5 h-5 hover:fill-error" />
+          </div>
+        </button>
+        <LocationButton location={task.title} />
         {editTitle ? (
           <button
             onClick={async () => {
@@ -124,31 +139,19 @@ export default function TaskComponent(props: Props) {
             }}
           >
             <div className="tooltip" data-tip="Save Changes">
-              <BookmarkIcon className="w-5 h-5" />
+              <BookmarkIcon className="w-5 h-5 hover:fill-primary" />
             </div>
           </button>
         ) : (
-          <button onClick={() => setEditTitle(!editTitle)}>
+          <button
+            className="flex justify-center"
+            onClick={() => setEditTitle(!editTitle)}
+          >
             <div className="tooltip" data-tip="Edit">
-              <PencilIcon className="w-5 h-5" />
+              <PencilIcon className="w-5 h-5 hover:fill-primary" />
             </div>
           </button>
         )}
-
-        <LocationButton location={task.title} />
-        <button
-          onClick={async () => {
-            await handleDeleteTask({
-              variables: {
-                id: task.id,
-              },
-            });
-          }}
-        >
-          <div className="tooltip" data-tip="Delete Task">
-            <TrashIcon className="w-5 h-5 hover:fill-error" />
-          </div>
-        </button>
         <p className="error">{onError}</p>
       </div>
     </div>

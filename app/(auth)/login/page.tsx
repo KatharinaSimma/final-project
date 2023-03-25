@@ -32,10 +32,12 @@ export default async function LoginPage() {
   }
 
   return (
-    <ApolloClientProvider
-      initialApolloState={JSON.stringify(client.cache.extract())}
-    >
-      <LoginForm />
-    </ApolloClientProvider>
+    <main className="min-h-screen">
+      <ApolloClientProvider
+        initialApolloState={JSON.stringify(client.cache.extract())}
+      >
+        <LoginForm />
+      </ApolloClientProvider>
+    </main>
   );
 }

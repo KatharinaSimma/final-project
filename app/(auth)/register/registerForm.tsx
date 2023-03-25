@@ -52,68 +52,63 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
   });
 
   return (
-    <div className="min-h-screen pt-9 bg-base-200">
-      <div className="flex-col">
-        <div className="text-center">
-          <h1 className="mx-auto text-3xl font-bold">Register now!</h1>
-          <p className="max-w-lg py-6 mx-auto">This app is awesome and free.</p>
-        </div>
-        <div className="flex-shrink-0 w-full max-w-md mx-auto shadow-2xl card bg-base-100">
-          <div className="card-body">
-            <form onSubmit={formik.handleSubmit} noValidate>
-              <div className="form-control">
-                <label className="label" htmlFor="username">
-                  <span className="label-text">Username</span>
-                </label>
-                <input
-                  id="username"
-                  name="username"
-                  placeholder="username"
-                  className={`input input-bordered ${
-                    formik.errors.username ? 'border-error' : ''
-                  }`}
-                  autoComplete="username"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.username}
-                />
-                {formik.touched.username && formik.errors.username ? (
-                  <p className="text-error">{formik.errors.username}</p>
-                ) : null}
-              </div>
-              <div className="form-control">
-                <label className="label" htmlFor="password">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="password"
-                  className={`input input-bordered ${
-                    formik.errors.password ? 'border-error' : ''
-                  }`}
-                  autoComplete="current-password"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                />
-                {formik.touched.password && formik.errors.password ? (
-                  <p className="text-error">{formik.errors.password}</p>
-                ) : null}
-              </div>
-              <Link
-                href="/login"
-                className="mt-5 label-text-alt link link-hover"
-              >
-                Already have an account?
-              </Link>
-              <p className="text-error min-h-8">{onError}</p>
-              <div className="mt-6 form-control">
-                <button className="btn btn-primary">Login</button>
-              </div>
-            </form>
-          </div>
+    <div className="flex flex-col min-h-full pt-9">
+      <div className="text-center">
+        <h1 className="mx-auto text-3xl font-bold ">Register</h1>
+        <p className="max-w-lg m-auto">Easy and free.</p>
+      </div>
+      <div className="flex-shrink-0 w-full max-w-md mx-auto shadow-2xl card bg-base-100">
+        <div className="card-body">
+          <form onSubmit={formik.handleSubmit} noValidate>
+            <div className="form-control">
+              <label className="label" htmlFor="username">
+                <span className="label-text">Username</span>
+              </label>
+              <input
+                id="username"
+                name="username"
+                placeholder="username"
+                className={`input input-bordered ${
+                  formik.errors.username ? 'border-error' : ''
+                }`}
+                autoComplete="username"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.username}
+              />
+              {formik.touched.username && formik.errors.username ? (
+                <p className="text-error">{formik.errors.username}</p>
+              ) : null}
+            </div>
+            <div className="form-control">
+              <label className="label" htmlFor="password">
+                <span className="label-text">Password</span>
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="password"
+                className={`input input-bordered ${
+                  formik.errors.password ? 'border-error' : ''
+                }`}
+                autoComplete="current-password"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+              />
+              {formik.touched.password && formik.errors.password ? (
+                <p className="text-error">{formik.errors.password}</p>
+              ) : null}
+            </div>
+            <Link href="/login" className="mt-5 label-text-alt link link-hover">
+              Already have an account?
+            </Link>
+            <p className="text-error min-h-8">{onError}</p>
+            <div className="mt-6 form-control">
+              <button className="btn btn-primary">Login</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

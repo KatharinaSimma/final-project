@@ -40,7 +40,7 @@ export default async function RootLayout(props: Props) {
   });
 
   const contactMessage = (
-    <Link href="/contact" className="flex justify-center gap-1">
+    <Link href="/contact" className="flex justify-center gap-1 p-4">
       <span className="align-middle flexjustify-center">
         Created by Katharina Simma with
       </span>
@@ -49,18 +49,24 @@ export default async function RootLayout(props: Props) {
   );
 
   return (
-    <html lang="en" data-theme={theme}>
+    <html lang="en" className="max-w-full overflow-x-hidden" data-theme={theme}>
       <head />
-      <body>
+      <body className="max-w-full overflow-x-hidden">
         <header className="hidden sm:block sm:p-5 sm:h-16">
-          <Navigation username={data.userBySessionToken?.username} />
+          <Navigation
+            isBottom={false}
+            username={data.userBySessionToken?.username}
+          />
         </header>
         {props.children}
-        <footer className="fixed bottom-0 w-full h-12 p-3 align-middle bg-base-100">
-          <div className="hidden sm:block ">{contactMessage}</div>
+        <footer className="btm-nav">
+          <div className="hidden align-middle sm:block">{contactMessage}</div>
 
           <div className="block sm:hidden">
-            <Navigation username={data.userBySessionToken?.username} />
+            <Navigation
+              isBottom={true}
+              username={data.userBySessionToken?.username}
+            />
           </div>
         </footer>
       </body>

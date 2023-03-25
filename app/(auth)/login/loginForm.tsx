@@ -43,10 +43,13 @@ export default function LoginForm() {
 
   return (
     <div>
-      <div className="min-h-screen pt-9 bg-base-200">
+      <div className="pt-9">
         <div className="flex-col">
           <div className="text-center">
-            <h1 className="mx-auto text-3xl font-bold">Login now!</h1>
+            <h1 className="mx-auto my-4 text-3xl font-bold">Login</h1>
+            <p className="max-w-lg py-6 mx-auto">
+              Please enter your credentials
+            </p>
           </div>
           <div className="flex-shrink-0 w-full max-w-md mx-auto shadow-2xl card bg-base-100">
             <div className="card-body">
