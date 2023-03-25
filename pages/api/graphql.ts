@@ -407,15 +407,19 @@ const resolvers = {
       if (!context.isUserLoggedIn) {
         throw new GraphQLError('Unauthorized operation');
       }
+      const title = z.string().nonempty().max(49);
+      if (!title.safeParse(args.title).success) {
+        throw new GraphQLError(
+          'The title must be less than 50 characters long.',
+        );
+      }
       if (
         !args.id ||
         (args.id && typeof args.id !== 'string') ||
-        typeof args.title !== 'string' ||
         typeof args.done !== 'boolean'
       ) {
         throw new GraphQLError('Required field missing');
       }
-
       return await updateTaskById(parseInt(args.id), args.title, args.done);
     },
 

@@ -48,7 +48,9 @@ export const getListWithTask = cache(async (id: number) => {
       id, list_id, title, done
     FROM
       tasks
-    WHERE tasks.list_id = ${id}
+    WHERE
+      tasks.list_id = ${id}
+    ORDER BY id DESC
   `;
   return tasks;
 });

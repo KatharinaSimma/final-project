@@ -12,13 +12,15 @@ export default function LocationButton(props: Props) {
   );
 
   return (
-    <a
-      className=""
-      href={locationLink}
-      rel="noreferrer noopener"
-      target="_blank"
-    >
-      <MapPinIcon className="w-6 h-6 hover:fill-primary" />
-    </a>
+    <div className="tooltip" data-tip="Show Location in maps">
+      <a
+        className=""
+        href={locationLink}
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        <MapPinIcon className="w-6 h-6 hover:fill-primary" />
+      </a>
+    </div>
   );
 }

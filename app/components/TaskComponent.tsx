@@ -1,7 +1,7 @@
 'use client';
 
 import { gql, useMutation } from '@apollo/client';
-import { TrashIcon } from '@heroicons/react/20/solid';
+import { BookmarkIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import { Task } from '../../database/lists';
 import LocationButton from './LocationButton';
@@ -21,7 +21,6 @@ const updateTaskMutation = gql`
     updateTaskById(id: $id, title: $title, done: $done) {
       id
       title
-      description
       done
     }
   }
@@ -30,8 +29,11 @@ const updateTaskMutation = gql`
 export default function TaskComponent(props: Props) {
   const [onError, setOnError] = useState('');
   const [done, setDone] = useState(props.task.done);
+  const [title, setTitle] = useState(props.task.title);
+  const [editTitle, setEditTitle] = useState(false);
 
   const { task } = props;
+  console.log('task', task.title, task.id);
 
   const [handleDeleteTask, { loading }] = useMutation(deleteTaskMutation, {
     variables: {
@@ -49,7 +51,7 @@ export default function TaskComponent(props: Props) {
   const [handleUpdateTask] = useMutation(updateTaskMutation, {
     variables: {
       id: task.id,
-      title: task.title,
+      title: title,
       done: !done,
     },
 
@@ -69,25 +71,70 @@ export default function TaskComponent(props: Props) {
 
   return (
     <div
-      className="flex items-center justify-between gap-5 px-1 my-2 hover:border hover:border-primary hover:rounded-md"
+      className={`flex items-center justify-between gap-5 px-1 my-2 border border-transparent  ${
+        !editTitle ? 'hover:border hover:border-primary hover:rounded-md' : ''
+      }`}
       key={`task-${task.id}`}
     >
-      <div className="flex items-baseline gap-1">
+      <div className="flex items-center gap-1">
         <label className="flex gap-2 cursor-pointer label">
           <input
             type="checkbox"
             className="checkbox checkbox-primary"
             onChange={async () => {
               setDone(!done);
-              await handleUpdateTask();
+              await handleUpdateTask({
+                variables: {
+                  id: task.id,
+                  title: title,
+                  done: !done,
+                },
+              });
             }}
             checked={done}
           />
-          <span className="label-text">{task.title}</span>
         </label>
+        {editTitle ? (
+          <label>
+            <input
+              className="input input-bordered input-primary h-fit"
+              value={title}
+              onChange={(event) => {
+                setTitle(event.currentTarget.value);
+              }}
+            />
+          </label>
+        ) : (
+          <span className="label-text">{title}</span>
+        )}
       </div>
 
-      <div className="flex justify-end gap-5">
+      <div className="flex justify-end gap-3">
+        {editTitle ? (
+          <button
+            onClick={async () => {
+              setEditTitle(!editTitle);
+              await handleUpdateTask({
+                variables: {
+                  id: task.id,
+                  title: title,
+                  done: done,
+                },
+              });
+            }}
+          >
+            <div className="tooltip" data-tip="Save Changes">
+              <BookmarkIcon className="w-5 h-5" />
+            </div>
+          </button>
+        ) : (
+          <button onClick={() => setEditTitle(!editTitle)}>
+            <div className="tooltip" data-tip="Edit">
+              <PencilIcon className="w-5 h-5" />
+            </div>
+          </button>
+        )}
+
         <LocationButton location={task.title} />
         <button
           onClick={async () => {
@@ -98,7 +145,9 @@ export default function TaskComponent(props: Props) {
             });
           }}
         >
-          <TrashIcon className="w-5 h-5 hover:fill-error" />
+          <div className="tooltip" data-tip="Delete Task">
+            <TrashIcon className="w-5 h-5 hover:fill-error" />
+          </div>
         </button>
         <p className="error">{onError}</p>
       </div>
