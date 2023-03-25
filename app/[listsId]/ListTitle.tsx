@@ -1,6 +1,12 @@
 'use client';
 
-type Props = { title: string; progress: string };
+import { ListWithTaskResponse } from './SingleViewList';
+
+type Props = {
+  list: ListWithTaskResponse;
+  progress: string;
+  currentUser: string;
+};
 
 export default function ListTitle(props: Props) {
   const style = {
@@ -10,11 +16,28 @@ export default function ListTitle(props: Props) {
   } as React.CSSProperties;
 
   return (
-    <div className="flex flex-col max-w-lg p-3 m-auto mb-12 sm:p-0">
-      <div className="flex items-center justify-between gap-3 py-5">
-        <h1 className="text-3xl text-center border border-transparent">
-          {props.title}
-        </h1>
+    <div className="flex flex-wrap items-center justify-center gap-3 py-14">
+      <h1 className="text-3xl text-center border border-transparent">
+        {props.list.title}
+      </h1>
+      <div className="flex gap-3">
+        <div className="-space-x-3 avatar-group">
+          {props.list.sharedUsers.map((user) => {
+            if (props.currentUser === user.username) {
+              return null;
+            }
+            return (
+              <div
+                className="avatar placeholder"
+                key={`shared-with-${user.id}`}
+              >
+                <div className="w-12 rounded-full bg-neutral-content text-base-100 hover:bg-primary">
+                  <span className="text-lg">{user.username.charAt(0)}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
         {props.progress !== '0' ? (
           <div className="radial-progress text-primary" style={style}>
             {props.progress}%
