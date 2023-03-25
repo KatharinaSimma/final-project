@@ -109,7 +109,7 @@ export default function TaskComponent(props: Props) {
         )}
       </div>
 
-      <div className="flex flex-row items-center justify-between gap-2">
+      <div className="flex flex-row items-center justify-between">
         {editTitle ? (
           <button
             className="flex justify-center"
@@ -140,7 +140,7 @@ export default function TaskComponent(props: Props) {
         )}
         <LocationButton location={task.title} />
         <button
-          className="flex justify-center"
+          className="flex justify-center ml-2"
           onClick={async () => {
             await handleDeleteTask({
               variables: {

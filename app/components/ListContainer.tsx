@@ -83,7 +83,7 @@ export default function ListContainer(props: Props) {
     <div className="max-w-lg m-auto min-w-md sm:p-0">
       <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
-        <label className="p-2 text-lg text-primary" htmlFor="createList">
+        <label className="text-lg  text-primary" htmlFor="createList">
           New List:{' '}
         </label>
         <div className="flex justify-end flex-grow gap-1">
