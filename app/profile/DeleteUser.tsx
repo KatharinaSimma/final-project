@@ -21,6 +21,7 @@ export default function DeleteUser(props: Props) {
   }
 
   const [onError, setOnError] = useState('');
+  const [alert, setAlert] = useState(false);
 
   const [handleDeleteUser] = useMutation(deleteUserById, {
     variables: {
@@ -39,13 +40,33 @@ export default function DeleteUser(props: Props) {
 
   return (
     <>
-      <button
-        className="btn btn-outline btn-error"
-        onClick={() => handleDeleteUser()}
-      >
-        Delete Account
-      </button>
+      {!alert ? (
+        <button
+          className="btn btn-outline btn-error"
+          onClick={() => setAlert(true)}
+        >
+          Delete Account
+        </button>
+      ) : null}
       <p className="error">{onError}</p>
+      {alert ? (
+        <div className="max-w-md m-auto shadow-lg alert">
+          <div>
+            <span className="pl-3 text-left">
+              Are you sure? <br />
+              This cannot be reverted!
+            </span>
+          </div>
+          <div className="flex-none">
+            <button
+              className="btn btn-md btn-error"
+              onClick={() => handleDeleteUser()}
+            >
+              Delete Account
+            </button>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
