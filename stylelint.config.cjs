@@ -10,6 +10,7 @@ const config = {
     // Allow files without any styles
     'no-empty-source': null,
   },
+  unknownAtRules: 'ignore',
   overrides: [
     {
       files: [
