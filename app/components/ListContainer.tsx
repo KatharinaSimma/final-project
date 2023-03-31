@@ -83,13 +83,14 @@ export default function ListContainer(props: Props) {
     <div className="max-w-lg m-auto min-w-md sm:p-0">
       <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
-        <label className="text-lg  text-primary" htmlFor="createList">
+        <label className="text-lg text-primary" htmlFor="createList">
           New List:{' '}
         </label>
         <div className="flex justify-end flex-grow gap-1">
           <input
             className="w-full input input-bordered input-primary"
             id="createList"
+            data-test-id="create-list"
             placeholder="..."
             value={newListName}
             onChange={(event) => setNewListName(event.currentTarget.value)}

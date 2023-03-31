@@ -106,7 +106,7 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
             </Link>
             <p className="text-error min-h-8">{onError}</p>
             <div className="mt-6 form-control">
-              <button className="btn btn-primary">Login</button>
+              <button className="btn btn-primary">Register</button>
             </div>
           </form>
         </div>

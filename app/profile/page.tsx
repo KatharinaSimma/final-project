@@ -21,9 +21,15 @@ export async function generateMetadata() {
   `,
   });
 
+  if (data && data.userBySessionToken && data.userBySessionToken.username) {
+    return {
+      title: data.userBySessionToken.username,
+      description: `${data.userBySessionToken.username}'s user profile`,
+    };
+  }
   return {
-    title: data.userBySessionToken.username,
-    description: `${data.userBySessionToken.username}'s user profile`,
+    title: 'Profile',
+    description: `User profile`,
   };
 }
 
@@ -31,7 +37,7 @@ export default async function UserProfilePage() {
   const client = initializeApollo(null);
   const sessionToken = cookies().get('sessionToken');
 
-  const { data } = await client.query({
+  const { data, loading } = await client.query({
     query: gql`
     query userBySessionToken($token: String! = "${sessionToken?.value}") {
       userBySessionToken(token: $token) {
@@ -42,7 +48,9 @@ export default async function UserProfilePage() {
   `,
   });
 
-  if (!data.userBySessionToken) {
+  if (loading) return <button className="btn loading">loading</button>;
+
+  if (!data || !data.userBySessionToken || !data.userBySessionToken.username) {
     redirect('/login');
   }
 
@@ -56,7 +64,7 @@ export default async function UserProfilePage() {
         >
           <UserInfoBox data={data.userBySessionToken.username} />
           <ThemeChooser />
-          <div className="my-7 divider"> DANGER ZONE</div>
+          <div className="my-7 divider">DANGER ZONE</div>
           <DeleteUser userId={data.userBySessionToken.id} />
         </ApolloClientProvider>
       </div>

@@ -27,7 +27,7 @@ export default async function HomePage() {
 
   if (loading) return <button className="btn loading">loading</button>;
 
-  if (!data.userBySessionToken) {
+  if (!data || !data.userBySessionToken || !data.userBySessionToken.username) {
     redirect('/about');
   }
 
