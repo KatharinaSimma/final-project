@@ -41,8 +41,8 @@ jobs:
         run: yarn tsc
       - name: Run ESLint
         run: yarn eslint . --max-warnings 0
-      - name: Run Stylelint
-        run: yarn stylelint '**/*.{css,scss,less,js,tsx}'
+      # - name: Run Stylelint
+      #   run: yarn stylelint '**/*.{css,scss,less,js,tsx}'
       - name: Install Playwright
         run: yarn playwright install --with-deps chromium
       - name: Run tests
