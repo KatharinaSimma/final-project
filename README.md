@@ -18,18 +18,21 @@ The extra feature that makes Taskology different from other list apps is a locat
 1.  Imagine you share a shopping list with your spouse. Choose the name of the shop you want to buy froma as the title of your list. When you click on the map icon, google maps shows you all the location of the specific shop around your current location
 2.  Imagine your frineds Arif and Daniel are sharing a love for kebap. They share a list with all the really good kebap places in Vienna. When Daniel clicks on a list item, google maps shows the location of this place. When Arif clicks on the title of the list, he'll see all kebap places around his location.
 
-## To Do Backlog
-
-- Use a websocket for synchronising lists between users.
-- Add two-factor authentication for better security
-- Make Taskology 100% keyboard navigatable to improve accessiblity
-- and more ...
+![Database Schema](./public/app_screenshot.png)
 
 ## Technologies
 
 - I Designed my data scheme with DrawSQL and used PostgreSQL, Migrations for data management
 
-<iframe width="100%" height="500px" style="box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); border-radius:15px;" allowtransparency="true" allowfullscreen="true" scrolling="no" title="Embedded DrawSQL IFrame" frameborder="0" src="https://drawsql.app/teams/katharinasimmas-team/diagrams/final-project-schema/embed"></iframe>
+![Database Schema](./public/drawsql_db_scheme.png)
+
+- I used React Next.js with Typescript and Node.js to build the app
+- Date Fetching is done with GraphQL Apollo
+- I implemented full user authentication incl. session tokens plus authorizations
+- UI Design & Prototyping was done in ExcaliDraw
+- The design is fully responsive and was implemented with Tailwind & Daisy UI incl. themes
+- I did E2E and unit test
+- Deployed on Fly.io: https://taskology.fly.dev/
 
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a>
 <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/> </a>
@@ -41,15 +44,14 @@ The extra feature that makes Taskology different from other list apps is a locat
 <a href="https://tailwindcss.com/" target="_blank" rel="noreferrer"><img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" alt="tailwind" width="40" height="40"/> </a>
 <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> </a>
 
-- I used React Next.js with Typescript and Node.js to build the app
-- Date Fetching is done with GraphQL Apollo
-- I implemented full user authentication incl. session tokens plus authorizations
-- UI Design & Prototyping was done in ExcaliDraw
-- The design is fully responsive and was implemented with Tailwind & Daisy UI incl. themes
-- I did E2E and unit test
-- Deployed on Fly.io: https://taskology.fly.dev/
-
 </p>
+
+## To Do Backlog
+
+- Use a websocket for synchronising lists between users.
+- Add two-factor authentication for better security
+- Make Taskology 100% keyboard navigatable to improve accessiblity
+- and more ...
 
 ## Set up
 
