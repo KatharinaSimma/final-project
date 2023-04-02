@@ -21,7 +21,6 @@ export type ListWithTasks = {
   id: number;
   listId: number | null;
   title: string;
-  description: string | null;
   tasks: any;
 };
 

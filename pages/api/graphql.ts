@@ -92,7 +92,6 @@ const typeDefs = gql`
   type Task {
     id: ID!
     title: String!
-    description: String
     listId: ID!
     done: Boolean
   }
@@ -100,7 +99,6 @@ const typeDefs = gql`
   type ListWithTasks {
     id: ID!
     title: String!
-    description: String
     tasks: [Task]
     sharedUsers: [User]
   }

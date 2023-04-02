@@ -28,7 +28,6 @@ const getSingleListWithTask = gql`
     singleListWithTasks(id: $singleListWithTasksId) {
       id
       title
-      description
       sharedUsers {
         id
         username
@@ -36,7 +35,6 @@ const getSingleListWithTask = gql`
       tasks {
         id
         title
-        description
         done
       }
     }

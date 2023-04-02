@@ -10,7 +10,7 @@ import ListComponent from './ListComponent';
 export type ListWithTaskResponse = {
   id: number;
   title: string;
-  description?: string;
+
   sharedUsers: [User];
   tasks: [Task];
 };
@@ -20,7 +20,6 @@ const getListWithTask = gql`
     listWithTasks {
       id
       title
-      description
       sharedUsers {
         id
         username
@@ -28,7 +27,6 @@ const getListWithTask = gql`
       tasks {
         id
         title
-        description
         done
       }
     }
