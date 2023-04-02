@@ -1,8 +1,10 @@
 # Taskology
 
+As a former project coordinator I am a well organised person and who loves to stay on top of her todos on the go.
+
 ## Description
 
-Taskology is a nifty little app that lets you create task lists that you can share with friends. Once you log in you can create lists and tasks with an intuitive interface. You can share lists with other registered users. Your friends can see when you tick off a task in (near) real time.
+Taskology is a progressive web (PWA) app that lets you create task lists that you can share with friends. Once you log in you can create lists and tasks with an intuitive interface. You can share lists with other registered users. Your friends can see when you tick off a task in (near) real time.
 The main goal of the app is to provide the simplest list functionality without the overhead of a big todo or project management app.
 
 ### The Fun Feature
@@ -18,27 +20,41 @@ The extra feature that makes Taskology different from other list apps is a locat
 
 ## To Do Backlog
 
-- [x] A progress bar for each list so the user can see how many list items are ticked off.
-- [ ] More choices for the location feature, e.g. let user define a geolocation for the list.
-- [ ] Implement a progressive Web App.
-- [ ] Use a websocket for synchronising lists between users.
-- [ ] Make Taskology 100% keyboard navigatable!
+- Use a websocket for synchronising lists between users.
+- Add two-factor authentication for better security
+- Make Taskology 100% keyboard navigatable to improve accessiblity
+- and more ...
 
 ## Technologies
 
-- nextjs
-- react
-- typescript
-- tailwindcss
-- daisy ui
-- graphql
-- postgres
+- I Designed my data scheme with DrawSQL and used PostgreSQL, Migrations for data management
 
-## Set up locally
+<iframe width="100%" height="500px" style="box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); border-radius:15px;" allowtransparency="true" allowfullscreen="true" scrolling="no" title="Embedded DrawSQL IFrame" frameborder="0" src="https://drawsql.app/teams/katharinasimmas-team/diagrams/final-project-schema/embed"></iframe>
+
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a>
+<a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/> </a>
+<a href="https://www.w3.org/html/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg" alt="html5" width="40" height="40"/> </a>
+<a href="https://www.w3schools.com/css/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original-wordmark.svg" alt="css3" width="40" height="40"/></a>
+<a href="https://nextjs.org/" target="_blank" rel="noreferrer"> <img src="https://cdn.worldvectorlogo.com/logos/nextjs-2.svg" alt="nextjs" width="40" height="40"/> </a>
+<a href="https://reactjs.org/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" alt="react" width="40" height="40"/> </a>
+<a href="https://graphql.org" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/graphql/graphql-icon.svg" alt="graphql" width="40" height="40"/> </a>
+<a href="https://tailwindcss.com/" target="_blank" rel="noreferrer"><img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" alt="tailwind" width="40" height="40"/> </a>
+<a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> </a>
+
+- I used React Next.js with Typescript and Node.js to build the app
+- Date Fetching is done with GraphQL Apollo
+- I implemented full user authentication incl. session tokens plus authorizations
+- UI Design & Prototyping was done in ExcaliDraw
+- The design is fully responsive and was implemented with Tailwind & Daisy UI incl. themes
+- I did E2E and unit test
+- Deployed on Fly.io: https://taskology.fly.dev/
+
+</p>
+
+## Set up
 
 1.  Clone the project
     https: `git clone git@github.com:KatharinaSimma/final-project.git`
-    ssh: `git clone git@github.com:KatharinaSimma/final-project.git`
 2.  Install packages: `yarn`
 3.  Run the app: `yarn dev`
 4.  Go to localhost: http://localhost:3000/
