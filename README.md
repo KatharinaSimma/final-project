@@ -32,6 +32,8 @@ If the name of the list is a specific place google, maps will take you to the lo
 - The design is fully responsive and was implemented with Tailwind & Daisy UI incl. themes
 - I did E2E and unit test
 - Deployed on Fly.io: https://taskology.fly.dev/
+- Continuous Integration with GitHub Actions
+- This app is a PWA (progressive web app)
 
 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" alt="javascript" width="40" height="40"/> </a>
 <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" alt="typescript" width="40" height="40"/> </a>
