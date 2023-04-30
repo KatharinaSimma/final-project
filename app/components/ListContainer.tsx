@@ -82,7 +82,7 @@ export default function ListContainer(props: Props) {
       <p className="text-error min-h-8">{onError}</p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label
-          className="text-lg text-primary"
+          className="text-lg"
           htmlFor="createList"
           aria-label="Create new list"
         >

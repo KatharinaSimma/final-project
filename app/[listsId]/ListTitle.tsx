@@ -31,7 +31,7 @@ export default function ListTitle(props: Props) {
                 className="avatar placeholder"
                 key={`shared-with-${user.id}`}
               >
-                <div className="w-12 rounded-full bg-neutral-content text-base-100 hover:bg-primary">
+                <div className="w-12 rounded-full bg-neutral-focus text-neutral-content hover:bg-primary">
                   <span className="text-lg">{user.username.charAt(0)}</span>
                 </div>
               </div>

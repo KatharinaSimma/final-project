@@ -51,7 +51,7 @@ export default function Navigation(props: {
           aria-label="User profile"
         >
           <div className="avatar placeholder">
-            <div className="rounded-full w-7 bg-primary text-neutral-content">
+            <div className="rounded-full w-7 bg-neutral-focus text-neutral-content">
               <span className="text-xs">{props.username.charAt(0)}</span>
             </div>
           </div>
