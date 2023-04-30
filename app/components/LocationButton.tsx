@@ -13,7 +13,12 @@ export default function LocationButton(props: Props) {
 
   return (
     <div className="ml-2 tooltip" data-tip="Show Location in maps">
-      <a href={locationLink} rel="noreferrer noopener" target="_blank">
+      <a
+        href={locationLink}
+        rel="noreferrer noopener"
+        target="_blank"
+        aria-label={`Show location for ${props.location} on google maps`}
+      >
         <MapPinIcon className="w-6 h-6 hover:fill-primary" />
       </a>
     </div>

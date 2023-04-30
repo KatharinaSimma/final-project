@@ -113,6 +113,7 @@ export default function TaskComponent(props: Props) {
         {editTitle ? (
           <button
             className="flex justify-center"
+            aria-label={`Save task ${task.title}`}
             onClick={async () => {
               setEditTitle(!editTitle);
               await handleUpdateTask({
@@ -141,6 +142,7 @@ export default function TaskComponent(props: Props) {
         <LocationButton location={task.title} />
         <button
           className="flex justify-center ml-2"
+          aria-label={`Delete task ${task.title}`}
           onClick={async () => {
             await handleDeleteTask({
               variables: {

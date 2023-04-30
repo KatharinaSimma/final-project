@@ -10,24 +10,23 @@ export default function ThemeChooser() {
   const router = useRouter();
   return (
     <div className="mt-10">
-      <div className="px-5 py-3 mx-auto my-4 bg-base-100 min-w-sm max-w-fit mp-2 btn btn-outline btn-primary min-w-md ">
+      <button
+        className="px-5 py-3 mx-auto my-4 bg-base-100 min-w-sm max-w-fit mp-2 btn btn-outline btn-primary min-w-md"
+        onClick={() => {
+          setListOpen(!listOpen);
+        }}
+      >
         <div className="flex items-center justify-between">
           Choose a theme
           <div className="flex gap-2 ">
-            <button
-              onClick={() => {
-                setListOpen(!listOpen);
-              }}
-            >
-              {listOpen ? (
-                <ChevronUpIcon className="w-6 h-6" />
-              ) : (
-                <ChevronDownIcon className="w-6 h-6" />
-              )}
-            </button>
+            {listOpen ? (
+              <ChevronUpIcon className="w-6 h-6" />
+            ) : (
+              <ChevronDownIcon className="w-6 h-6" />
+            )}
           </div>
         </div>
-      </div>
+      </button>
       <div
         className={`max-w-4xl mx-auto my-4 h-fit grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 ${
           listOpen ? '' : 'hidden'
@@ -37,9 +36,10 @@ export default function ThemeChooser() {
           return (
             <button
               key={`theme-${theme}`}
-              className="overflow-hidden text-left rounded-lg "
+              className="overflow-hidden text-left rounded-lg hover:outline foucs:outline"
               data-set-theme={theme}
               data-act-class="[&amp;_svg]:visible"
+              aria-label={`Set theme color ${theme}`}
               onClick={() => {
                 setStringifiedCookie('theme', theme);
                 setListOpen(false);

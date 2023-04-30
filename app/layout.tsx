@@ -40,7 +40,11 @@ export default async function RootLayout(props: Props) {
   });
 
   const contactMessage = (
-    <Link href="/contact" className="flex justify-center gap-1 p-4">
+    <Link
+      href="/contact"
+      className="flex justify-center gap-1 p-4"
+      aria-label="Contact page"
+    >
       <span className="align-middle flexjustify-center">
         Created by Katharina Simma with
       </span>

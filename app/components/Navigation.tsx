@@ -44,7 +44,12 @@ export default function Navigation(props: {
           </div>
         </Link>
       ) : (
-        <Link href="/profile" prefetch={false} className="flex gap-1">
+        <Link
+          href="/profile"
+          prefetch={false}
+          className="flex gap-1"
+          aria-label="User profile"
+        >
           <div className="avatar placeholder">
             <div className="rounded-full w-7 bg-primary text-neutral-content">
               <span className="text-xs">{props.username.charAt(0)}</span>

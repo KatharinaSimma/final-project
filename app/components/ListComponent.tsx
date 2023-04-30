@@ -30,6 +30,9 @@ export default function ListComponent(props: Props) {
         <div className="flex items-center gap-2 ">
           {list.title}
           <button
+            aria-label={
+              listOpen ? `Close list ${list.title}` : `Open list ${list.title}`
+            }
             onClick={() => {
               setListOpen(!listOpen);
             }}
@@ -64,7 +67,7 @@ export default function ListComponent(props: Props) {
           <LocationButton location={list.title} />
 
           <div className="tooltip" data-tip="Edit list">
-            <Link href={`/${list.id}`}>
+            <Link href={`/${list.id}`} aria-label="Edit list">
               <EllipsisVerticalIcon className="w-7 h-7 hover:fill-primary" />
             </Link>
           </div>

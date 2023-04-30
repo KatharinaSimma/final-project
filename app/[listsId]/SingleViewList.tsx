@@ -169,6 +169,7 @@ export default function SingleViewList(props: Props) {
           />
           <button
             className="flex btn btn-outline btn-primary"
+            aria-label="Create new task"
             onClick={async () => await handleCreateTask()}
           >
             <PlusIcon className="w-6 h-6" />
@@ -180,6 +181,7 @@ export default function SingleViewList(props: Props) {
       <div className="divider">
         <button
           className="flex items-center justify-center gap-2"
+          aria-label="Show list actions"
           onClick={() => {
             setShowActions(!showActions);
           }}
@@ -229,6 +231,7 @@ export default function SingleViewList(props: Props) {
               />
               <button
                 className="flex btn btn-outline btn-primary"
+                aria-label={`Share list ${data.singleListWithTasks.title} with ${username}`}
                 onClick={async () => {
                   await handleShareList();
                 }}
@@ -241,6 +244,7 @@ export default function SingleViewList(props: Props) {
           <div className="w-full my-3">
             <button
               className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error"
+              aria-label={`Delete list ${data.singleListWithTasks.title}`}
               onClick={async () => {
                 await handleDeleteList({
                   variables: {

@@ -98,6 +98,7 @@ export default function LoginForm() {
                 <Link
                   href="/register"
                   className="mt-5 label-text-alt link link-hover"
+                  aria-label="Register"
                 >
                   Don't have an account?
                 </Link>

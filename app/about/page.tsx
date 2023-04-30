@@ -42,6 +42,7 @@ export default async function AboutPage() {
                 <Link
                   href="/login"
                   className="mt-5 label-text-alt link link-hover"
+                  aria-label="Login"
                 >
                   Already have an account?
                 </Link>

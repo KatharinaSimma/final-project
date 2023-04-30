@@ -57,6 +57,7 @@ export default function EditLIstTitle(props: Props) {
         />
         <button
           className="flex btn btn-outline btn-primary"
+          aria-label={`Edit title for list ${props.list.title}`}
           onClick={async () => {
             setEditTitle(!editTitle);
             await handleUpdateList();
