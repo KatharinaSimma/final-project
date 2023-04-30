@@ -77,35 +77,38 @@ export default function TaskComponent(props: Props) {
       key={`task-${task.id}`}
     >
       <div className="flex items-center gap-1">
-        <label className="flex gap-2 cursor-pointer label">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-primary"
-            onChange={async () => {
-              setDone(!done);
-              await handleUpdateTask({
-                variables: {
-                  id: task.id,
-                  title: title,
-                  done: !done,
-                },
-              });
-            }}
-            checked={done}
-          />
-        </label>
+        <input
+          type="checkbox"
+          id={`task-title-${task.id}`}
+          className="checkbox checkbox-primary"
+          checked={done}
+          onChange={async () => {
+            setDone(!done);
+            await handleUpdateTask({
+              variables: {
+                id: task.id,
+                title: title,
+                done: !done,
+              },
+            });
+          }}
+        />
+
         {editTitle ? (
-          <label>
-            <input
-              className="input input-bordered input-primary h-fit"
-              value={title}
-              onChange={(event) => {
-                setTitle(event.currentTarget.value);
-              }}
-            />
-          </label>
+          <input
+            className="input input-bordered input-primary h-fit"
+            value={title}
+            onChange={(event) => {
+              setTitle(event.currentTarget.value);
+            }}
+          />
         ) : (
-          <span className="label-text">{title}</span>
+          <label
+            className="flex gap-2 cursor-pointer label"
+            htmlFor={`task-title-${task.id}`}
+          >
+            {title}
+          </label>
         )}
       </div>
 
