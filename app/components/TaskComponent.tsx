@@ -133,6 +133,7 @@ export default function TaskComponent(props: Props) {
           <button
             className="flex justify-center"
             onClick={() => setEditTitle(!editTitle)}
+            aria-label={`Edit task ${task.title}`}
           >
             <div className="tooltip" data-tip="Edit">
               <PencilIcon className="w-5 h-5 hover:fill-primary" />
