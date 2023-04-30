@@ -243,7 +243,7 @@ export default function SingleViewList(props: Props) {
           <EditLIstTitle list={data.singleListWithTasks} />
           <div className="w-full my-3">
             <button
-              className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error"
+              className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error btn-outline"
               aria-label={`Delete list ${data.singleListWithTasks.title}`}
               onClick={async () => {
                 await handleDeleteList({
