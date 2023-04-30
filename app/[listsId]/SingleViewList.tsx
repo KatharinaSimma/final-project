@@ -194,7 +194,7 @@ export default function SingleViewList(props: Props) {
         <>
           <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
             {data.singleListWithTasks.sharedUsers.length > 1 && (
-              <ul className="w-full">
+              <div className="w-full">
                 You
                 {data.singleListWithTasks.sharedUsers.map((user: User) => {
                   if (props.currentUser === user.username) {
@@ -204,14 +204,14 @@ export default function SingleViewList(props: Props) {
                     <span key={`shared-with-${user.id}`}>
                       {' '}
                       and{' '}
-                      <strong className="text-primary-focus">
+                      <strong className="p-1 m-1 border">
                         {user.username}{' '}
                       </strong>
                     </span>
                   );
                 })}
                 share this list.
-              </ul>
+              </div>
             )}
             {onShareError ? <p className="text-error">{onShareError}</p> : null}
           </div>
