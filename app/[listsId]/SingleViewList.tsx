@@ -194,7 +194,7 @@ export default function SingleViewList(props: Props) {
         <>
           <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
             {data.singleListWithTasks.sharedUsers.length > 1 && (
-              <div className="w-full">
+              <p className="w-full" role="status">
                 You
                 {data.singleListWithTasks.sharedUsers.map((user: User) => {
                   if (props.currentUser === user.username) {
@@ -211,9 +211,8 @@ export default function SingleViewList(props: Props) {
                   );
                 })}
                 share this list.
-              </div>
+              </p>
             )}
-            {onShareError ? <p className="text-error">{onShareError}</p> : null}
           </div>
 
           <div className="flex flex-wrap items-center my-2 justify-items-center">
@@ -227,7 +226,7 @@ export default function SingleViewList(props: Props) {
                 placeholder="enter a username"
                 value={username}
                 onChange={(event) => setUsername(event.currentTarget.value)}
-                onFocus={() => setOnError('')}
+                onFocus={() => setOnShareError('')}
               />
               <button
                 className="flex btn btn-outline btn-primary"
@@ -239,6 +238,11 @@ export default function SingleViewList(props: Props) {
                 <ShareIcon className="w-6 h-6" />
               </button>
             </div>
+            {onShareError ? (
+              <p className="m-3 text-error" role="status">
+                {onShareError}
+              </p>
+            ) : null}
           </div>
           <EditLIstTitle list={data.singleListWithTasks} />
           <div className="w-full my-3">

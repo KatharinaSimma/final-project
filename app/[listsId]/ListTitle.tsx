@@ -17,7 +17,11 @@ export default function ListTitle(props: Props) {
 
   return (
     <div className="flex flex-wrap items-center justify-center gap-3 py-14">
-      <h1 className="text-3xl text-center border border-transparent">
+      <h1
+        className="text-3xl text-center border border-transparent"
+        role="status"
+        aria-label="List title"
+      >
         {props.list.title}
       </h1>
       <div className="flex gap-3">
@@ -39,7 +43,12 @@ export default function ListTitle(props: Props) {
           })}
         </div>
         {props.progress !== '0' ? (
-          <div className="radial-progress text-primary" style={style}>
+          <div
+            className="radial-progress text-primary"
+            style={style}
+            role="status"
+            aria-label="List progress"
+          >
             {props.progress}%
           </div>
         ) : null}

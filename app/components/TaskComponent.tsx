@@ -31,7 +31,6 @@ export default function TaskComponent(props: Props) {
   const [done, setDone] = useState(props.task.done);
   const [title, setTitle] = useState(props.task.title);
   const [editTitle, setEditTitle] = useState(false);
-
   const { task } = props;
 
   const [handleDeleteTask, { loading }] = useMutation(deleteTaskMutation, {
@@ -81,6 +80,18 @@ export default function TaskComponent(props: Props) {
           id={`task-title-${task.id}`}
           className="checkbox checkbox-primary"
           checked={done}
+          onKeyUp={async (event) => {
+            if (event.key === 'Enter') {
+              setDone(!done);
+              await handleUpdateTask({
+                variables: {
+                  id: task.id,
+                  title: title,
+                  done: !done,
+                },
+              });
+            }
+          }}
           onChange={async () => {
             setDone(!done);
             await handleUpdateTask({
