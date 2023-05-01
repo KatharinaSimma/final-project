@@ -42,7 +42,7 @@ export default function DeleteUser(props: Props) {
     <>
       {!alert ? (
         <button
-          className="btn btn-outline btn-error"
+          className="btn btn-error btn-outline"
           onClick={() => setAlert(true)}
         >
           Delete Account
@@ -50,19 +50,24 @@ export default function DeleteUser(props: Props) {
       ) : null}
       <p className="error">{onError}</p>
       {alert ? (
-        <div className="max-w-md m-auto shadow-lg alert">
+        <div className="max-w-xl m-auto shadow-lg alert">
           <div>
-            <span className="pl-3 text-left">
+            <span className="pl-3 text-left" role="alert">
               Are you sure? <br />
               This cannot be reverted!
             </span>
           </div>
           <div className="flex-none">
             <button
-              className="btn btn-md btn-error"
+              className="btn btn-md btn-error btn-outline"
               onClick={() => handleDeleteUser()}
             >
               Delete Account
+            </button>
+          </div>
+          <div className="flex-none">
+            <button className="btn btn-md " onClick={() => setAlert(false)}>
+              Cancel
             </button>
           </div>
         </div>
