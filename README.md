@@ -29,7 +29,7 @@ If the name of the list is a specific place google, maps will take you to the lo
 - Date Fetching is done with GraphQL Apollo
 - I implemented full user authentication incl. session tokens plus authorizations
 - UI Design & Prototyping was done in ExcaliDraw
-- The design is fully responsive and was implemented with Tailwind & Daisy UI incl. themes
+- The design is fully responsive and was implemented with Tailwind & Daisy UI
 - I did E2E and unit test
 - Deployed on Fly.io: https://taskology.fly.dev/
 - Continuous Integration with GitHub Actions
@@ -44,8 +44,6 @@ If the name of the list is a specific place google, maps will take you to the lo
 <a href="https://graphql.org" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/graphql/graphql-icon.svg" alt="graphql" width="40" height="40"/> </a>
 <a href="https://tailwindcss.com/" target="_blank" rel="noreferrer"><img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" alt="tailwind" width="40" height="40"/> </a>
 <a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> </a>
-
-</p>
 
 ## To Do Backlog
 
@@ -72,15 +70,3 @@ If the name of the list is a specific place google, maps will take you to the lo
 ### Registration Screen (Color theme: Forest)
 
 ![register screen](./public/register_screenshot.png)
-
-### Profile (Color theme: Valentine)
-
-![profile screen](./public/profile_screenshot.png)
-
-### Home View (Color theme: Cyberpunk)
-
-![home screen](./public/home_screenshot.png)
-
-### Edit List View (Color theme: Aqua)
-
-![list screen](./public/singlelist_screenshot.png)
