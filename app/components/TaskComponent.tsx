@@ -33,7 +33,6 @@ export default function TaskComponent(props: Props) {
   const [editTitle, setEditTitle] = useState(false);
 
   const { task } = props;
-  console.log('task', task.title, task.id);
 
   const [handleDeleteTask, { loading }] = useMutation(deleteTaskMutation, {
     variables: {
