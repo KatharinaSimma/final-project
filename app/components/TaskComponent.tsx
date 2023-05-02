@@ -69,16 +69,20 @@ export default function TaskComponent(props: Props) {
 
   return (
     <div
-      className={`flex items-center justify-between gap-5 my-2 border border-transparent  ${
-        !editTitle ? 'hover:border hover:border-primary hover:rounded-md' : ''
-      }`}
+      className="flex items-center justify-between gap-5 my-2"
       key={`task-${task.id}`}
     >
-      <div className="flex items-center gap-1">
+      <div
+        className={`flex items-center border border-transparent  ${
+          !editTitle
+            ? 'p-l hover:border hover:border-primary hover:rounded-md'
+            : ''
+        }`}
+      >
         <input
           type="checkbox"
           id={`task-title-${task.id}`}
-          className="checkbox checkbox-primary"
+          className="mx-2 checkbox checkbox-primary"
           checked={done}
           onKeyUp={async (event) => {
             if (event.key === 'Enter') {
@@ -125,7 +129,7 @@ export default function TaskComponent(props: Props) {
       <div className="flex flex-row items-center justify-between">
         {editTitle ? (
           <button
-            className="flex justify-center"
+            className="flex justify-center p-1 border border-transparent sm:p-3 tooltip hover:border hover:border-primary hover:rounded-md"
             aria-label={`Save task ${task.title}`}
             onClick={async () => {
               setEditTitle(!editTitle);
@@ -144,7 +148,7 @@ export default function TaskComponent(props: Props) {
           </button>
         ) : (
           <button
-            className="flex justify-center"
+            className="flex justify-center p-1 border border-transparent sm:p-3 tooltip hover:border hover:border-primary hover:rounded-md"
             onClick={() => setEditTitle(!editTitle)}
             aria-label={`Edit task ${task.title}`}
           >
@@ -155,7 +159,7 @@ export default function TaskComponent(props: Props) {
         )}
         <LocationButton location={task.title} />
         <button
-          className="flex justify-center ml-2"
+          className="flex justify-center p-1 border border-transparent sm:p-3 hover:border hover:border-primary hover:rounded-md"
           aria-label={`Delete task ${task.title}`}
           onClick={async () => {
             await handleDeleteTask({

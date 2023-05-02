@@ -184,13 +184,13 @@ export default function SingleViewList(props: Props) {
 
       <div className="divider">
         <button
-          className="flex items-center justify-center gap-2"
+          className="flex items-center justify-center gap-2 p-1 border border-transparent sm-p-3 tooltip hover:border hover:border-primary hover:rounded-md"
           aria-label="Show list actions"
           onClick={() => {
             setShowActions(!showActions);
           }}
         >
-          <WrenchIcon className="transition-all w-7 h-7 fill-primary hover:w-10 hover:h-10" />{' '}
+          <WrenchIcon className="transition-all w-7 h-7 fill-primary" />{' '}
           {showActions ? 'Hide' : 'Show'} list actions
         </button>
       </div>

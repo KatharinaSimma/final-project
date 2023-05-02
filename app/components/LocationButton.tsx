@@ -12,7 +12,10 @@ export default function LocationButton(props: Props) {
   );
 
   return (
-    <div className="ml-2 tooltip" data-tip="Show Location in maps">
+    <div
+      className="p-1 border border-transparent sm:p-3 tooltip hover:border hover:border-primary hover:rounded-md"
+      data-tip="Show Location in maps"
+    >
       <a
         href={locationLink}
         rel="noreferrer noopener"
