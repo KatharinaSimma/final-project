@@ -79,7 +79,9 @@ export default function ListContainer(props: Props) {
 
   return (
     <div className="max-w-lg m-auto min-w-md sm:p-0">
-      <p className="text-error min-h-8">{onError}</p>
+      <p className="text-error min-h-8" role="alert">
+        {onError}
+      </p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label
           className="text-lg"

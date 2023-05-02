@@ -67,7 +67,7 @@ export default function EditLIstTitle(props: Props) {
         </button>
       </div>
 
-      <p className="text-error min-h-8">{onError}</p>
+      <p className="text-error min-h-8" role="alert">{onError}</p>
     </div>
   );
 }

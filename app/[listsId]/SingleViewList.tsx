@@ -153,7 +153,11 @@ export default function SingleViewList(props: Props) {
         progress={progress}
         currentUser={props.currentUser}
       />
-      {onError ? <p className="text-error min-h-8">{onError}</p> : null}
+      {onError ? (
+        <p className="text-error min-h-8" role="alert">
+          {onError}
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label className="p-1 text-lg text-primary" htmlFor="createTask">
           New Task:
