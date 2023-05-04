@@ -79,9 +79,15 @@ export default function ListContainer(props: Props) {
 
   return (
     <div className="max-w-lg m-auto min-w-md sm:p-0">
-      <p className="text-error min-h-8">{onError}</p>
+      <p className="text-error min-h-8" role="alert">
+        {onError}
+      </p>
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
-        <label className="text-lg text-primary" htmlFor="createList">
+        <label
+          className="text-lg"
+          htmlFor="createList"
+          aria-label="Create new list"
+        >
           New List:{' '}
         </label>
         <div className="flex justify-end flex-grow gap-1">
@@ -96,6 +102,7 @@ export default function ListContainer(props: Props) {
           />
           <button
             className="flex btn btn-outline btn-primary"
+            aria-label="Create new list"
             onClick={async () => await handleCreateList()}
           >
             <PlusIcon className="w-6 h-6" />

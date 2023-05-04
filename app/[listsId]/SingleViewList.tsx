@@ -153,7 +153,11 @@ export default function SingleViewList(props: Props) {
         progress={progress}
         currentUser={props.currentUser}
       />
-      {onError ? <p className="text-error min-h-8">{onError}</p> : null}
+      {onError ? (
+        <p className="text-error min-h-8" role="alert">
+          {onError}
+        </p>
+      ) : null}
       <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
         <label className="p-1 text-lg text-primary" htmlFor="createTask">
           New Task:
@@ -169,6 +173,7 @@ export default function SingleViewList(props: Props) {
           />
           <button
             className="flex btn btn-outline btn-primary"
+            aria-label="Create new task"
             onClick={async () => await handleCreateTask()}
           >
             <PlusIcon className="w-6 h-6" />
@@ -179,12 +184,13 @@ export default function SingleViewList(props: Props) {
 
       <div className="divider">
         <button
-          className="flex items-center justify-center gap-2"
+          className="flex items-center justify-center gap-2 p-1 border border-transparent sm-p-3 tooltip hover:border hover:border-primary hover:rounded-md"
+          aria-label="Show list actions"
           onClick={() => {
             setShowActions(!showActions);
           }}
         >
-          <WrenchIcon className="transition-all w-7 h-7 fill-primary hover:w-10 hover:h-10" />{' '}
+          <WrenchIcon className="transition-all w-7 h-7 fill-primary" />{' '}
           {showActions ? 'Hide' : 'Show'} list actions
         </button>
       </div>
@@ -192,7 +198,7 @@ export default function SingleViewList(props: Props) {
         <>
           <div className="flex flex-wrap items-center gap-1 my-2 justify-items-center">
             {data.singleListWithTasks.sharedUsers.length > 1 && (
-              <ul className="w-full">
+              <p className="w-full" role="status">
                 You
                 {data.singleListWithTasks.sharedUsers.map((user: User) => {
                   if (props.currentUser === user.username) {
@@ -202,16 +208,15 @@ export default function SingleViewList(props: Props) {
                     <span key={`shared-with-${user.id}`}>
                       {' '}
                       and{' '}
-                      <strong className="text-primary-focus">
+                      <strong className="p-1 m-1 border">
                         {user.username}{' '}
                       </strong>
                     </span>
                   );
                 })}
                 share this list.
-              </ul>
+              </p>
             )}
-            {onShareError ? <p className="text-error">{onShareError}</p> : null}
           </div>
 
           <div className="flex flex-wrap items-center my-2 justify-items-center">
@@ -225,10 +230,11 @@ export default function SingleViewList(props: Props) {
                 placeholder="enter a username"
                 value={username}
                 onChange={(event) => setUsername(event.currentTarget.value)}
-                onFocus={() => setOnError('')}
+                onFocus={() => setOnShareError('')}
               />
               <button
                 className="flex btn btn-outline btn-primary"
+                aria-label={`Share list ${data.singleListWithTasks.title} with ${username}`}
                 onClick={async () => {
                   await handleShareList();
                 }}
@@ -236,11 +242,17 @@ export default function SingleViewList(props: Props) {
                 <ShareIcon className="w-6 h-6" />
               </button>
             </div>
+            {onShareError ? (
+              <p className="m-3 text-error" role="status">
+                {onShareError}
+              </p>
+            ) : null}
           </div>
           <EditLIstTitle list={data.singleListWithTasks} />
           <div className="w-full my-3">
             <button
-              className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error"
+              className="flex items-center gap-1 px-4 py-2 m-auto btn btn-error btn-outline"
+              aria-label={`Delete list ${data.singleListWithTasks.title}`}
               onClick={async () => {
                 await handleDeleteList({
                   variables: {

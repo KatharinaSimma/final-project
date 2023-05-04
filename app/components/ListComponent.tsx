@@ -30,6 +30,10 @@ export default function ListComponent(props: Props) {
         <div className="flex items-center gap-2 ">
           {list.title}
           <button
+            className="p-1 border border-transparent sm:p-2 tooltip hover:border hover:border-primary hover:rounded-md"
+            aria-label={
+              listOpen ? `Close list ${list.title}` : `Open list ${list.title}`
+            }
             onClick={() => {
               setListOpen(!listOpen);
             }}
@@ -52,7 +56,7 @@ export default function ListComponent(props: Props) {
                   className="avatar placeholder"
                   key={`shared-with-${user.id}`}
                 >
-                  <div className="w-6 rounded-full bg-neutral-content text-base-100 hover:bg-primary">
+                  <div className="w-6 rounded-full bg-neutral-focus text-neutral-content hover:bg-primary">
                     <div className="tooltip" data-tip="hoi">
                       <span className="text-xs">{user.username.charAt(0)}</span>
                     </div>
@@ -63,8 +67,11 @@ export default function ListComponent(props: Props) {
           </div>
           <LocationButton location={list.title} />
 
-          <div className="tooltip" data-tip="Edit list">
-            <Link href={`/${list.id}`}>
+          <div
+            className="p-0 border border-transparent sm:p-2 tooltip hover:border hover:border-primary hover:rounded-md"
+            data-tip="Edit list"
+          >
+            <Link href={`/${list.id}`} aria-label="Edit list">
               <EllipsisVerticalIcon className="w-7 h-7 hover:fill-primary" />
             </Link>
           </div>

@@ -27,6 +27,7 @@ export default function Contact() {
                 href="https://github.com/KatharinaSimma/"
                 rel="noreferrer noopener"
                 target="_blank"
+                aria-label="Katharina Simma's Github profile"
               >
                 <FaGithub className="w-12 h-12 fill-primary hover:fill-secondary" />
               </a>
@@ -35,6 +36,7 @@ export default function Contact() {
                 href="https://www.linkedin.com/in/katharinasimma/"
                 rel="noreferrer noopener"
                 target="_blank"
+                aria-label="Katharina Simma's Linkedin profile"
               >
                 <FaLinkedin className="w-12 h-12 fill-primary hover:fill-secondary" />
               </a>
@@ -43,6 +45,7 @@ export default function Contact() {
                 href="mailto:katharina.simma@diebin.at"
                 rel="noreferrer noopener"
                 target="_blank"
+                aria-label="Write email to Katharina Simma"
               >
                 <FaEnvelope className="w-12 h-12 fill-primary hover:fill-secondary" />
               </a>

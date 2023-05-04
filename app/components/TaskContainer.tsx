@@ -23,12 +23,12 @@ export default function TaskContainer(props: Props) {
       ))}
       <div className="divider">
         <button
-          className="flex items-center justify-center gap-2"
+          className="flex items-center justify-center gap-2 p-1 border border-transparent sm:p-3 tooltip hover:border hover:border-primary hover:rounded-md"
           onClick={() => {
             setShowDone(!showDone);
           }}
         >
-          <CheckIcon className="w-8 h-8 transition-all fill-primary hover:w-10 hover:h-10" />{' '}
+          <CheckIcon className="w-8 h-8 transition-all fill-primary " />{' '}
           {showDone ? 'Hide' : 'Show'} done items
         </button>
       </div>

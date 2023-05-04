@@ -71,7 +71,9 @@ export default function LoginForm() {
                     value={formik.values.username}
                   />
                   {formik.touched.username && formik.errors.username ? (
-                    <p className="text-error">{formik.errors.username}</p>
+                    <p className="text-error" role="alert">
+                      {formik.errors.username}
+                    </p>
                   ) : null}
                 </div>
                 <div className="form-control">
@@ -92,20 +94,22 @@ export default function LoginForm() {
                     value={formik.values.password}
                   />
                   {formik.touched.password && formik.errors.password ? (
-                    <p className="text-error">{formik.errors.password}</p>
+                    <p className="text-error" role="alert">
+                      {formik.errors.password}
+                    </p>
                   ) : null}
                 </div>
-                <Link
-                  href="/register"
-                  className="mt-5 label-text-alt link link-hover"
-                >
-                  Don't have an account?
-                </Link>
-                <p className="text-error min-h-8">{onError}</p>
+                <p className="text-error min-h-8" role="alert">
+                  {onError}
+                </p>
                 <div className="mt-6 form-control">
                   <button className="btn btn-primary">Login</button>
                 </div>
               </form>
+              <p className="mt-5">Don't have an account?</p>
+              <Link href="/register" className="btn btn-primary btn-outline">
+                Register
+              </Link>
             </div>
           </div>
         </div>

@@ -36,14 +36,12 @@ export default async function AboutPage() {
               <h2 className="card-title">Be productive with Taskology</h2>
               <p>Making an account is easy and free.</p>
               <div className="mt-6 form-control">
-                <Link href="/register" className="btn btn-primary btn-wide">
+                <Link href="/register" className="btn btn-primary">
                   Register
                 </Link>
-                <Link
-                  href="/login"
-                  className="mt-5 label-text-alt link link-hover"
-                >
-                  Already have an account?
+                <p className="mt-5 mb-1">Already have an account?</p>
+                <Link href="/login" className="btn btn-primary btn-outline">
+                  Login
                 </Link>
               </div>
             </div>

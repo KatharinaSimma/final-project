@@ -31,9 +31,7 @@ export default function TaskComponent(props: Props) {
   const [done, setDone] = useState(props.task.done);
   const [title, setTitle] = useState(props.task.title);
   const [editTitle, setEditTitle] = useState(false);
-
   const { task } = props;
-  console.log('task', task.title, task.id);
 
   const [handleDeleteTask, { loading }] = useMutation(deleteTaskMutation, {
     variables: {
@@ -71,17 +69,23 @@ export default function TaskComponent(props: Props) {
 
   return (
     <div
-      className={`flex items-center justify-between gap-5 my-2 border border-transparent  ${
-        !editTitle ? 'hover:border hover:border-primary hover:rounded-md' : ''
-      }`}
+      className="flex items-center justify-between gap-5 my-2"
       key={`task-${task.id}`}
     >
-      <div className="flex items-center gap-1">
-        <label className="flex gap-2 cursor-pointer label">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-primary"
-            onChange={async () => {
+      <div
+        className={`flex items-center border border-transparent  ${
+          !editTitle
+            ? 'p-l hover:border hover:border-primary hover:rounded-md'
+            : ''
+        }`}
+      >
+        <input
+          type="checkbox"
+          id={`task-title-${task.id}`}
+          className="mx-2 checkbox checkbox-primary"
+          checked={done}
+          onKeyUp={async (event) => {
+            if (event.key === 'Enter') {
               setDone(!done);
               await handleUpdateTask({
                 variables: {
@@ -90,29 +94,43 @@ export default function TaskComponent(props: Props) {
                   done: !done,
                 },
               });
-            }}
-            checked={done}
-          />
-        </label>
+            }
+          }}
+          onChange={async () => {
+            setDone(!done);
+            await handleUpdateTask({
+              variables: {
+                id: task.id,
+                title: title,
+                done: !done,
+              },
+            });
+          }}
+        />
+
         {editTitle ? (
-          <label>
-            <input
-              className="input input-bordered input-primary h-fit"
-              value={title}
-              onChange={(event) => {
-                setTitle(event.currentTarget.value);
-              }}
-            />
-          </label>
+          <input
+            className="input input-bordered input-primary h-fit"
+            value={title}
+            onChange={(event) => {
+              setTitle(event.currentTarget.value);
+            }}
+          />
         ) : (
-          <span className="label-text">{title}</span>
+          <label
+            className="flex gap-2 cursor-pointer label"
+            htmlFor={`task-title-${task.id}`}
+          >
+            {title}
+          </label>
         )}
       </div>
 
       <div className="flex flex-row items-center justify-between">
         {editTitle ? (
           <button
-            className="flex justify-center"
+            className="flex justify-center p-1 border border-transparent sm:p-3 tooltip hover:border hover:border-primary hover:rounded-md"
+            aria-label={`Save task ${task.title}`}
             onClick={async () => {
               setEditTitle(!editTitle);
               await handleUpdateTask({
@@ -130,8 +148,9 @@ export default function TaskComponent(props: Props) {
           </button>
         ) : (
           <button
-            className="flex justify-center"
+            className="flex justify-center p-1 border border-transparent sm:p-3 tooltip hover:border hover:border-primary hover:rounded-md"
             onClick={() => setEditTitle(!editTitle)}
+            aria-label={`Edit task ${task.title}`}
           >
             <div className="tooltip" data-tip="Edit">
               <PencilIcon className="w-5 h-5 hover:fill-primary" />
@@ -140,7 +159,8 @@ export default function TaskComponent(props: Props) {
         )}
         <LocationButton location={task.title} />
         <button
-          className="flex justify-center ml-2"
+          className="flex justify-center p-1 border border-transparent sm:p-3 hover:border hover:border-primary hover:rounded-md"
+          aria-label={`Delete task ${task.title}`}
           onClick={async () => {
             await handleDeleteTask({
               variables: {
