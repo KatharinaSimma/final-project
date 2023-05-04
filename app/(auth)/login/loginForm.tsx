@@ -106,12 +106,9 @@ export default function LoginForm() {
                   <button className="btn btn-primary">Login</button>
                 </div>
               </form>
-              <Link
-                href="/register"
-                className="mt-5 label-text-alt link link-hover"
-                aria-label="Register"
-              >
-                Don't have an account?
+              <p className="mt-5">Don't have an account?</p>
+              <Link href="/register" className="btn btn-primary btn-outline">
+                Register
               </Link>
             </div>
           </div>

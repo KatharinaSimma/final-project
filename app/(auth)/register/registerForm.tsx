@@ -112,8 +112,9 @@ export default function RegisterForm(props: { returnTo?: string | string[] }) {
               <button className="btn btn-primary">Register</button>
             </div>
           </form>
-          <Link href="/login" className="mt-5 label-text-alt link link-hover">
-            Already have an account?
+          <p className="mt-5">Already have an account?</p>
+          <Link href="/login" className="btn btn-primary btn-outline">
+            Login
           </Link>
         </div>
       </div>
